@@ -24,4 +24,14 @@
     <servlet-name>EliminarServlet</servlet-name>
     <url-pattern>/eliminar</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EditarServlet</display-name>
+    <servlet-name>EditarServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.EditarServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EditarServlet</servlet-name>
+    <url-pattern>/editar</url-pattern>
+  </servlet-mapping>
 </web-app>

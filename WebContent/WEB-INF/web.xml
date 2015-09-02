@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>BaseDatos</display-name>
-  <welcome-file-list>    
-    <welcome-file>index.jsp</welcome-file>    
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <description>Servlet de prueba para insertar un nuevo registro en la tabla test</description>
+    <display-name>InsertarServlet</display-name>
+    <servlet-name>InsertarServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.InsertarServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InsertarServlet</servlet-name>
+    <url-pattern>/insertar</url-pattern>
+  </servlet-mapping>
 </web-app>

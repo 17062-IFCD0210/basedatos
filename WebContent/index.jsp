@@ -14,6 +14,7 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/cover.css" rel="stylesheet">
+    <link href="css/basedatos.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -50,28 +51,65 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base Datos</h1>
-            <p class="lead">Cargar Driver</p>
-            <%
-            	Class.forName("com.mysql.jdbc.Driver");
-            	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-            	
-            	// Preparamos la consulta 
-            	Statement st = conexion.createStatement(); 
-            	String sql = "SELECT * FROM `test`";
-            	ResultSet rs = st.executeQuery (sql);
-            	
-            	//recorrer datos del resultado
-            	out.print("<ul>");
-            	while (rs.next()){ 
-    				 
-            		out.print("<li>" + rs.getInt("id") + " " 
-            		 		+ rs.getString("nombre") + "</li>");
-            		
-				}
-            	out.print("</ul>");
-            	
-            	//cerrar conexiones
-            %>
+            <ul class="blanco">
+            	<li>Servidor: <small>localhost</small></li>
+            	<li>Base de Datos: <small>skalada</small></li>
+            	<li>Puerto: <small>3306</small></li>
+            	<li>Usuario: <small>root</small></li>
+            	<li>Password: </li>
+            	<li>Tabla: <small>test</small></li>
+            </ul>
+            
+           
+            
+            <ol>
+            	<li>Cargando Driver: <code>com.mysql.jdbc.Driver</code></li>
+            	<br>
+            	<li>Establecer Conexion: <code>"jdbc:mysql://localhost/skalada","root", ""</code></li>
+            	<br>
+            	<li>Preparar Consulta: <code>SELECT * FROM `test`</code></li>
+            	<br>
+            	<li>Registros
+            	<br><br>
+            	<a class="btn btn-link" href="form.jsp" role="button">Insertar nuevo registro</a>
+            	<br><br>
+            	<%
+	            	Class.forName("com.mysql.jdbc.Driver");
+	            	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
+	            	
+	            	// Preparamos la consulta 
+	            	Statement st = conexion.createStatement(); 
+	            	String sql = "SELECT * FROM `test`";
+	            	ResultSet rs = st.executeQuery (sql);
+	            	
+	            	//recorrer datos del resultado
+	            	out.print("<table class=\"tabla_blanco\">");
+	            		out.print("<tr>");
+	            			out.print("<th>Id</th>");
+	            			out.print("<th>Nombre</th>");
+	            			out.print("<th>Nota</th>");
+	            			out.print("<th>Telefono</th>");
+	            			out.print("<th>Fecha</th>");
+	            		out.print("</tr>");
+		            	while (rs.next()){ 
+		            		out.print("<tr>");
+		    				out.print("<td>" + rs.getInt("id") + "</td>");
+		            		out.print("<td>" + rs.getString("nombre") + "</td>");
+		            		out.print("<td>" + rs.getFloat("nota") + "</td>");
+		            		out.print("<td>" + rs.getString("telefono") + "</td>");
+		            		out.print("<td>" + rs.getDate("fecha") + "</td>");
+		            		out.print("</tr>");
+						}
+	            	out.print("</table>");
+
+            		//cerrar conexiones
+            		conexion.close();
+            	%>
+            	</li>
+            	<br>
+            	<li>Cerrar conexion: <code>conexion.close();</code></li>
+            </ol>
+            
             
           </div>
 

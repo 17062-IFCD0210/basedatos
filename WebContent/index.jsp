@@ -50,7 +50,8 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base Datos</h1>
-            <p class="lead">Cargar Driver</p>
+            <a href="form.jsp">Insertar nuevo registro</a>
+            <p class="lead">Resgistros</p>
             <%
             	Class.forName("com.mysql.jdbc.Driver");
             	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
@@ -78,7 +79,7 @@
           <div class="mastfoot">
             <div class="inner">
               <p>Documentación <a href="#">Ipartek Campus</a></p>
-              <p>Codigo Fuente <a href="#">GITHUB</a></p>
+              <p>Codigo Fuente <a target="_blank" href="https://github.com/17062-IFCD0210/basedatos">GITHUB</a></p>
             </div>
           </div>
 

@@ -45,33 +45,63 @@
 				</div>
 
 				<div class="inner cover">
-										
-					<h1 class="cover-heading">Insertar Nuevo registro</h1>
+					<h1 class="cover-heading">JDBC - Java Database Connectivity</h1>
+					<div>
+						<%
+							//Mostrar mensajes
+							if (request.getAttribute("msg_error") != null){
+								out.print("<div class='msg_error'>");
+								out.print("<h2>" + request.getAttribute("msg_error") + "</h2>");
+								out.print("</div>");
+							}
+							if (request.getAttribute("msg_ok") != null){
+								out.print("<div class='msg_ok'>");
+								out.print("<h2>" + request.getAttribute("msg_ok") + "</h2>");
+								out.print("</div>");
+							}
+						%>
 					
-					<%
-						//Mostrar mensajes
-						if (request.getAttribute("msg_error") != null){
-							out.print("<div class='msg_error'>");
-							out.print("<h2>" + request.getAttribute("msg_error") + "</h2>");
-							out.print("</div><br>");
-						}					
-					%>
-															
-					<form action="insertar" method="post">
-						
-						<input type="text" name="nombre" placeholder="Tu nombre" 
-						required="required" autofocus="autofocus" tabindex="1">
-						<br><br>
-						<input type="text" name="nota" placeholder="Tu nota" 
-						required="required" tabindex="2">
-						<br><br>
-						<input type="text" name="telefono" placeholder="Tu telefono" 
-						tabindex="3" pattern="[0-9]{9,15}">
-						<br><br>						
-						<input type="submit" class="btn-lg" value="Crear">
-						
-					</form>
+											
+						<% 
+							Class.forName("com.mysql.jdbc.Driver"); 
+							Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost:3306/skalada","root", "");
+							Statement s = conexion.createStatement(); 
+							String sql = "SELECT * FROM `test`";						
+							ResultSet rs = s.executeQuery (sql);
+						%>						
+						<div class="resultado">
+							<table>
+								<tr>
+									<th>ID</th>
+									<th>NOMBRE</th>
+									<th>NOTA</th>
+									<th>TELEFONO</th>
+									<th>FECHA</th>
+									<th>Opc.</th>
+								</tr>
+								<%
+									while (rs.next()) 
+									{ 
+										out.print("<tr>");
+											out.print("<td>" + rs.getString("id") + "</td>");
+											out.print("<td>" + rs.getString("nombre") + "</td>");
+											out.print("<td>" + rs.getString("nota") + "</td>");
+											out.print("<td>" + rs.getString("telefono") + "</td>");
+											out.print("<td>" + rs.getString("fecha") + "</td>");
+											out.print("<td><a href='eliminar?id=" + rs.getString("id") + "'><span class='icon-trashcan red'></span></td>");
+										out.print("</tr>");	
+									}
+								%>
+							</table>							
+						</div> <!-- END .resultado -->
+						<%
+							conexion.close();
+						%>						
+					</div>
 					
+					<a href="form.jsp"><button class="btn-lg">Nuevo Registro</button></a>
+					
+									
 				</div>
 
 				<div class="mastfoot">

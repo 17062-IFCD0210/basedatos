@@ -11,52 +11,50 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class InsertarServlet
+ * Servlet implementation class EliminarServlet
  */
-public class InsertarServlet extends HttpServlet {
+public class EliminarServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public InsertarServlet() {
+    public EliminarServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		try {
 			//recoger parametros
-			String pNombre = request.getParameter("nombre");
-			float pNota = Float.parseFloat(request.getParameter("nota"));
-			String pTelefono = request.getParameter("telefono");
-			
+			int pID = Integer.parseInt(request.getParameter("id"));
+		
 			//TODO llamar modelo para inserccion
 			Class.forName("com.mysql.jdbc.Driver"); 
 			Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost:3306/skalada","root", "");
 			
 			Statement st = conexion.createStatement();
-			//String sql = "INSERT INTO `test` (`nombre`, `nota`) VALUES ('" + pNombre + "', 5.00);";
-			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES ('" + pNombre + "', " + pNota + ", '" + pTelefono + "');";
+			
+			String sql = "DELETE FROM `test` WHERE `id`=" + pID + ";";
 						
 			if ( st.executeUpdate(sql) != 1 ){
-				throw new Exception("No se ha realizado insercion");
+				throw new Exception("No se ha podido eliminar");
 			}
 			
 			conexion.close();
 			
 			//Volver a la JDBC
-			request.setAttribute("msg_ok", "Registro insertado");
+			request.setAttribute("msg_ok", "Registro eliminado");
 			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
-			
+						
 		} catch (Exception e){
 			request.setAttribute("msg_error", e.getMessage());
-			request.getRequestDispatcher("form.jsp").forward(request, response);
-		}
+			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
+		} 
 	}
 
 }

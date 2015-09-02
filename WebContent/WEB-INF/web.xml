@@ -14,4 +14,24 @@
     <servlet-name>InsertarServlet</servlet-name>
     <url-pattern>/insertar</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EliminarServlet</display-name>
+    <servlet-name>EliminarServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.EliminarServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EliminarServlet</servlet-name>
+    <url-pattern>/eliminar</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Filtrar</display-name>
+    <servlet-name>Filtrar</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.Filtrar</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Filtrar</servlet-name>
+    <url-pattern>/filtrar</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -1,3 +1,4 @@
+<%@page pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -44,26 +45,48 @@
           <div class="inner cover">
           
           	<form action="insertar" method="post">
-          	
-          		<input type="text" 
-          			   name="nombre" 
-          		       placeholder="Tu nombre" 
-          		       required
-          		       autofocus 
-          		       tabindex="1" >
-          		
-          		<br>
-          		<br>
+
+	       		<div class="form-group">
+	          		<label for="nombre">Nombre</label>
+	          		<input type="text" 
+	          			   name="nombre" 
+	          		       placeholder="Tu nombre" 
+	          		       required
+	          		       autofocus 
+	          		       tabindex="1" >
+	          	</div>
+	       		<div class="form-group">
+	          		<label for="nota">Nota</label>
+	          		<input type="number" 
+	          			   name="nota" 
+	          		       placeholder="Tu nota" 
+	          		       required
+	          		       tabindex="2" >
+				</div>
+				<div class="form-group">
+	          		<label for="telefono">Teléfono</label>
+	          		<input type="text" 
+	          			   name="telefono" 
+	          		       placeholder="Tu telefono" 
+	          		       tabindex="3" >
+				</div>
+				<div class="form-group">
+	          		<label for="fecha">Fecha</label>
+	           		<input type="date" 
+	          			   name="fecha"  
+	          		       tabindex="4" >
+	          	</div>          		
           		<input type="reset" value="Limpiar">
           		<input type="submit" value="Crear">
           	
           	</form>
-           
+          	<br>
+           	<a href="index.jsp">Volver</a>
           </div>
 
           <div class="mastfoot">
             <div class="inner">
-              <p>Documentaci�n <a href="#">Ipartek Campus</a></p>
+              <p>Documentación <a href="#">Ipartek Campus</a></p>
               <p>Codigo Fuente <a target="_blank" href="https://github.com/17062-IFCD0210/basedatos">GITHUB</a></p>
             </div>
           </div>

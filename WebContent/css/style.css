@@ -1,0 +1,32 @@
+#content{
+	width: 50%;
+}
+
+.datos{
+	color: grey;
+	margin: 20px auto;
+}
+
+.dark-panel{
+	background-color: #777676;
+	color: #2D2B2B;
+}
+
+.mb15{
+	margin-bottom: 15px;
+}
+
+.borrar{
+	color: #E69393;
+}
+
+.borrar:hover{
+	color: red;
+}
+
+.editar{
+	color: #3462B3;
+}
+
+.editar:hover{
+	color: blue;

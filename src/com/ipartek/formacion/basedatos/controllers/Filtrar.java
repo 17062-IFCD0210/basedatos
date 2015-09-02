@@ -30,7 +30,7 @@ public class Filtrar extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try{
 			//recoger parametros
-			String pParam = request.getParameter("param");
+			int pParam = Integer.parseInt(request.getParameter("param"));
 
 			//TODO llamar modelo para inserccion
 			Class.forName("com.mysql.jdbc.Driver");
@@ -38,13 +38,13 @@ public class Filtrar extends HttpServlet {
 	    	
 	    	Statement st = conexion.createStatement();
 	    	String sql   = "SELECT * FROM `test`";
-	    	if ("aprobados".equals(pParam)){
+	    	if (pParam==0){
 	    		sql+=" WHERE nota >=5;";
-	    	}else if("suspendidos".equals(pParam)){
+	    	}else if(pParam==1){
 	    		sql+=" WHERE nota <5;";
 	    	}
 	    	//ejecutar delete
-	    	if ( st.executeUpdate(sql) != 1){	    		
+	    	if ( st.executeQuery(sql) != 1){	    		
 	    		throw new Exception("No se ha realizado filtrado: " + sql);	    		
 	    	}
 	    	

@@ -103,9 +103,9 @@
 			%>
 			</table>
 
-            <a href="filtrar?param='aprobados'">Aprobados</a><br>
-            <a href="filtrar?param='suspendidos'">Suspendidos</a><br>
-            <a href="filtrar?param='todos'">Todos</a><br>
+            <a href="filtrar?param=0">Aprobados</a><br>
+            <a href="filtrar?param=1">Suspendidos</a><br>
+            <a href="filtrar?param=2">Todos</a><br>
           </div>
 
           <div class="mastfoot">

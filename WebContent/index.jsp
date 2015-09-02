@@ -51,6 +51,12 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base Datos</h1>
+            <% //Mostrar mensaje
+              	if(request.getAttribute("msg2") != null) {
+              		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+              	}
+              
+              %>
             <ul class="blanco">
             	<li>Servidor: <small>localhost</small></li>
             	<li>Base de Datos: <small>skalada</small></li>
@@ -71,7 +77,7 @@
             	<br>
             	<li>Registros
             	<br><br>
-            	<a class="btn btn-link" href="form.jsp" role="button">Insertar nuevo registro</a>
+            	<a class="btn btn-primary btn-xs" href="form.jsp" role="button">Insertar nuevo registro</a>
             	<br><br>
             	<%
 	            	Class.forName("com.mysql.jdbc.Driver");
@@ -93,11 +99,13 @@
 	            		out.print("</tr>");
 		            	while (rs.next()){ 
 		            		out.print("<tr>");
-		    				out.print("<td>" + rs.getInt("id") + "</td>");
-		            		out.print("<td>" + rs.getString("nombre") + "</td>");
-		            		out.print("<td>" + rs.getFloat("nota") + "</td>");
-		            		out.print("<td>" + rs.getString("telefono") + "</td>");
-		            		out.print("<td>" + rs.getDate("fecha") + "</td>");
+			    				out.print("<td>" + rs.getInt("id") + "</td>");
+			            		out.print("<td>" + rs.getString("nombre") + "</td>");
+			            		out.print("<td>" + rs.getFloat("nota") + "</td>");
+			            		out.print("<td>" + rs.getString("telefono") + "</td>");
+			            		out.print("<td>" + rs.getDate("fecha") + "</td>");
+			            		out.print("<td><a href=\"editar?id=" + rs.getInt("id") + "\" class=\"verde\">E</a></td>");
+			            		out.print("<td><a href=\"eliminar?id=" + rs.getInt("id") + "\" class=\"rojo\">X</a></td>");
 		            		out.print("</tr>");
 						}
 	            	out.print("</table>");
@@ -105,6 +113,10 @@
             		//cerrar conexiones
             		conexion.close();
             	%>
+            	<br>
+            	<a class="btn btn-primary btn-xs" href="form.jsp" role="button">Aprobados</a>
+            	<a class="btn btn-primary btn-xs" href="form.jsp" role="button">Suspendidos</a>
+            	<a class="btn btn-primary btn-xs" href="form.jsp" role="button">Todos</a>
             	</li>
             	<br>
             	<li>Cerrar conexion: <code>conexion.close();</code></li>

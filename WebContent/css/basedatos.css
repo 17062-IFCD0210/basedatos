@@ -17,3 +17,13 @@
 .tabla_blanco th {
 	text-align: center;
 }
+
+.rojo:hover {
+	color:red;
+	text-decoration: none;
+}
+
+.verde:hover {
+	color:green;
+	text-decoration: none;
+}

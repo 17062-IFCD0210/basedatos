@@ -43,6 +43,7 @@ public class EditarServlet extends HttpServlet {
 						
 			ResultSet rs = st.executeQuery(sql);
 			
+			rs.next();
 			request.setAttribute("nombre", rs.getString("nombre") );
 			request.setAttribute("nota", rs.getString("nota") );
 			request.setAttribute("telefono", rs.getString("telefono") );

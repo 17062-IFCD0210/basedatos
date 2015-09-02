@@ -35,7 +35,8 @@
 						<h3 class="masthead-brand">Base Datos</h3>
 						<nav>
 							<ul class="nav masthead-nav">
-								<li class="active"><a href="#">Home</a></li>
+								<li class="active"><a href="index.jsp">Home</a></li>
+								<li><a href="form.jsp">JDBC</a></li>
 								<li><a href="#">Patron DAO</a></li>
 								<li><a href="#">Hibernate</a></li>
 							</ul>

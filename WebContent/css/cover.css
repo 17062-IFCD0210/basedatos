@@ -55,7 +55,7 @@ body {
 
 /* Padding for spacing */
 .inner {
-  padding: 30px;
+  padding: 0 30px;
 }
 
 
@@ -112,10 +112,34 @@ body {
 .cover {
   padding: 0 20px;
 }
-.cover .btn-lg {
-  padding: 10px 20px;
-  font-weight: bold;
+
+.bd_datos {
+	background-color: white;
+	border: 1px solid black;
+	color: black;
+	width: 30%;
 }
+	.bd_datos p {margin: 5px; padding-left: 10px; text-align: left;}
+		.bd_datos p mark {background-color: white; color: green;}
+
+.bd_proceso {
+	margin-top: 20px;
+	margin-left: 50px;
+	text-align: left;
+}
+	.bd_proceso p span {font-size: 30px;}	
+	.bd_proceso .resultado {
+		margin: 10px 20px;
+		padding: 15px;
+		color: #c7254e;
+	    background-color: #f9f2f4;
+	    border-radius: 4px;
+	    font-size: 120%;
+	    margin-bottom: 20px;
+	}
+		.bd_proceso .resultado table {margin: 0 auto;}
+		.bd_proceso .resultado th,td {padding: 5px 10px; border: 1px solid #691515;}
+		.bd_proceso .resultado th {text-align: center;}
 
 
 /*
@@ -136,10 +160,10 @@ body {
   /* Pull out the header and footer */
   .masthead {
     position: fixed;
+    background-color: #333;
     top: 0;
   }
   .mastfoot {
-    position: fixed;
     bottom: 0;
   }
   /* Start the vertical centering */

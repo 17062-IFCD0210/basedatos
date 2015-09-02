@@ -33,12 +33,12 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Conexion Base Datos</h3>
+              <h3 class="masthead-brand">Conexión Base Datos</h3>
               <nav>
                 <ul class="nav masthead-nav">
                   <li class="active"><a href="#">Home</a></li>
                   <li class=""><a href="#">JDBC</a></li>
-                  <li><a href="#">Patron DAO</a></li>
+                  <li><a href="#">Patrón DAO</a></li>
                   <li><a href="#">Hibernate</a></li>
                 </ul>
               </nav>
@@ -49,8 +49,11 @@
 
 
           <div class="inner cover">
-            <h1 class="cover-heading">Aprende Base Datos</h1>
-            <p class="lead">Cargar Driver</p>
+            <h1 class="cover-heading">Aprende Base de Datos</h1>
+            <a href="form.jsp">Insertar nuevo registro</a>
+            <p class="lead">Registros</p>
+            
+          
             <%
             	Class.forName("com.mysql.jdbc.Driver");
             	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
@@ -61,18 +64,34 @@
             	ResultSet rs = st.executeQuery (sql);
             	
             	//recorrer datos del resultado
-            	out.print("<ul>");
+            	out.print("<table>");
+            	
+            	out.print("<tr>"); 
+	            	out.print("<th>Id</th>");
+	            	out.print("<th>Nombre</th>");
+	            	out.print("<th>Nota</th>");
+	            	out.print("<th>Telefono</th>");
+	            	out.print("<th>Fecha</th>");
+	            	out.print("<th>Eliminar</th>");
+	            	out.print("<th>Editar</th>");
+	            	
             	while (rs.next()){ 
-    				 
-            		out.print("<li>" + rs.getInt("id") + " " 
-            		 		+ rs.getString("nombre") + "</li>");
-            		
+            		out.print("</tr>");	 						
+            		out.print("<td>" + rs.getInt("id") + "</td>");
+            		out.print("<td>" + rs.getString("nombre") + "</td>");
+            		out.print("<td>" + rs.getFloat("nota") + "</td>");
+            		out.print("<td>" + rs.getInt("telefono") + "</td>");
+            		out.print("<td>" + rs.getDate("fecha") + "</td>");
+
+            		          		
+            		           		
 				}
-            	out.print("</ul>");
+            	out.print("</table>");
+            	
             	
             	//cerrar conexiones
             %>
-            
+          
           </div>
 
           <div class="mastfoot">

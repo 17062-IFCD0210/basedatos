@@ -34,20 +34,37 @@ public class ListarServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		ArrayList<Persona> alumnos = new ArrayList<Persona>();
+		String sql = null;
 		
 		try{	
-			//Recoger parametros
-			String sql;
-			int filtro;
-			if(request.getParameter("filtro") != null ){
-				filtro = Integer.parseInt(request.getParameter("filtro"));
-				if (filtro == 1){
-					sql = "SELECT * FROM `test`WHERE `nota`>=5;";
-				} else {
-					sql = "SELECT * FROM `test` WHERE `nota`<5;";
+			//Recoger parametros			
+			String filtro = request.getParameter("filtro");
+			String order = request.getParameter("order");
+			String column = request.getParameter("column");
+			if("1".equals(filtro)){		//APROBADOS		
+				sql = "SELECT * FROM `test` WHERE `nota`>=5 ";
+				if ("asc".equals(order)){
+					sql = sql + "ORDER BY `"+column+"` ASC;";
 				}
-			} else {
-				sql = "SELECT * FROM `test`;";
+				if ("desc".equals(order)){
+					sql = sql + "ORDER BY `"+column+"` DESC;";
+				}
+			} else if("2".equals(filtro)){		//SUSPENDIDOS
+				sql = "SELECT * FROM `test` WHERE `nota`<5 ";
+				if ("asc".equals(order)){
+					sql = sql + "ORDER BY `"+column+"` ASC;";
+				}
+				if ("desc".equals(order)){
+					sql = sql + "ORDER BY `"+column+"` DESC;";
+				}
+			} else {		//TODOS
+				sql = "SELECT * FROM `test` ";
+				if ("asc".equals(order)){
+					sql = sql + "ORDER BY `"+column+"` ASC;";
+				}
+				if ("desc".equals(order)){
+					sql = sql + "ORDER BY `"+column+"` DESC;";
+				}
 			}
 			
 			//Realizar consulta BBDD
@@ -74,10 +91,12 @@ public class ListarServlet extends HttpServlet {
 			
 			//Cargar atributos en request
 			request.setAttribute("alumnos", alumnos);
+			request.setAttribute("filtro", filtro);
 			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
 			
 		} catch (Exception e) {
-			request.setAttribute("msg_error", e.getMessage());
+			request.setAttribute("msg_error", e.getMessage()+sql);
+			
 			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
 		}
 		

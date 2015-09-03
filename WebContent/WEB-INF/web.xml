@@ -4,6 +4,7 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+
   <servlet>
     <description>Servlet para insertar un nuevo registro en la tabla Test</description>
     <display-name>InsertarServlet</display-name>

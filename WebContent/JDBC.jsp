@@ -64,10 +64,26 @@
 							<table>
 								<thead>
 									<tr>
-										<th>NOMBRE</th>
-										<th>NOTA</th>
+										<%
+											String order_asc = "?";
+											String order_desc = "?";
+										
+											if (request.getAttribute("filtro") != null ){
+												order_asc = order_asc + "filtro=" + request.getAttribute("filtro") + "&"; 
+												order_desc = order_desc + "filtro=" + request.getAttribute("filtro") + "&";
+											}
+										
+											order_asc = order_asc + "order=asc&column=";
+											order_desc = order_desc + "order=desc&column=";
+										%>									
+									
+										<th>NOMBRE <a href="listar<%=order_desc%>nombre"><span class="icon-arrow-up small"></span></a>
+												   <a href="listar<%=order_asc%>nombre"><span class="icon-arrow-down small"></span></a></th>
+										<th>NOTA <a href="listar<%=order_desc%>nota"><span class="icon-arrow-up small"></span></a>
+												 <a href="listar<%=order_asc%>nota"><span class="icon-arrow-down small"></span></a></th>
 										<th>TELEFONO</th>
-										<th>FECHA</th>
+										<th>FECHA <a href="listar<%=order_desc%>fecha"><span class="icon-arrow-up small"></span></a>
+												  <a href="listar<%=order_asc%>fecha"><span class="icon-arrow-down small"></span></a></th>
 										<th>Opc.</th>
 									</tr>
 								</thead>

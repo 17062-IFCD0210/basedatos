@@ -1,3 +1,6 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+<%@page import="java.sql.ResultSet"%>
 <%@page pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -30,7 +33,19 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Insertar Nuevo Registro</h3>
+              <h3 class="masthead-brand">
+              <% 
+              	boolean edicion=false; 
+              	Persona p = null;
+              	if ( request.getAttribute("alumno") != null ){
+          			out.print("Editar Registro");
+          			p = (Persona)request.getAttribute("alumno");
+          			edicion=true;
+            	}else{
+          			out.print("Insertar Nuevo Registro");
+          		}              
+              %>
+              </h3>
               
               <% //mostrar mensajes
               	 if ( request.getAttribute("msg") != null ){
@@ -44,7 +59,15 @@
 
           <div class="inner cover">
           
-          	<form action="insertar" method="post">
+          <% 
+          if(edicion){
+        	 	out.print("<form action='actualizar' method='post'>");
+          }else{
+        	  out.print("<form action='insertar' method='post'>");
+          }
+        	  
+          %>
+          	<input type="hidden" name="id" value="<% if(edicion){out.print(p.getId());} %>">
 
 	       		<div class="form-group">
 	          		<label for="nombre">Nombre</label>
@@ -53,7 +76,9 @@
 	          		       placeholder="Tu nombre" 
 	          		       required
 	          		       autofocus 
-	          		       tabindex="1" >
+	          		       tabindex="1"
+	          		       value="<% if(edicion){out.print(p.getNombre());} %>"
+	          		       >
 	          	</div>
 	       		<div class="form-group">
 	          		<label for="nota">Nota</label>
@@ -61,27 +86,33 @@
 	          			   name="nota" 
 	          		       placeholder="Tu nota" 
 	          		       required
-	          		       tabindex="2" >
+	          		       tabindex="2"
+	          		       value="<% if(edicion){out.print(p.getNota());} %>"
+	          		        >
 				</div>
 				<div class="form-group">
 	          		<label for="telefono">Teléfono</label>
 	          		<input type="text" 
 	          			   name="telefono" 
 	          		       placeholder="Tu telefono" 
-	          		       tabindex="3" >
+	          		       tabindex="3"
+	          		       value="<% if(edicion){out.print(p.getTelefono());} %>"
+	          		        >
 				</div>
 				<div class="form-group">
 	          		<label for="fecha">Fecha</label>
 	           		<input type="date" 
 	          			   name="fecha"  
-	          		       tabindex="4" >
+	          		       tabindex="4"
+  	          		       value="<% if(edicion){ out.print(p.getFecha().toString().substring(0, 10));} %>"
+	          		        >
 	          	</div>          		
           		<input type="reset" value="Limpiar">
-          		<input type="submit" value="Crear">
+          		<input type="submit" value="Grabar">
           	
           	</form>
           	<br>
-           	<a href="index.jsp">Volver</a>
+           	<a href="inicio">Volver</a>
           </div>
 
           <div class="mastfoot">

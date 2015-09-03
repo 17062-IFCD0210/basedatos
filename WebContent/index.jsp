@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.Statement"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+<%@page import="java.util.ArrayList"%>
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -58,7 +56,7 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Conexion Base Datos</h3>
+              <h3 class="masthead-brand"><a href="inicio">Conexion Base Datos</a></h3>
               <nav>
                 <ul class="nav masthead-nav">
                   <li class="active"><a href="#">Home</a></li>
@@ -77,35 +75,33 @@
             <h1 class="cover-heading">Aprende Base Datos</h1>
             <a href="form.jsp">Insertar nuevo registro</a>
             <p class="lead">Registros</p>
-            <%
-            	Class.forName("com.mysql.jdbc.Driver");
-            	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-            	
-            	// Preparamos la consulta 
-            	Statement st = conexion.createStatement(); 
-            	String sql = "SELECT * FROM `test`";
-            	ResultSet rs = st.executeQuery (sql);
-			%>
-    			<table class="verde tabla">
-            	<thead><td>ID</td><td>Nombre</td><td>Nota</td><td>Telefono</td><td>Fecha</td><td>Editar</td><td>Eliminar</td></thead>
+    		<table class="verde tabla">
+            	<thead><tr><td>Nombre</td><td>Nota</td><td>Telefono</td><td>Fecha</td><td>Editar</td><td>Eliminar</td></tr></thead>
 
-
- 			<% 	//recorrer datos del resultado
-				while (rs.next()) 
-				{ 
-					out.print("<tr><td>" + rs.getInt("id") + "</td><td>" + rs.getString("nombre") + "</td><td>" + rs.getFloat("nota")+"</td><td>"+rs.getString("telefono")+"</td><td>"+rs.getTimestamp("fecha") +"</td><td><a href='actualizar?id="+rs.getInt("id")+"'>Editar</a></td><td><a href='eliminar?id="+rs.getInt("id")+"'>Eliminar</a></td></tr>");
+				<tbody>
+ 			<% 	//recuperar atributo de listado personas
+ 				ArrayList<Persona> alumnos = (ArrayList<Persona>)request.getAttribute("alumnos");
+				if (alumnos==null){
+					alumnos=new ArrayList<Persona>();
+				}
+				Persona p = null;
+				for (int i=0;i<alumnos.size();i++){
+					p = alumnos.get(i);
+					out.print("<tr><td>" + p.getNombre() + "</td><td>" + p.getNota() +"</td><td>"+p.getTelefono()+"</td><td>"+p.getFecha() +"</td><td><a href='editar?id="+p.getId()+"'>E</a></td><td><a href='eliminar?id="+p.getId()+"'>X</a></td></tr>");
 				}
             	
-            	//cerrar conexiones
-				rs.close();
-				st.close();
-				conexion.close();            	
 			%>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="6">Mostrando: <%=alumnos.size()%></td>
+					</tr>
+				</tfoot>
 			</table>
 
-            <a href="filtrar?param=0">Aprobados</a><br>
-            <a href="filtrar?param=1">Suspendidos</a><br>
-            <a href="filtrar?param=2">Todos</a><br>
+            <a href="inicio?filtro=0">Aprobados</a><br>
+            <a href="inicio?filtro=1">Suspendidos</a><br>
+            <a href="inicio">Todos</a><br>
           </div>
 
           <div class="mastfoot">

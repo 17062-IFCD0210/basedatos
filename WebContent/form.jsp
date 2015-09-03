@@ -78,7 +78,7 @@
 	          		<br>
 	          		<p>
 	          		<label for="date">Fecha: </label>
-	          		<input type="date" max="2015-12-31" min="2012-01-01" name="date"
+	          		<input type="date" max="2015-12-31" min="2012-01-01" name="fecha"
 	          				required
 	          				/>
 	          		</p>

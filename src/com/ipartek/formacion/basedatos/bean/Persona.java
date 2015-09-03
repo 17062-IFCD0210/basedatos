@@ -7,9 +7,8 @@ public class Persona {
 	private int id;
 	private String nombre;
 	private float nota;
-	private Timestamp fecha;
 	private String telefono;
-	
+	private Timestamp fecha;
 	
 	//Constructor basico
 	/**

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+
+
 
 <html lang="es">
   <head>
@@ -48,6 +51,7 @@
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base de Datos</h1>
             <a href="form.jsp">Insertar nuevo registro</a>
+                     
             <p class="lead">Registros</p>
             
             	<table>
@@ -66,8 +70,8 @@
 	            <tbody>
 	            <%
 	            	//recuperar atributo de listado personas
-	            	ArrayList<Persona> alumnos =
-	            		(ArrayList<Persona>)request.getAttribute("alumnos");
+	            	ArrayList<Persona> alumnos = 
+		            	(ArrayList<Persona>)request.getAttribute("alumnos");
 	            	if ( alumnos == null ){
 	            		alumnos = new ArrayList<Persona>();
 	            	}
@@ -82,10 +86,10 @@
 	            				<td><%=p.getTelefono()%></td>
 	            				<td><%=p.getFecha()%></td>
 	            				<td>
-	            					<button type="submit" class="btn btn-warning">
+	            					<a href='eliminar?id="+ rs.getInt("id")+"'>
 	        						<span class="glyphicon glyphicon-trash"></span>
-	   								</button>
-	            				</td> 
+	   								</a>
+	            				</td>
 	            				<td>
 	            					<button type="submit" class="btn btn-default">
 	        						<span class="glyphicon glyphicon-pencil"></span>
@@ -100,15 +104,17 @@
 	            %>
 	             </tbody>
 	           	 <tfoot>
+	           	 	<tr>
 	            		<td colspan="6">Mostrando: <%=alumnos.size()%></td>
+	           	 	</tr>
 	           	 </tfoot>	
 
 				</table>
 
           <br>
-            	<a class="btn btn-primary btn-xs" href="lista?accion=1" role="button">Aprobados</a>
-            	<a class="btn btn-primary btn-xs" href="lista?accion=2" role="button">Suspendidos</a>
-            	<a class="btn btn-primary btn-xs" href="lista?accion=3" role="button">Todos</a>
+            	<a class="btn btn-primary btn-xs" href="" role="button">Aprobados</a>
+            	<a class="btn btn-primary btn-xs" href="" role="button">Suspendidos</a>
+            	<a class="btn btn-primary btn-xs" href="" role="button">Todos</a>
            
           <br>
           </div>

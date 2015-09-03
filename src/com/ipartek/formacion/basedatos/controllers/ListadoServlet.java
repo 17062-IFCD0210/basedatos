@@ -66,7 +66,7 @@ public class ListadoServlet extends HttpServlet {
 			//Volver a la HOME
 			request.getRequestDispatcher("index.jsp").forward(request, response);
 		} catch(Exception e) {
-			request.setAttribute("msg2", e.getMessage());
+			request.setAttribute("msg", e.getMessage());
 			request.getRequestDispatcher("form.jsp").forward(request, response);
 		}
 	}

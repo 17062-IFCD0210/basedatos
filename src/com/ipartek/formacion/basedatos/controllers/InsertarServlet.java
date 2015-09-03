@@ -15,61 +15,70 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class InsertarServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public InsertarServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public InsertarServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		try{
-			//recoger parametros
-			String pNombre 		= request.getParameter("nombre");
-			String pNota   		= request.getParameter("nota");
-			String pTelefono    = request.getParameter("telefono");
-			String pFecha   	= request.getParameter("fecha");
-			
-			//Llamar modelo para insercion
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		// recoger parametros
+		String sql = "";
+		String pNombre = request.getParameter("nombre");
+		float pNota = Float.parseFloat(request.getParameter("nota"));
+		String pTelefono = request.getParameter("telefono");
+		String pFecha = request.getParameter("fecha");
+
+		// llamar modelo para insercion
+		try {
+			// abrir conexion
 			Class.forName("com.mysql.jdbc.Driver");
-	    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-	    	
-	    	Statement st = conexion.createStatement();
-	    	String sql 	 = "INSERT INTO `test` (`nombre`,`nota`,`telefono`,`fecha`)"
-	    					+ " VALUES ('" + pNombre + " '" + pNota + "' '" + pTelefono + "' '" + pFecha + "');";
-	    	
-	    	//ejecutar insert,si rdo distinto de 1(numero de inserciones), algo ha ido mal
-	    	if ( st.executeUpdate(sql) != 1){
-	    		
-	    		throw new Exception("No se ha realizado insercion: " + sql);
+			Connection conexion = DriverManager.getConnection(
+					"jdbc:mysql://localhost/skalada", "root", "");
+
+			// crear SQL
+			Statement st = conexion.createStatement();
+			sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES ('"
+					+ pNombre + "' , " + pNota + " , '" + pTelefono + "', '" + pFecha + "');";
+			if (st.executeUpdate(sql) != 1) {
+				throw new Exception("No se ha realizado la insercion: " + sql);
+			}
+
+			// ejecutar SQL
+			if(st.executeUpdate(sql) != 1) {
+	    		throw new Exception("No se ha realizado insercion " + sql);
 	    	}
-	    	
-	    	
-	    	conexion.close();
-			
-			//Volver a la Home
-			request.getRequestDispatcher("index.jsp").forward(request, response);
-		
-		}catch (Exception e){
-			request.setAttribute("msg", e.getMessage() );
+			// cerrar conexion
+
+			st.close();
+			conexion.close();
+			// volver a la HOME
+			request.getRequestDispatcher("index.jsp")
+					.forward(request, response);
+		} catch (Exception e) {
+			request.setAttribute("msg", e.getMessage() + " SQL: " + sql);
 			request.getRequestDispatcher("form.jsp").forward(request, response);
 		}
-		
-		}
-	
-
+	}
 
 }

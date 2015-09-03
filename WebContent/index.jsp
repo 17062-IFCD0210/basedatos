@@ -50,7 +50,11 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base Datos</h1>
+            
+            <a href="form.jsp">Insertar nuevo registro</a>
+            
             <p class="lead">Cargar Driver</p>
+            
             <%
             	Class.forName("com.mysql.jdbc.Driver");
             	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
@@ -61,15 +65,20 @@
             	ResultSet rs = st.executeQuery (sql);
             	
             	//recorrer datos del resultado
-            	out.print("<ul>");
-            	while (rs.next()){ 
-    				 
-            		out.print("<li>" + rs.getInt("id") + " " 
-            		 		+ rs.getString("nombre") + "</li>");
-            		
-				}
-            	out.print("</ul>");
-            	
+	            	out.print("<table>");
+	            	
+	            	while (rs.next()){ 
+	    				
+	            		out.print("<tr>");
+		            		out.print("<td>" + rs.getInt("id") + "</td>" +
+		            				  "<td>" + rs.getString("nombre") + "</td>" +
+		            				  "<td><a href='eliminar?id=" + rs.getInt("id") + "'>Eliminar</a></td>" +
+		            				  "<td><a href='editar?id=" + rs.getInt("id") + "''>Editar</a></td>");
+	            		out.print("</tr>");
+	            		
+					}
+	            	out.print("</table>");
+           
             	//cerrar conexiones
             %>
             

@@ -51,7 +51,7 @@ public class InsertarServlet extends HttpServlet {
 			
 			//Volver a la JDBC
 			request.setAttribute("msg_ok", "Registro insertado");
-			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
+			request.getRequestDispatcher("listar").forward(request, response);
 			
 		} catch (Exception e){
 			request.setAttribute("msg_error", e.getMessage());

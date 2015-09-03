@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class EditarServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static int pID;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -31,7 +32,7 @@ public class EditarServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			//recoger parametros
-			int pID = Integer.parseInt(request.getParameter("id"));
+			pID = Integer.parseInt(request.getParameter("id"));
 		
 			//TODO llamar modelo para inserccion
 			Class.forName("com.mysql.jdbc.Driver"); 
@@ -43,7 +44,10 @@ public class EditarServlet extends HttpServlet {
 						
 			ResultSet rs = st.executeQuery(sql);
 			
+			//Exception (Before start of result set)
+			//Basically you are positioning the cursor before the first row and then requesting data. You need to move the cursor to the first row.
 			rs.next();
+			
 			request.setAttribute("nombre", rs.getString("nombre") );
 			request.setAttribute("nota", rs.getString("nota") );
 			request.setAttribute("telefono", rs.getString("telefono") );
@@ -55,7 +59,7 @@ public class EditarServlet extends HttpServlet {
 						
 		} catch (Exception e){
 			request.setAttribute("msg_error", e.getMessage());
-			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
+			request.getRequestDispatcher("listar").forward(request, response);
 		} 
 	}
 
@@ -73,7 +77,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			
 			Statement st = conexion.createStatement();
 			
-			String sql = "UPDATE `test` SET `nombre`='hola' WHERE `id`=0;";
+			String sql = "UPDATE `test` SET `nombre`='" + pNombre + "', `nota`=" + pNota + ", `telefono`='" + pTelefono + "' WHERE `id`=" + pID + ";";
 						
 			if ( st.executeUpdate(sql) != 1 ){
 				throw new Exception("No se ha podido editar");
@@ -82,12 +86,12 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			conexion.close();
 			
 			//Volver a la JDBC
-			request.setAttribute("msg_ok", "Registro insertado");
-			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
+			request.setAttribute("msg_ok", "Registro modificado");
+			request.getRequestDispatcher("listar").forward(request, response);
 			
 		} catch (Exception e){
 			request.setAttribute("msg_error", e.getMessage());
-			request.getRequestDispatcher("form.jsp").forward(request, response);
+			request.getRequestDispatcher("listar").forward(request, response);
 		}
 	}
 

@@ -34,4 +34,14 @@
     <servlet-name>EditarServlet</servlet-name>
     <url-pattern>/editar</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ListarServlet</display-name>
+    <servlet-name>ListarServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.ListarServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListarServlet</servlet-name>
+    <url-pattern>/listar</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -49,11 +49,11 @@ public class EliminarServlet extends HttpServlet {
 			
 			//Volver a la JDBC
 			request.setAttribute("msg_ok", "Registro eliminado");
-			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
+			request.getRequestDispatcher("listar").forward(request, response);
 						
 		} catch (Exception e){
 			request.setAttribute("msg_error", e.getMessage());
-			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
+			request.getRequestDispatcher("listar").forward(request, response);
 		} 
 	}
 

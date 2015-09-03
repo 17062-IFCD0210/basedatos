@@ -36,7 +36,7 @@
 						<nav>
 							<ul class="nav masthead-nav">
 								<li><a href="index.jsp">Home</a></li>
-								<li class="active"><a href="JDBC.jsp">JDBC</a></li>
+								<li class="active"><a href="listar">JDBC</a></li>
 								<li><a href="#">Patron DAO</a></li>
 								<li><a href="#">Hibernate</a></li>
 							</ul>

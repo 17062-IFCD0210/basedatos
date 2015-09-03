@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.Statement"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+<%@page import="java.util.ArrayList"%>
+
 <html lang="es">
 <head>
 	<meta charset="utf-8">
@@ -36,7 +35,7 @@
 						<nav>
 							<ul class="nav masthead-nav">
 								<li><a href="index.jsp">Home</a></li>
-								<li class="active"><a href="JDBC.jsp">JDBC</a></li>
+								<li class="active"><a href="listar">JDBC</a></li>
 								<li><a href="#">Patron DAO</a></li>
 								<li><a href="#">Hibernate</a></li>
 							</ul>
@@ -59,49 +58,60 @@
 								out.print("<h2>" + request.getAttribute("msg_ok") + "</h2>");
 								out.print("</div>");
 							}
-						%>
-					
+						%>								
 											
-						<% 
-							Class.forName("com.mysql.jdbc.Driver"); 
-							Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost:3306/skalada","root", "");
-							Statement s = conexion.createStatement(); 
-							String sql = "SELECT * FROM `test`";						
-							ResultSet rs = s.executeQuery (sql);
-						%>						
-						<div class="resultado">
+						<div class="resultado" id="tabla">
 							<table>
-								<tr>
-									<th>ID</th>
-									<th>NOMBRE</th>
-									<th>NOTA</th>
-									<th>TELEFONO</th>
-									<th>FECHA</th>
-									<th>Opc.</th>
-								</tr>
+								<thead>
+									<tr>
+										<th>NOMBRE</th>
+										<th>NOTA</th>
+										<th>TELEFONO</th>
+										<th>FECHA</th>
+										<th>Opc.</th>
+									</tr>
+								</thead>
+								<tbody>
 								<%
-									while (rs.next()) 
-									{ 
-										out.print("<tr>");
-											out.print("<td>" + rs.getString("id") + "</td>");
-											out.print("<td>" + rs.getString("nombre") + "</td>");
-											out.print("<td>" + rs.getString("nota") + "</td>");
-											out.print("<td>" + rs.getString("telefono") + "</td>");
-											out.print("<td>" + rs.getString("fecha") + "</td>");
-											out.print("<td><a href='eliminar?id=" + rs.getString("id") + "'><span class='icon-trashcan red'></span>");
-											out.print("	   <a href='editar?id=" + rs.getString("id") + "'><span class='icon-edit blue'></span>'</td>");
-										out.print("</tr>");	
+									//recuperar atributo de listado personas
+									ArrayList<Persona> alumnos = (ArrayList<Persona>)request.getAttribute("alumnos");
+									
+									if(alumnos == null){
+										alumnos = new ArrayList<Persona>();
 									}
+									
+									Persona p = null;
+									for(int i = 0; i < alumnos.size(); i++){
+										p = alumnos.get(i);										
+								%>								
+									<tr>
+										<td><%=p.getNombre()%></td>
+										<td><%=p.getNota()%></td>
+										<td><%=p.getTelefono()%></td>
+										<td><%=p.getFecha()%></td>
+										<td><a href="eliminar?id=<%=p.getId()%>"><span class='icon-trashcan red'></span></a> <a href="editar?id=<%=p.getId()%>"><span class='icon-edit blue'></span></a></td>
+									</tr>										
+								<%
+									}	//END for									
 								%>
+								</tbody>			
+								<tfoot>
+									<tr>
+										<td colspan="6">Mostrando: <%=alumnos.size()%></td>
+									</tr>
+								</tfoot>
 							</table>							
 						</div> <!-- END .resultado -->
-						<%
-							conexion.close();
-						%>						
+												
 					</div>
 					
 					<a href="form.jsp"><button class="btn-lg">Nuevo Registro</button></a>
 					
+					<div>						
+						<a href="listar?filtro=1"><button class="btn-lg">Aprobados</button></a>
+						<a href="listar?filtro=2"><button class="btn-lg">Suspendidos</button></a>
+						<a href="listar"><button class="btn-lg">Todos</button></a>					
+					</div>
 									
 				</div>
 
@@ -118,7 +128,7 @@
 
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.min.js"></script>		
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="js/bootstrap.min.js"></script>
 </body>

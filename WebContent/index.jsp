@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.Statement"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
+
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+<%@page import="java.util.ArrayList"%>
+
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -14,6 +14,7 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/cover.css" rel="stylesheet">
+    <link href="css/basedatos.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -50,37 +51,84 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base Datos</h1>
-            
-            <a href="form.jsp">Insertar nuevo registro</a>
-            
-            <p class="lead">Cargar Driver</p>
-            
-            <%
-            	Class.forName("com.mysql.jdbc.Driver");
-            	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-            	
-            	// Preparamos la consulta 
-            	Statement st = conexion.createStatement(); 
-            	String sql = "SELECT * FROM `test`";
-            	ResultSet rs = st.executeQuery (sql);
-            	
-            	//recorrer datos del resultado
-	            	out.print("<table>");
-	            	
-	            	while (rs.next()){ 
-	    				
-	            		out.print("<tr>");
-		            		out.print("<td>" + rs.getInt("id") + "</td>" +
-		            				  "<td>" + rs.getString("nombre") + "</td>" +
-		            				  "<td><a href='eliminar?id=" + rs.getInt("id") + "'>Eliminar</a></td>" +
-		            				  "<td><a href='editar?id=" + rs.getInt("id") + "''>Editar</a></td>");
-	            		out.print("</tr>");
-	            		
-					}
-	            	out.print("</table>");
+            <% //Mostrar mensaje
+              	if(request.getAttribute("msg") != null) {
+              		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+              	}
+              
+              %>
+              <div class="tablaconexion">
+	            <ul>
+	            	<li>Servidor: <small>localhost</small></li>
+	            	<li>Base de Datos: <small>skalada</small></li>
+	            	<li>Puerto: <small>3306</small></li>
+	            	<li>Usuario: <small>root</small></li>
+	            	<li>Password: </li>
+	            	<li>Tabla: <small>test</small></li>
+	            </ul>
+           	  </div>
            
-            	//cerrar conexiones
-            %>
+             	<a class="btn btn-warning btn-xs" href="form.jsp" role="button">Insertar nuevo registro</a>
+             	
+            	<table class="tabla_blanco">
+	            	<thead>
+	            		<tr>	
+	            			<th>Nombre</th>
+	            			<th>Nota</th>
+	            			<th>Telefono</th>
+	            			<th>Fecha</th>
+	            			<th>Editar</th>
+	            			<th>Eliminar</th>
+	            		</tr>
+	            	</thead>
+	            	
+	            	
+	            	
+	            	<tbody>	
+		            	<%    	
+		            		//recuperar atributo de listado personas
+		            		ArrayList<Persona> alumnos = 
+		            		      (ArrayList<Persona>)request.getAttribute("alumnos");
+		            		if ( alumnos == null ){ 
+		            			alumnos = new ArrayList<Persona>();
+		            		}
+		            		
+		            		Persona p = null;
+		            		for (int i=0; i < alumnos.size(); i++){
+		            			p = alumnos.get(i);
+		            			%>
+		            				<tr>            					
+		            					<td><%=p.getNombre()%></td>
+		            					<td><%=p.getNota()%></td>
+		            					<td><%=p.getTelefono()%></td>
+		            					<td><%=p.getFecha()%></td>
+										<td><a href="">E</a></td>
+										<td><a href="">X</a></td>
+		            				</tr>            			
+		            			<%
+		            		}//end for
+		            	
+		            	%>
+            		</tbody>
+            		
+            		<tfoot>
+	            		<tr>
+	            			<td colspan="6">Mostrando: <%=alumnos.size()%> </td>
+	            		</tr>
+	            	</tfoot>
+	            	
+	            	
+            	</table>
+            	
+            	<br>
+            	<a class="btn btn-warning btn-xs" href="/inicio" role="button" id="0">Aprobados</a>
+            	<a class="btn btn-warning btn-xs" href="/inicio" role="button" id="1">Suspendidos</a>
+            	<a class="btn btn-warning btn-xs" href="/inicio" role="button">Todos</a>
+            	
+            	<br>
+            	
+           
+            
             
           </div>
 

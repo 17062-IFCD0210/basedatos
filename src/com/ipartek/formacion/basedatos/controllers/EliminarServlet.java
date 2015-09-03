@@ -34,19 +34,27 @@ public class EliminarServlet extends HttpServlet {
 				String sId = request.getParameter("id");
 				int pId = Integer.parseInt(sId);
 				
-			// TODO Llamar modelo para insercion
+			// Llamar modelo para eliminacion
 				Class.forName("com.mysql.jdbc.Driver");
 		    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
 				
 		    	Statement st = conexion.createStatement();
-		    	String sql = "DELETE FROM `test` WHERE `id`=" + pId +"";
+		    	String sql = "DELETE FROM `test` WHERE `id`=" + pId + ";";
+		    	
+		    	if ( st.executeUpdate(sql) != 1 ){
+		    		
+		    		throw new Exception("No se ha realizado eliminiacion: " + sql);
+		    	}
+		    	
+		    //Cerrar conexion
+		    	conexion.close();
 		    	
 			// Volver a la home
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("/inicio").forward(request, response);
 			
 		}catch (Exception e){
 			request.setAttribute( "msg", e.getMessage() );
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("form.jsp").forward(request, response);
 		}
 		
 		

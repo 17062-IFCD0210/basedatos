@@ -45,10 +45,14 @@ table {
 
 table tr td {
 	border: 2px solid orange;
-	
 }
 
+
 /* Extra markup and styles for table-esque vertical and horizontal centering */
+.lead {
+	text-align: left;
+}
+
 .site-wrapper {
   display: table;
   width: 100%;
@@ -140,6 +144,26 @@ table tr td {
   color: rgba(255,255,255,.5);
 }
 
+/*
+ * Tabla conexión de index.jsp
+ */
+ 
+.tablaconexion {
+	background-color: orange;
+}
+.tabladecoracion ul{
+	text-decoration: none;
+}
+
+
+
+.celdaizq{
+	text-align: right;
+}
+
+.celdadch{
+	text-align: left;
+}
 
 /*
  * Affix and center

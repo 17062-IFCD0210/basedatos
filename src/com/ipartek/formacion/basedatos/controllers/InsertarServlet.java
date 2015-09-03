@@ -46,7 +46,7 @@ public class InsertarServlet extends HttpServlet {
 			float pNota = Float.parseFloat(sNota);
 				
 			
-			// TODO Llamar modelo para insercion
+			// Llamar modelo para insercion
 			Class.forName("com.mysql.jdbc.Driver");
 	    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
 			
@@ -62,10 +62,9 @@ public class InsertarServlet extends HttpServlet {
 	    	conexion.close();
 	    	
 			// Volver a la home
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("/inicio").forward(request, response);
 			
 		}catch (Exception e){
-			
 			request.setAttribute( "msg", e.getMessage() );
 			request.getRequestDispatcher("form.jsp").forward(request, response);
 		}

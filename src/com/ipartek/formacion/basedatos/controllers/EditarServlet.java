@@ -1,6 +1,10 @@
 package com.ipartek.formacion.basedatos.controllers;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +28,36 @@ public class EditarServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
+		try {
+			// Recoger parametros
+				String sId = request.getParameter("id");
+				int pId = Integer.parseInt(sId);
+				
+			// Llamar modelo para eliminacion
+				Class.forName("com.mysql.jdbc.Driver");
+		    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
+				
+		    	Statement st = conexion.createStatement();
+		    	String sql = "DELETE FROM `test` WHERE `id`=" + pId + "";
+		    	
+		    	if ( st.executeUpdate(sql) != 1 ){
+		    		
+		    		throw new Exception("No se ha realizado eliminiacion: " + sql);
+		    	}
+		    	
+		    	conexion.close();
+		    	
+			// Volver a la home
+			request.getRequestDispatcher("index.jsp").forward(request, response);
+			
+		}catch (Exception e){
+			request.setAttribute( "msg", e.getMessage() );
+			request.getRequestDispatcher("index.jsp").forward(request, response);
+		}
+		
+		
+		
 	}
 
 	/**

@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>BaseDatos</display-name>
   <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>inicio</welcome-file>
   </welcome-file-list>
   <servlet>
     <description>Servlet de prueba para insertar un nuevo registro en la tabla Test</description>
@@ -13,5 +13,35 @@
   <servlet-mapping>
     <servlet-name>InsertarServlet</servlet-name>
     <url-pattern>/insertar</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>InicioServlet</display-name>
+    <servlet-name>InicioServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.InicioServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InicioServlet</servlet-name>
+    <url-pattern>/inicio</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EliminarServlet</display-name>
+    <servlet-name>EliminarServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.EliminarServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EliminarServlet</servlet-name>
+    <url-pattern>/eliminar</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ListadoServlet</display-name>
+    <servlet-name>ListadoServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.ListadoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListadoServlet</servlet-name>
+    <url-pattern>/listado</url-pattern>
   </servlet-mapping>
 </web-app>

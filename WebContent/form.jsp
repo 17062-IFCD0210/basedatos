@@ -46,58 +46,56 @@
           	
           	<form action="insertar" method="post">
           		<fieldset>
-				<legend>Datos Registro</legend>
-          		<p>
-          		<label for="nombre">Nombre: </label><br>
-				<input type="text" 
-					   id="nombre" name="nombre" 
-					   required pattern="[a-zA-ZáéíóúñÁÉÍÓÚÑ]{2,256}"	 
-				       placeholder="Tu nombre"				       
-				       autofocus
-				       tabindex="1"			       
-				       >
-				</p>
-				
-				<p>
-				<label for="nota">Nota: </label><br>
-				<input type="text" id="nota" name="nota"
-				       placeholder="Tu nota de 0-10"
-				       required				        
-					   >
-				</p>
-				
-				<p>
-				<label for="telefono">Telefono: </label><br>
-    			<input type="tel" 
-    				   id="telefono" name="telefono" 
-    				   required
-    				   placeholder="Tu telefono"
-    				   >
-          		</p>
-          		
-          		<br>
-          		<p>
-          		<label for="date">Fecha: </label>
-          		<input type="date" max="2015-12-31" min="2012-01-01" name="date"
-          				required
-          				/>
-          		</p>
-          		
-          		<br>
-          		<input type="submit" value="Crear">
-          		<input type="reset"  value="Limpiar Formulario">
-          	
-          	</fieldset>
+					<legend>Datos Registro</legend>
+	          		<p>
+	          		<label for="nombre">Nombre: </label><br>
+					<input type="text" 
+						   id="nombre" name="nombre" 
+						   required pattern="[a-zA-ZáéíóúñÁÉÍÓÚÑ]{2,256}"	 
+					       placeholder="Tu nombre"				       
+					       autofocus
+					       tabindex="1"			       
+					       >
+					</p>
+					
+					<p>
+					<label for="nota">Nota: </label><br>
+					<input type="text" id="nota" name="nota"
+					       placeholder="Tu nota de 0-10"
+					       required				        
+						   >
+					</p>
+					
+					<p>
+					<label for="telefono">Tel&eacute;fono: </label><br>
+	    			<input type="tel" 
+	    				   id="telefono" name="telefono" 
+	    				   required
+	    				   placeholder="Tu telefono"
+	    				   >
+	          		</p>
+	          		
+	          		<br>
+	          		<p>
+	          		<label for="date">Fecha: </label>
+	          		<input type="date" max="2015-12-31" min="2012-01-01" name="date"
+	          				required
+	          				/>
+	          		</p>
+	          		
+	          		<br>
+	          		<input type="submit" value="Crear">
+	          		<input type="reset"  value="Limpiar">
+	          	
+          		</fieldset>
           	</form>
-          
-          
-                               
+                                     
           </div>
 
           <div class="mastfoot">
             <div class="inner">
-              <p>Documentaci�n <a href="#">Ipartek Campus</a></p>
-              <p>Codigo Fuente <a href="#">GITHUB</a></p>
+              <p>Documentaci�n <a href="http://www.formacion.ipartek.com/campus/">Ipartek Campus</a></p>
+              <p>Codigo Fuente <a href="https://github.com/">GITHUB</a></p>
             </div>
           </div>
 

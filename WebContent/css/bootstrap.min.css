@@ -3367,7 +3367,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-default {
 	color: #333;
-	background-color: #fff;
+	background-color: #0066FF;
 	border-color: #ccc
 }
 
@@ -3589,8 +3589,8 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-warning {
 	color: #fff;
-	background-color: #f0ad4e;
-	border-color: #eea236
+	background-color: #CC0000;
+	border-color: white
 }
 
 .btn-warning.focus, .btn-warning:focus {
@@ -3601,7 +3601,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-warning:hover {
 	color: #fff;
-	background-color: #ec971f;
+	background-color: silver;
 	border-color: #d58512
 }
 

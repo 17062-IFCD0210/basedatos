@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.Statement"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+<%@page import="java.util.ArrayList"%>
+
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -45,53 +44,73 @@
             </div>
           </div>
 
-		
-
 
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base de Datos</h1>
             <a href="form.jsp">Insertar nuevo registro</a>
             <p class="lead">Registros</p>
             
-          
-            <%
-            	Class.forName("com.mysql.jdbc.Driver");
-            	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
+            	<table>
+            		<thead>
             	
-            	// Preparamos la consulta 
-            	Statement st = conexion.createStatement(); 
-            	String sql = "SELECT * FROM `test`";
-            	ResultSet rs = st.executeQuery (sql);
-            	
-            	//recorrer datos del resultado
-            	out.print("<table>");
-            	
-            	out.print("<tr>"); 
-	            	out.print("<th>Id</th>");
-	            	out.print("<th>Nombre</th>");
-	            	out.print("<th>Nota</th>");
-	            	out.print("<th>Telefono</th>");
-	            	out.print("<th>Fecha</th>");
-	            	out.print("<th>Eliminar</th>");
-	            	out.print("<th>Editar</th>");
+            	<tr>
+	            	<th>Nombre</th>
+	            	<th>Nota</th>
+	            	<th>Telefono</th>
+	            	<th>Fecha</th>
+	            	<th>Eliminar</th>
+	            	<th>Editar</th>
+	            </tr>
+	            </thead>
+  
+	            <tbody>
+	            <%
+	            	//recuperar atributo de listado personas
+	            	ArrayList<Persona> alumnos =
+	            		(ArrayList<Persona>)request.getAttribute("alumnos");
+	            	if ( alumnos == null ){
+	            		alumnos = new ArrayList<Persona>();
+	            	}
 	            	
-            	while (rs.next()){ 
-            		out.print("</tr>");	 						
-            		out.print("<td>" + rs.getInt("id") + "</td>");
-            		out.print("<td>" + rs.getString("nombre") + "</td>");
-            		out.print("<td>" + rs.getFloat("nota") + "</td>");
-            		out.print("<td>" + rs.getInt("telefono") + "</td>");
-            		out.print("<td>" + rs.getDate("fecha") + "</td>");
+	            	Persona p = null;
+	            	for (int i=0; i < alumnos.size(); i++){
+	            		p = alumnos.get(i);
+	            		%>
+	            			<tr>
+	            				<td><%=p.getNombre()%></td>
+	            				<td><%=p.getNota()%></td>
+	            				<td><%=p.getTelefono()%></td>
+	            				<td><%=p.getFecha()%></td>
+	            				<td>
+	            					<button type="submit" class="btn btn-warning">
+	        						<span class="glyphicon glyphicon-trash"></span>
+	   								</button>
+	            				</td> 
+	            				<td>
+	            					<button type="submit" class="btn btn-default">
+	        						<span class="glyphicon glyphicon-pencil"></span>
+	   								</button>
+	            				</td> 
 
-            		          		
-            		           		
-				}
-            	out.print("</table>");
-            	
-            	
-            	//cerrar conexiones
-            %>
-          
+	            			</tr>	            		
+	            		<%
+	            		
+	            	}//end for
+	            	
+	            %>
+	             </tbody>
+	           	 <tfoot>
+	            		<td colspan="6">Mostrando: <%=alumnos.size()%></td>
+	           	 </tfoot>	
+
+				</table>
+
+          <br>
+            	<a class="btn btn-primary btn-xs" href="lista?accion=1" role="button">Aprobados</a>
+            	<a class="btn btn-primary btn-xs" href="lista?accion=2" role="button">Suspendidos</a>
+            	<a class="btn btn-primary btn-xs" href="lista?accion=3" role="button">Todos</a>
+           
+          <br>
           </div>
 
           <div class="mastfoot">

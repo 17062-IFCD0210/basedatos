@@ -55,7 +55,7 @@ public class InsertarServlet extends HttpServlet {
 	        
 	        conexion.close();
 			//Volver a la HOME
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("inicio").forward(request, response); //Para que cargue de nuevo todos los registros con el nuevo
 		}catch  (Exception e){ //Si falla que vuelva al form. Sólo se pueden enviar Atributos, parámetros no
 			request.setAttribute("msg", e.getMessage()); //Preparo un mensaje para mostrar al usuario en el formulario
 			request.getRequestDispatcher("form.jsp").forward(request, response);

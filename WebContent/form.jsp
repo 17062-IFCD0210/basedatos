@@ -33,7 +33,7 @@
               <h3 class="masthead-brand">Base Datos</h3>
               <nav>
                 <ul class="nav masthead-nav">
-                	<li class="active"><a href="index.jsp">Home</a></li>
+                	<li class="active"><a href="inicio">Home</a></li>
                 	<li class="active"><a href="#">Insertar Nuevo Registro</a></li>
                 </ul>
               </nav>
@@ -42,11 +42,14 @@
 
           <div class="inner cover">
           
-               <% //mostrar mensajes
-               	if (request.getAttribute("msg") != null){
-               		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
-               	}
-               %>
+          		<% 
+	          		/*ResultSet rs = request.getAttribute("rs");
+	          		
+	               //mostrar mensajes
+	               	if (request.getAttribute("msg") != null){
+	               		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+	               	}*/
+               	%>
                   
 	          <form action="insertar" method="post"> <!-- action="insertar" o URL mapping en el controlador (servlet) -->
 	          

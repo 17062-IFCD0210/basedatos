@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatosProfe.bean.Persona"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
@@ -47,16 +49,14 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">Conexi√≥n Base Datos</h1>
-            <a href="form.jsp">Insertar nuevo registro</a>
-            <p></p>
             
             <div id="bbdd">
-	 				<h5><strong>Servidor: </strong><span id="location_host"></span></h5>
-	 				<h5><strong>Base Datos: </strong><span id="bbdd_nombre"></span></h5>
-	 				<h5><strong>Puerto: </strong><span id="location_port"></span></h5>
-	 				<h5><strong>Usuario: </strong><span id="bbdd_usuario"></span></h5>
-	 				<h5><strong>Password: </strong><span id="bbdd_pass"></span></h5>
-	 				<h5><strong>Tabla: </strong><span id="bbdd_tabla"></span></h5>
+ 				<h5><strong>Servidor: </strong><span id="location_host"></span></h5>
+ 				<h5><strong>Base Datos: </strong><span id="bbdd_nombre"></span></h5>
+ 				<h5><strong>Puerto: </strong><span id="location_port"></span></h5>
+ 				<h5><strong>Usuario: </strong><span id="bbdd_usuario"></span></h5>
+ 				<h5><strong>Password: </strong><span id="bbdd_pass"></span></h5>
+ 				<h5><strong>Tabla: </strong><span id="bbdd_tabla"></span></h5>
             </div>
 
             <div id="area">
@@ -65,8 +65,8 @@
            	</div>
            	
            	<div id="area">
-	           		<p class="lead">Establecemos conexi√≥n con BBDD</p>
-	           		<span id="comando">Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");</span>
+	           	<p class="lead">Establecemos conexi√≥n con BBDD</p>
+	           	<span id="comando">Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");</span>
 	           	<%Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");%>
            	</div>
            	
@@ -80,23 +80,51 @@
            	</div>
            	
            	<div id="area">
-	           		<p class="lead">Recorremos los datos del resultado <span id="comando">while (rs.next()){out.print("<li>" + rs.getString("id") + " " + rs.getString("nombre") + "</li>");}</span></p>
+	           	<p class="lead">Recorremos los datos del resultado <span id="comando">while (rs.next())+ "</li>");}</span></p>
+	           	<a class="btn btn-default boton-separar" href="form.jsp" role="button">Insertar nuevo registro</a>
 	           	<%
-	           		if (rs.next()){
-		            	out.print("<table><tr><th>Nombre</th><th>Nota</th><th>Tel&eacute;fono</th><th>Fecha</th></tr>");
-		            	while (rs.next()){
-		            		out.print("<tr><td>" + rs.getString("id") + "</td><td>" + rs.getString("nombre") + "</td><td>" + rs.getFloat("nota") + "</td><td>"
-		            		+ rs.getString("telefono") + "</td>");
-		            			// "<td><a href='eliminar&id=" + rs.getInt("id") + "'>Eliminar</a></td>");
-		            			// o asÌ
-		            			%>
-		            			<td><a href="eliminar?id=<%=rs.getInt("id")%>">Eliminar</a></td>
-		            			<td><a href="editar?id=<%=rs.getInt("id")%>">Editar</a></td>
-		            			<%
-							}
-		            	out.print("</table>");
-	           		}
-	            %>
+	           	
+	            	out.print("<table class='tabla_blanco'><thead><tr><th>Nombre</th><th>Nota</th><th>Tel&eacute;fono</th><th>Fecha</th><th>Editar</th><th>Eliminar</th></tr><thead>");
+            		out.print("<tbody>");
+
+	            	//Recuperar atributo del listado personas
+	            	ArrayList<Persona> alumnos = (ArrayList<Persona>)request.getAttribute("alumnos");
+	            	if (alumnos == null) {
+	            		alumnos = new ArrayList<Persona>(); 
+	            	}
+	            	
+	            	Persona p = null;
+	            	for (int i=0; i<alumnos.size();i++){
+	            		p = alumnos.get(i);
+	            		%>
+	            			<tr>
+	            				<td><%=p.getNombre()%></td>
+	            				<td><%=p.getNota()%></td>
+	            				<td><%=p.getTelefono()%></td>
+	            				<td><%=p.getFecha()%></td>
+	            				<td><a href="#"><img src="img/editar.png"></a></td>
+	            				<td><a href="eliminar?id=<%=p.getId()%> onclick="confirm('Est· seguro?');false;"><img src="img/eliminar.png"></a></td>
+	            			</tr>
+	            		<%
+	            	} //end for
+            	%>
+            	
+            	<!--  		<td><a href="eliminar?id=< % =rs.getInt("id")%>">Eliminar</a></td> -->
+            	<!-- 		<td><a href="Editar?id=< % =rs.getInt("id")%>&accion=0">Editar</a></td> -->
+        
+            	</tbody>
+            
+	            <tfoot>
+		            <tr class="">
+		            	<td colspan="6">Mostrando: <%=alumnos.size()%></td>
+		            </tr>
+	            </tfoot>
+            	</table>
+	            
+	            <a class="btn btn-default" href="inicio" role="button">Todos</a>
+	            <a class="btn btn-default" href="inicio?filtro=0" role="button">Aprobados</a>
+	            <a class="btn btn-default" href="inicio?filtro=1" role="button">Suspendidos</a>
+	            
             </div>
             
             <div id="area">

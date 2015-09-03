@@ -54,11 +54,11 @@ public class EliminarServlet extends HttpServlet {
 	        conexion.close();
 			//Volver a la HOME
 	        request.setAttribute("msg","El registro " + pID + " ha sido borrado satisfactoriamente");
-			request.getRequestDispatcher("index.jsp").forward(request, response); //Te devuelve a la HOME con un mensaje
+			request.getRequestDispatcher("inicio").forward(request, response); //Te devuelve a la HOME con un mensaje
 			
 		}catch  (Exception e){ //Si falla que vuelva al form. S�lo se pueden enviar Atributos, par�metros no
 			request.setAttribute("msg", e.getMessage()); //Preparo un mensaje para mostrar al usuario en el formulario
-			request.getRequestDispatcher("form.jsp").forward(request, response);
+			request.getRequestDispatcher("inicio").forward(request, response);
 		}
 	}
 

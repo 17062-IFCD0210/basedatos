@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.Statement"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
+
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+<%@page import="java.util.ArrayList"%>
+
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -52,7 +52,7 @@
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base Datos</h1>
             <% //Mostrar mensaje
-              	if(request.getAttribute("msg2") != null) {
+              	if(request.getAttribute("msg") != null) {
               		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
               	}
               
@@ -68,59 +68,64 @@
             
            
             
-            <ol>
-            	<li>Cargando Driver: <code>com.mysql.jdbc.Driver</code></li>
-            	<br>
-            	<li>Establecer Conexion: <code>"jdbc:mysql://localhost/skalada","root", ""</code></li>
-            	<br>
-            	<li>Preparar Consulta: <code>SELECT * FROM `test`</code></li>
-            	<br>
-            	<li>Registros
-            	<br><br>
-            	<a class="btn btn-primary btn-xs" href="form.jsp" role="button">Insertar nuevo registro</a>
-            	<br><br>
-            	<%
-	            	Class.forName("com.mysql.jdbc.Driver");
-	            	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
+            	<table class="tabla_blanco">
+	            	<thead>
+	            		<tr>	
+	            			<th>Nombre</th>
+	            			<th>Nota</th>
+	            			<th>Telefono</th>
+	            			<th>Fecha</th>
+	            			<th>Editar</th>
+	            			<th>Eliminar</th>
+	            		</tr>
+	            	</thead>
 	            	
-	            	// Preparamos la consulta 
-	            	Statement st = conexion.createStatement(); 
-	            	String sql = "SELECT * FROM `test`";
-	            	ResultSet rs = st.executeQuery (sql);
 	            	
-	            	//recorrer datos del resultado
-	            	out.print("<table class=\"tabla_blanco\">");
-	            		out.print("<tr>");
-	            			out.print("<th>Id</th>");
-	            			out.print("<th>Nombre</th>");
-	            			out.print("<th>Nota</th>");
-	            			out.print("<th>Telefono</th>");
-	            			out.print("<th>Fecha</th>");
-	            		out.print("</tr>");
-		            	while (rs.next()){ 
-		            		out.print("<tr>");
-			    				out.print("<td>" + rs.getInt("id") + "</td>");
-			            		out.print("<td>" + rs.getString("nombre") + "</td>");
-			            		out.print("<td>" + rs.getFloat("nota") + "</td>");
-			            		out.print("<td>" + rs.getString("telefono") + "</td>");
-			            		out.print("<td>" + rs.getDate("fecha") + "</td>");
-			            		out.print("<td><a href=\"editar?id=" + rs.getInt("id") + "\" class=\"verde\">E</a></td>");
-			            		out.print("<td><a href=\"eliminar?id=" + rs.getInt("id") + "\" class=\"rojo\">X</a></td>");
-		            		out.print("</tr>");
-						}
-	            	out.print("</table>");
-
-            		//cerrar conexiones
-            		conexion.close();
-            	%>
+	            	
+	            	<tbody>	
+		            	<%    	
+		            		//recuperar atributo de listado personas
+		            		ArrayList<Persona> alumnos = 
+		            		      (ArrayList<Persona>)request.getAttribute("alumnos");
+		            		if ( alumnos == null ){ 
+		            			alumnos = new ArrayList<Persona>();
+		            		}
+		            		
+		            		Persona p = null;
+		            		for (int i=0; i < alumnos.size(); i++){
+		            			p = alumnos.get(i);
+		            			%>
+		            				<tr>            					
+		            					<td><%=p.getNombre()%></td>
+		            					<td><%=p.getNota()%></td>
+		            					<td><%=p.getTelefono()%></td>
+		            					<td><%=p.getFecha()%></td>
+		            					<td><a href="#">E</a></td>
+		            					<td><a href="#">X</a></td>
+		            				</tr>            			
+		            			<%
+		            		}//end for
+		            	
+		            	%>
+            		</tbody>
+            		
+            		<tfoot>
+	            		<tr>
+	            			<td colspan="6">Mostrando: <%=alumnos.size()%> </td>
+	            		</tr>
+	            	</tfoot>
+	            	
+	            	
+            	</table>
+            	
             	<br>
             	<a class="btn btn-primary btn-xs" href="lista?accion=1" role="button">Aprobados</a>
             	<a class="btn btn-primary btn-xs" href="lista?accion=2" role="button">Suspendidos</a>
             	<a class="btn btn-primary btn-xs" href="lista?accion=3" role="button">Todos</a>
-            	</li>
+            	
             	<br>
-            	<li>Cerrar conexion: <code>conexion.close();</code></li>
-            </ol>
+            	
+           
             
             
           </div>

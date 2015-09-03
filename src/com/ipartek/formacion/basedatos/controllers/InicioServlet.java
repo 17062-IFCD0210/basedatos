@@ -5,22 +5,25 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ipartek.formacion.basedatos.bean.Persona;
+
 /**
- * Servlet implementation class ListadoServlet
+ * Servlet implementation class InicioServlet
  */
-public class ListadoServlet extends HttpServlet {
+public class InicioServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ListadoServlet() {
+    public InicioServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,9 +33,12 @@ public class ListadoServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ArrayList<Persona> alumnos = new ArrayList<Persona>();
 		try {
-			//Recoger parametro accion
-			int pAccion = Integer.parseInt(request.getParameter("accion"));
+			//Recoger parametros
+			String pFiltro = request.getParameter("filtro");
+			
+			
 			
 			//Abrir conexion
 			Class.forName("com.mysql.jdbc.Driver");
@@ -40,35 +46,51 @@ public class ListadoServlet extends HttpServlet {
 	    	
 	    	//Crear SQL
 	    	Statement st = conexion.createStatement();
-	    	String sqlSus = "SELECT * FROM `test` WHERE nota < 5;";
-	    	String sqlApr = "SELECT * FROM `test` WHERE nota >= 5;";
-	    	String sqlTodos = "SELECT * FROM `test`;";
+	    	String sql = null;
+	    	if(pFiltro != null) {
+	    		switch(pFiltro) {
+		    		case "0":
+		    			sql = "SELECT * FROM `test` WHERE nota>=5;";
+		    		break;
+		    		case "1":
+		    			sql = "SELECT * FROM `test` WHERE nota<5;";
+		    		break;
+	    		}
+	    	} else {
+	    		sql = "SELECT * FROM `test`;";
+	    	}
+
 	    	
 			//Ejecutar SQL
-	    	switch (pAccion) {
-	    		case 1:
-	    			ResultSet rs = st.executeQuery (sqlApr);
-	    		break;
-	    		case 2:
-	    			ResultSet rs2 = st.executeQuery (sqlSus);
-	    		break;
-	    		case 3:
-	    			ResultSet rs3 = st.executeQuery (sqlApr);
-	    		break;
+	    	ResultSet rs = st.executeQuery (sql);
+	    	
+	    	//Mapeo resultSet => ArrayList<Persona>
+	    	Persona p = null;
+	    	while(rs.next()) {
+	    		p = new Persona(rs.getString("nombre"));
+	    		p.setId(rs.getInt("id"));
+	    		p.setNombre(rs.getString("nombre"));
+	    		p.setNota(rs.getFloat("nota"));
+	    		p.setTelefono(rs.getString("telefono"));
+	    		p.setFecha(rs.getTimestamp("fecha"));
+	    		alumnos.add(p);
 	    	}
 	    	
 	    	
+	    	//Cargar atributos en request
+	    	request.setAttribute("alumnos", alumnos);
 	    	
 			//Cerrar conexion
-	    	
-	    	conexion.close();
+			conexion.close();
 			
-			//Volver a la HOME
+			//Forward
 			request.getRequestDispatcher("index.jsp").forward(request, response);
 		} catch(Exception e) {
-			request.setAttribute("msg2", e.getMessage());
-			request.getRequestDispatcher("form.jsp").forward(request, response);
+			e.printStackTrace();
+			request.setAttribute("msg", e.getMessage());
 		}
+		
+		
 	}
 
 	/**
@@ -76,7 +98,7 @@ public class ListadoServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		doGet(request,response);
 	}
 
 }

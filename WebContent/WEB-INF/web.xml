@@ -24,4 +24,14 @@
     <servlet-name>EliminarServlet</servlet-name>
     <url-pattern>/eliminar</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description>Listado de la BBDD segun nota</description>
+    <display-name>ListadoServlet</display-name>
+    <servlet-name>ListadoServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.ListadoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListadoServlet</servlet-name>
+    <url-pattern>/lista</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -3,6 +3,7 @@ package com.ipartek.formacion.basedatos.controllers;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 import javax.servlet.ServletException;
@@ -11,15 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class EliminarServlet
+ * Servlet implementation class ListadoServlet
  */
-public class EliminarServlet extends HttpServlet {
+public class ListadoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EliminarServlet() {
+    public ListadoServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,8 +31,8 @@ public class EliminarServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			//Recoger parametros
-			int pId = Integer.parseInt(request.getParameter("id"));
+			//Recoger parametro accion
+			int pAccion = Integer.parseInt(request.getParameter("accion"));
 			
 			//Abrir conexion
 			Class.forName("com.mysql.jdbc.Driver");
@@ -39,12 +40,24 @@ public class EliminarServlet extends HttpServlet {
 	    	
 	    	//Crear SQL
 	    	Statement st = conexion.createStatement();
-	    	String sql = "DELETE FROM test WHERE id=" + pId + ";";
+	    	String sqlSus = "SELECT * FROM `test` WHERE nota < 5;";
+	    	String sqlApr = "SELECT * FROM `test` WHERE nota >= 5;";
+	    	String sqlTodos = "SELECT * FROM `test`;";
 	    	
 			//Ejecutar SQL
-	    	if(st.executeUpdate(sql) != 1) {
-	    		throw new Exception("No se ha realizado eliminacion " + sql);
+	    	switch (pAccion) {
+	    		case 1:
+	    			ResultSet rs = st.executeQuery (sqlApr);
+	    		break;
+	    		case 2:
+	    			ResultSet rs2 = st.executeQuery (sqlSus);
+	    		break;
+	    		case 3:
+	    			ResultSet rs3 = st.executeQuery (sqlApr);
+	    		break;
 	    	}
+	    	
+	    	
 	    	
 			//Cerrar conexion
 	    	

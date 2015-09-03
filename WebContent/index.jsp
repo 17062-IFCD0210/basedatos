@@ -114,9 +114,9 @@
             		conexion.close();
             	%>
             	<br>
-            	<a class="btn btn-primary btn-xs" href="form.jsp" role="button">Aprobados</a>
-            	<a class="btn btn-primary btn-xs" href="form.jsp" role="button">Suspendidos</a>
-            	<a class="btn btn-primary btn-xs" href="form.jsp" role="button">Todos</a>
+            	<a class="btn btn-primary btn-xs" href="lista?accion=1" role="button">Aprobados</a>
+            	<a class="btn btn-primary btn-xs" href="lista?accion=2" role="button">Suspendidos</a>
+            	<a class="btn btn-primary btn-xs" href="lista?accion=3" role="button">Todos</a>
             	</li>
             	<br>
             	<li>Cerrar conexion: <code>conexion.close();</code></li>

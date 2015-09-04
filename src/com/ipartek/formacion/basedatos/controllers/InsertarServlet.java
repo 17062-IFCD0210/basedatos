@@ -4,10 +4,15 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.util.Date;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ipartek.formacion.basedatos.bean.Persona;
+import com.ipartek.formacion.basedatos.modelo.DAOPersona;
 
 /**
  * Servlet implementation class InsertarServlet
@@ -40,25 +45,19 @@ public class InsertarServlet extends HttpServlet {
 			String pNombre = request.getParameter("nombre");
 			float pNota = Float.parseFloat(request.getParameter("nota"));
 			String pTelefono= request.getParameter("telefono");
-			String pFecha = "";
+			Date pFecha;
 			if(request.getParameter("fecha")!=null){
-				pFecha = request.getParameter("fecha");
+				//pFecha = Date.parse(request.getParameter("fecha"));
 			}			
 			
-			//TODO llamar modelo para inserccion
-			Class.forName("com.mysql.jdbc.Driver");
-	    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-	    	
-	    	Statement st = conexion.createStatement();
-	    	sql   = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES ('" + pNombre + "',"+ pNota + ",'"+ pTelefono +"','"+ pFecha +"');";
-	    	
-	    	//ejecutar insert
-	    	if ( st.executeUpdate(sql) != 1){	    		
-	    		throw new Exception("No se ha realizado insercion: " + sql);	    		
-	    	}
-	    	
-			
-	    	conexion.close();
+	    	Persona p = null;	    	
+    		p = new Persona( pNombre );
+    		//p.setFecha(pFecha);
+    		p.setTelefono(pTelefono);
+    		p.setNota(pNota);
+
+    		DAOPersona dao = new DAOPersona();
+			dao.save(p);
 			
 			//Volver a la HOME
 			request.getRequestDispatcher("inicio").forward(request, response);

@@ -1,71 +1,91 @@
 package com.ipartek.formacion.basedatos.controllers;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
+import com.ipartek.formacion.basedatos.modelo.DAOPersona;
+
+
 
 /**
  * Servlet implementation class InicioServlet
  */
 public class InicioServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public InicioServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
+	private RequestDispatcher dispatcher = null;       
+	//Modelo DAOPersona
+	DAOPersona dao = null;
+	
+	//parametros
+	private String pAccion;
+	private String pID; 
+	private String pFiltro;
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		dao = new DAOPersona();
+	}
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<Persona> alumnos = new ArrayList<Persona>();
+		
+		//Recoger parametros: accion, id, filtro
+		pID = request.getParameter("id");
+		pAccion = request.getParameter("accion");
+		pFiltro = request.getParameter("filtro");
+		
+		//En funcion del parametro 'accion' realizar la accion
+		// 0: Listar
+		// 1: Detalle
+		// 2: Eliminar
+
+		//Detalle
+		if("1".equals(pAccion)){
+			detalle(request, response);
+			
+		//Eliminar
+		}else if("2".equals(pAccion)){
+			eliminar(request, response);
+			
+		//Listar
+		}else {
+			listar(request, response);
+		}
+		
+		//forward
+		dispatcher.forward(request, response);
+				
+		
+	/*	
+		
+		ArrayList<Object> alumnos = new ArrayList<Object>();
 		
 		try{
 			//recoger parametros
-	    	String sql   = "SELECT * FROM `test`";
-			if(request.getParameter("filtro")!=null){
-				int pFiltro = Integer.parseInt(request.getParameter("filtro"));
-		    	if (pFiltro==0){
-		    		sql+=" WHERE `nota` >= 5.0;";
-		    	}else if(pFiltro==1){
-		    		sql+=" WHERE `nota` < 5.0;";
-		    	}
-			}
+			String filtro = request.getParameter("filtro");
 			
-
-			//realizar consulta BBDD
-			Class.forName("com.mysql.jdbc.Driver");
-	    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");    	
-	    	Statement st = conexion.createStatement();
-	    	//String sql   = "SELECT * FROM `test`;";
-	      	ResultSet rs = st.executeQuery (sql);
-	  		
-	      	//mapeo resulSet ==> ArrayList<Persona>
-	      	Persona p = null;
-	      	
-	      	while(rs.next()){
-	      		p = new Persona(rs.getString("nombre"));
-	      		p.setId(rs.getInt("id"));
-	      		p.setNota(rs.getFloat("nota"));
-	      		p.setTelefono(rs.getString("telefono"));
-	      		p.setFecha(rs.getTimestamp("fecha"));
-	      		
-	      		alumnos.add(p);
-	      	}
+			//llamar al modelo
+			DAOPersona dao = new DAOPersona();
+			if("0".equals(filtro)){
+				alumnos=dao.getAprobados();
+			}else if ("1".equals(filtro)){
+				alumnos=dao.getSuspendidos();
+			}else{
+				alumnos = dao.getAll();
+			}
 	      	
 			//cargar atributos en request
 	      	request.setAttribute("alumnos", alumnos);
@@ -76,7 +96,47 @@ public class InicioServlet extends HttpServlet {
 		}	      	
 		//forward
 		request.getRequestDispatcher("index.jsp").forward(request, response);
-			
+*/			
+	}
+
+	
+
+	private void listar(HttpServletRequest request, HttpServletResponse response) {
+		ArrayList<Object> alumnos = new ArrayList<Object>();
+		
+		if("0".equals(pFiltro)){
+			alumnos=dao.getAprobados();
+		}else if ("1".equals(pFiltro)){
+			alumnos=dao.getSuspendidos();
+		}else{
+			alumnos = dao.getAll();
+		}
+      	
+		//cargar atributos en request
+      	request.setAttribute("alumnos", alumnos);
+      	
+      	dispatcher = request.getRequestDispatcher("index.jsp");
+      	
+	}
+
+	private void eliminar(HttpServletRequest request,
+			HttpServletResponse response) {
+		
+		int id = Integer.parseInt(pID);
+		dao.delete(id);
+		//dispatcher = request.getRequestDispatcher("inicio?accion=0");
+		listar(request, response);
+		
+	}
+
+	private void detalle(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		int id = Integer.parseInt(pID);
+		Object alumno = dao.getById(id);
+      	request.setAttribute("alumno", alumno);     	
+      	dispatcher = request.getRequestDispatcher("form.jsp");
+		
 	}
 
 	/**
@@ -84,6 +144,42 @@ public class InicioServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
+		
+		String sql=null;
+		try{
+			//recoger parametros
+			pID=request.getParameter("id");
+			System.out.println(pID);
+			String pNombre = request.getParameter("nombre");
+			float pNota = Float.parseFloat(request.getParameter("nota"));
+			String pTelefono= request.getParameter("telefono");
+			Date pFecha;
+			if(request.getParameter("fecha")!=null){
+				//pFecha = Date.parse(request.getParameter("fecha"));
+			}			
+			
+	    	Persona p = null;	    	
+    		p = new Persona( pNombre );
+    		//p.setFecha(pFecha);
+    		p.setTelefono(pTelefono);
+    		p.setNota(pNota);
+
+    		if ("-1".equals(pID)){
+    			dao.save(p);
+    		}else{
+    			dao.update(p);
+    		}
+			
+    		dispatcher = request.getRequestDispatcher("inicio?accion=0");
+			
+		}catch ( Exception e){
+			
+			request.setAttribute("msg", e.getMessage() + "SQL: "+sql);
+			dispatcher = request.getRequestDispatcher("form.jsp");
+		}
+		//forward
+		listar(request,response);
+		//dispatcher.forward(request, response);		
 	}
 
 }

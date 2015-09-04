@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ipartek.formacion.basedatos.modelo.DAOPersona;
+
 /**
  * Servlet implementation class EliminarServlet
  */
@@ -31,21 +33,9 @@ public class EliminarServlet extends HttpServlet {
 		try{
 			//recoger parametros
 			int pId = Integer.parseInt(request.getParameter("id"));
-
-			//TODO llamar modelo para inserccion
-			Class.forName("com.mysql.jdbc.Driver");
-	    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-	    	
-	    	Statement st = conexion.createStatement();
-	    	String sql   = "DELETE FROM `test` WHERE `id` = "+pId+";";
-
-	    	//ejecutar delete
-	    	if ( st.executeUpdate(sql) != 1){	    		
-	    		throw new Exception("No se ha realizado eliminacion: " + sql);	    		
-	    	}
-	    	
 			
-	    	conexion.close();
+			DAOPersona dao = new DAOPersona();
+			dao.delete(pId);
 			
 			//Volver a la HOME
 			request.getRequestDispatcher("inicio").forward(request, response);

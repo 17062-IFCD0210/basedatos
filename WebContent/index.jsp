@@ -87,7 +87,7 @@
 				Persona p = null;
 				for (int i=0;i<alumnos.size();i++){
 					p = alumnos.get(i);
-					out.print("<tr><td>" + p.getNombre() + "</td><td>" + p.getNota() +"</td><td>"+p.getTelefono()+"</td><td>"+p.getFecha() +"</td><td><a href='editar?id="+p.getId()+"'>E</a></td><td><a href='eliminar?id="+p.getId()+"'>X</a></td></tr>");
+					out.print("<tr><td>" + p.getNombre() + "</td><td>" + p.getNota() +"</td><td>"+p.getTelefono()+"</td><td>"+p.getFecha() +"</td><td><a href='inicio?accion=1&id="+p.getId()+"'>E</a></td><td><a href='inicio?accion=2&id="+p.getId()+"'>X</a></td></tr>");
 				}
             	
 			%>

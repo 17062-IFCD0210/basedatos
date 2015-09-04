@@ -34,6 +34,7 @@
           <div class="masthead clearfix">
             <div class="inner">
               <h3 class="masthead-brand">
+              
               <% 
               	boolean edicion=false; 
               	Persona p = null;
@@ -60,13 +61,14 @@
           <div class="inner cover">
           
           <% 
-          if(edicion){
+/*          if(edicion){
         	 	out.print("<form action='actualizar' method='post'>");
           }else{
-        	  out.print("<form action='insertar' method='post'>");
+        	  out.print("<form action='inicio' method='post'>");
           }
-        	  
+  */      	  
           %>
+          <form action='inicio' method='post'>
           	<input type="hidden" name="id" value="<% if(edicion){out.print(p.getId());} %>">
 
 	       		<div class="form-group">

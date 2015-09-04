@@ -55,8 +55,26 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public Object getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Object resul = new Object();
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			Statement st = con.createStatement(); 
+	    	String sql = "SELECT * FROM `test` where id=" + id;
+	    	ResultSet rs = st.executeQuery (sql);
+	    	
+	    	while(rs.next()){	    		    		
+	    		resul = mapeo(rs);    		
+	    	}	
+	    	
+	    	
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		
+		return resul;
 	}
 
 	@Override

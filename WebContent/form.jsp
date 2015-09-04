@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -41,7 +42,14 @@
             </div>
           </div>
 
+		<%
 		
+			Persona p = (Persona)request.getAttribute("alumno");
+			if ( p == null ){
+				p = new Persona("");
+			}
+		
+		%>
 
 
           <div class="inner cover">
@@ -49,7 +57,13 @@
          	<form action="insertar" method="post">
          		<label for="nombre">Nombre: </label>
          		<br>
-         		<input type="text" name="nombre" placeholder="Tu Nombre" required autofocus tabindex="1">
+         		<input type="text" 
+         		       name="nombre" 
+         		       value="<%=p.getNombre()%>" 
+         		       placeholder="Tu Nombre" 
+         		       required 
+         		       autofocus 
+         		       tabindex="1">
          		<br><br>
          		
          		<label for="nota">Nota: </label>

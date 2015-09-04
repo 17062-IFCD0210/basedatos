@@ -100,8 +100,8 @@
 		            					<td><%=p.getNota()%></td>
 		            					<td><%=p.getTelefono()%></td>
 		            					<td><%=p.getFecha()%></td>
-		            					<td><a href="insertar?id=<%=p.getId()%>">E</a></td>
-		            					<td><a href="eliminar?id=<%=p.getId()%>">X</a></td>
+		            					<td><a href="inicio?id=<%=p.getId()%>&accion=1">E</a></td>
+		            					<td><a href="inicio?id=<%=p.getId()%>&accion=2">X</a></td>
 		            				</tr>            			
 		            			<%
 		            		}//end for

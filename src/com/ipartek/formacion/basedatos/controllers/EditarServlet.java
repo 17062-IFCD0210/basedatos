@@ -5,11 +5,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ipartek.formacion.basedatos.bean.Persona;
 
 /**
  * Servlet implementation class EditarServlet
@@ -48,13 +51,15 @@ public class EditarServlet extends HttpServlet {
 			//Basically you are positioning the cursor before the first row and then requesting data. You need to move the cursor to the first row.
 			rs.next();
 			
-			request.setAttribute("nombre", rs.getString("nombre") );
-			request.setAttribute("nota", rs.getString("nota") );
-			request.setAttribute("telefono", rs.getString("telefono") );
+			Persona p = new Persona(rs.getString("nombre"));			
+			p.setNota(Float.parseFloat(rs.getString("nota")));
+			p.setTelefono(rs.getString("telefono"));
 			
 			conexion.close();
 			
 			//Ir a form_mod
+			request.setAttribute("alumno", p);
+			request.setAttribute("metodo", "Modificar");
 			request.getRequestDispatcher("form_mod.jsp").forward(request, response);
 						
 		} catch (Exception e){

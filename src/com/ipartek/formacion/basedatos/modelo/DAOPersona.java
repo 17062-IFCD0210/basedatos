@@ -2,6 +2,7 @@ package com.ipartek.formacion.basedatos.modelo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ public class DAOPersona implements IDAOPersona {
 	 * Recupera todas las Personas
 	 * @return {@code ArrayList<Persona>} listado personas
 	 */
+	@Override
 	public ArrayList<Object> getAll(){		
 		
 		ArrayList<Object> resul = new ArrayList<Object>();
@@ -30,28 +32,18 @@ public class DAOPersona implements IDAOPersona {
 	    	String sql = "SELECT * FROM `test` ";
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
-	    	//mapeo resultSet => ArrayList<Persona>
-	    	Persona p = null;	    	
+	    	//mapeo resultSet => ArrayList<Persona>	    	   	
 	    	while(rs.next()){
-	    		
-	    		p = new Persona( rs.getString("nombre") );
-	    		p.setId( rs.getInt("id"));
-	    		p.setNota(rs.getFloat("nota"));	    		
-	    		p.setTelefono(rs.getString("telefono"));
-	    		p.setFecha( rs.getTimestamp("fecha"));
-	    		
-	    		resul.add(p);
-	    	}		    	
-	    	
+	    		resul.add(mapeo(rs));
+	    	}	
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
 			DataBaseHelper.closeConnection();
-		}
-		
+		}		
 		return resul;		
 	}
-
+	
 	@Override
 	public int save(Object o) {
 		// TODO Auto-generated method stub
@@ -60,8 +52,25 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public Object getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Object resul = new Object();
+		
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			Statement st = con.createStatement(); 
+	    	String sql = "SELECT * FROM `test` WHERE `id`="+id;
+	    	ResultSet rs = st.executeQuery (sql);
+	    	
+	    	//mapeo resultSet => ArrayList<Persona>	    	   	
+	    	while(rs.next()){
+	    		resul = mapeo(rs);
+	    	}	
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			DataBaseHelper.closeConnection();
+		}		
+		return resul;		
 	}
 
 	@Override
@@ -72,8 +81,24 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		Boolean resul = false;
+		
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			Statement st = con.createStatement(); 
+			String sql = "DELETE FROM `test` WHERE `id`=" + id + ";";
+			
+			if ( st.executeUpdate(sql) != 1 ){
+				throw new Exception("No se ha podido eliminar");
+			} else {
+				resul = true;
+			}	    		
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			DataBaseHelper.closeConnection();
+		}		
+		return resul;	
 	}
 
 	@Override
@@ -88,24 +113,15 @@ public class DAOPersona implements IDAOPersona {
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>
-	    	Persona p = null;	    	
+	    	//mapeo resultSet => ArrayList<Persona>	    	   	
 	    	while(rs.next()){
-	    		
-	    		p = new Persona( rs.getString("nombre") );
-	    		p.setId( rs.getInt("id"));
-	    		p.setNota(rs.getFloat("nota"));	    		
-	    		p.setTelefono(rs.getString("telefono"));
-	    		p.setFecha( rs.getTimestamp("fecha"));
-	    		
-	    		resul.add(p);
-	    	}		    	
-	    	
+	    		resul.add(mapeo(rs));
+	    	}	   	
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
 			DataBaseHelper.closeConnection();
-		}
-		
+		}		
 		return resul;		
 	}
 
@@ -119,26 +135,34 @@ public class DAOPersona implements IDAOPersona {
 	    	String sql = "SELECT * FROM `test` WHERE `nota`<5 ";
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
-	    	//mapeo resultSet => ArrayList<Persona>
-	    	Persona p = null;	    	
+	    	//mapeo resultSet => ArrayList<Persona>	    	   	
 	    	while(rs.next()){
-	    		
-	    		p = new Persona( rs.getString("nombre") );
-	    		p.setId( rs.getInt("id"));
-	    		p.setNota(rs.getFloat("nota"));	    		
-	    		p.setTelefono(rs.getString("telefono"));
-	    		p.setFecha( rs.getTimestamp("fecha"));
-	    		
-	    		resul.add(p);
-	    	}		    	
-	    	
+	    		resul.add(mapeo(rs));
+	    	}	 
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
 			DataBaseHelper.closeConnection();
-		}
-		
+		}		
 		return resul;		
+	}
+	
+	/**
+	 * Mapea un ResultSet a Persona
+	 * @param rs
+	 * @return
+	 * @throws SQLException 
+	 */
+	private Persona mapeo (ResultSet rs) throws SQLException{
+		Persona resul = null;    
+		
+		resul = new Persona( rs.getString("nombre") );
+		resul.setId( rs.getInt("id"));
+		resul.setNota(rs.getFloat("nota"));	    		
+		resul.setTelefono(rs.getString("telefono"));
+		resul.setFecha( rs.getTimestamp("fecha"));	    		
+    		 
+		return resul;
 	}
 	
 }

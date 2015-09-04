@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.Constantes"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
@@ -37,7 +38,7 @@
 							<ul class="nav masthead-nav">
 								<li class="active"><a href="index.jsp">Home</a></li>
 								<li><a href="listar">JDBC</a></li>
-								<li><a href="#">Patron DAO</a></li>
+								<li><a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>">Patron DAO</a></li>
 								<li><a href="#">Hibernate</a></li>
 							</ul>
 						</nav>

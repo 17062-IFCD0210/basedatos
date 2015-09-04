@@ -141,20 +141,23 @@ body {
 	margin: 10px 0;
 	padding: 10px;
 	color: #000;
-    background-color: #f9f2f4;
+    background-color: #FFF;
     border-radius: 4px;
     font-size: 120%;
     margin-bottom: 20px;
 }
-	.resultado table {margin: 0 auto;}
-	.resultado th,td {padding: 5px 10px; border: 1px solid #691515;}
-	.resultado th {text-align: center;}
+/* 	.resultado table {margin: 0 auto;} */
+/* 	.resultado th,td {padding: 5px 10px; border: 1px solid #691515;} */
+/* 	.resultado th {text-align: center;} */
 
 .red {
 	color: red;
 }
 .blue {
 	color: blue;
+}
+.black {
+	color: #000;
 }
 
 
@@ -192,6 +195,7 @@ body {
   /* Pull out the header and footer */
   .masthead {
     position: fixed;
+    z-index: 25;
     background-color: #333;
     top: 0;
   }

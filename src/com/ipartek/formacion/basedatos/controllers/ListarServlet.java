@@ -44,38 +44,19 @@ public class ListarServlet extends HttpServlet {
 			
 			DAOPersona dao = new DAOPersona();
 			
-			if("1".equals(filtro)){		//APROBADOS		
-				alumnos = dao.getAprobados();	
-//				if ("asc".equals(order)){
-//					sql = sql + "ORDER BY `"+column+"` ASC;";
-//				}
-//				if ("desc".equals(order)){
-//					sql = sql + "ORDER BY `"+column+"` DESC;";
-//				}
+			if("1".equals(filtro)){		//APROBADOS						
+				alumnos = dao.getAprobados();
 			} else if("2".equals(filtro)){		//SUSPENDIDOS
 				alumnos = dao.getSuspendidos();
-//				if ("asc".equals(order)){
-//					sql = sql + "ORDER BY `"+column+"` ASC;";
-//				}
-//				if ("desc".equals(order)){
-//					sql = sql + "ORDER BY `"+column+"` DESC;";
-//				}
 			} else {		//TODOS
-				alumnos = dao.getAll();	
-//				if ("asc".equals(order)){
-//					sql = sql + "ORDER BY `"+column+"` ASC;";
-//				}
-//				if ("desc".equals(order)){
-//					sql = sql + "ORDER BY `"+column+"` DESC;";
-//				}
+				alumnos = dao.getAll();
 			}
-			
-			
-						
+				
 			
 			//Cargar atributos en request
 			request.setAttribute("alumnos", alumnos);
 			request.setAttribute("filtro", filtro);
+			request.setAttribute("metodo", "Modificar");
 			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
 			
 		} catch (Exception e) {

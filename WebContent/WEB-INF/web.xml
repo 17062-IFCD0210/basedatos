@@ -4,7 +4,6 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
-
   <servlet>
     <description>Servlet para insertar un nuevo registro en la tabla Test</description>
     <display-name>InsertarServlet</display-name>
@@ -44,5 +43,15 @@
   <servlet-mapping>
     <servlet-name>ListarServlet</servlet-name>
     <url-pattern>/listar</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>InicioPersonaServlet</display-name>
+    <servlet-name>InicioPersonaServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.InicioPersonaServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InicioPersonaServlet</servlet-name>
+    <url-pattern>/inicio_persona</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+<%@page import="com.ipartek.formacion.basedatos.Constantes"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
@@ -36,8 +38,8 @@
 						<nav>
 							<ul class="nav masthead-nav">
 								<li><a href="index.jsp">Home</a></li>
-								<li class="active"><a href="listar">JDBC</a></li>
-								<li><a href="#">Patron DAO</a></li>
+								<li><a href="listar">JDBC</a></li>
+								<li><a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>">Patron DAO</a></li>
 								<li><a href="#">Hibernate</a></li>
 							</ul>
 						</nav>
@@ -47,19 +49,23 @@
 				<div class="inner cover">
 										
 					<h1 class="cover-heading">Modificar registro</h1>
-																														
+					
+					<%
+						Persona p = (Persona)request.getAttribute("alumno");
+					%>
+																																			
 					<form action="editar" method="post">
 						
-						<input type="text" name="nombre" value="<%=request.getAttribute("nombre")%>"
+						<input type="text" name="nombre" value="<%=p.getNombre()%>"
 						required="required" autofocus="autofocus" tabindex="1">
 						<br><br>
-						<input type="text" name="nota" value="<%=request.getAttribute("nota")%>" 
+						<input type="text" name="nota" value="<%=p.getNota()%>" 
 						required="required" tabindex="2">
 						<br><br>
-						<input type="text" name="telefono" value="<%=request.getAttribute("telefono")%>" 
+						<input type="text" name="telefono" value="<%=p.getTelefono()%>" 
 						tabindex="3" pattern="[0-9]{9,15}">
 						<br><br>						
-						<input type="submit" class="btn-lg" value="Modificar">
+						<input type="submit" class="btn-lg" value="<%=request.getAttribute("metodo")%>">
 						
 					</form>
 					

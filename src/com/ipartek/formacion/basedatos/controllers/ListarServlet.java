@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
+import com.ipartek.formacion.basedatos.modelo.DAOPersona;
 
 /**
  * Servlet implementation class ListarServlet
@@ -33,61 +34,44 @@ public class ListarServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		ArrayList<Persona> alumnos = new ArrayList<Persona>();
-		String sql = null;
+		ArrayList<Object> alumnos = new ArrayList<Object>();
 		
 		try{	
 			//Recoger parametros			
 			String filtro = request.getParameter("filtro");
 			String order = request.getParameter("order");
 			String column = request.getParameter("column");
+			
+			DAOPersona dao = new DAOPersona();
+			
 			if("1".equals(filtro)){		//APROBADOS		
-				sql = "SELECT * FROM `test` WHERE `nota`>=5 ";
-				if ("asc".equals(order)){
-					sql = sql + "ORDER BY `"+column+"` ASC;";
-				}
-				if ("desc".equals(order)){
-					sql = sql + "ORDER BY `"+column+"` DESC;";
-				}
+				alumnos = dao.getAprobados();	
+//				if ("asc".equals(order)){
+//					sql = sql + "ORDER BY `"+column+"` ASC;";
+//				}
+//				if ("desc".equals(order)){
+//					sql = sql + "ORDER BY `"+column+"` DESC;";
+//				}
 			} else if("2".equals(filtro)){		//SUSPENDIDOS
-				sql = "SELECT * FROM `test` WHERE `nota`<5 ";
-				if ("asc".equals(order)){
-					sql = sql + "ORDER BY `"+column+"` ASC;";
-				}
-				if ("desc".equals(order)){
-					sql = sql + "ORDER BY `"+column+"` DESC;";
-				}
+				alumnos = dao.getSuspendidos();
+//				if ("asc".equals(order)){
+//					sql = sql + "ORDER BY `"+column+"` ASC;";
+//				}
+//				if ("desc".equals(order)){
+//					sql = sql + "ORDER BY `"+column+"` DESC;";
+//				}
 			} else {		//TODOS
-				sql = "SELECT * FROM `test` ";
-				if ("asc".equals(order)){
-					sql = sql + "ORDER BY `"+column+"` ASC;";
-				}
-				if ("desc".equals(order)){
-					sql = sql + "ORDER BY `"+column+"` DESC;";
-				}
+				alumnos = dao.getAll();	
+//				if ("asc".equals(order)){
+//					sql = sql + "ORDER BY `"+column+"` ASC;";
+//				}
+//				if ("desc".equals(order)){
+//					sql = sql + "ORDER BY `"+column+"` DESC;";
+//				}
 			}
 			
-			//Realizar consulta BBDD
-			Class.forName("com.mysql.jdbc.Driver"); 		
-			Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost:3306/skalada","root", "");
-			Statement s = conexion.createStatement(); 
 			
-			ResultSet rs = s.executeQuery (sql);
-			
-			//mapeo resultSet => Arraylist<Persona>
-			Persona p = null;
-			
-			while (rs.next()) 
-			{ 
-				p = new Persona(rs.getString("nombre"));				
-				p.setId(rs.getInt("id"));
-				p.setNota(rs.getFloat("nota"));	
-				p.setTelefono(rs.getString("telefono"));
-				p.setFecha(rs.getTimestamp("fecha"));
-				alumnos.add(p);
-			}
-		
-			conexion.close();
+						
 			
 			//Cargar atributos en request
 			request.setAttribute("alumnos", alumnos);
@@ -95,8 +79,7 @@ public class ListarServlet extends HttpServlet {
 			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
 			
 		} catch (Exception e) {
-			request.setAttribute("msg_error", e.getMessage()+sql);
-			
+			request.setAttribute("msg_error", e.getMessage());			
 			request.getRequestDispatcher("JDBC.jsp").forward(request, response);
 		}
 		

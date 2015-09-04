@@ -123,7 +123,8 @@
 					
 					<a href="form.jsp"><button class="btn-lg">Nuevo Registro</button></a>
 					
-					<div>						
+					<div>	
+						<br>					
 						<a href="listar?filtro=1"><button class="btn-lg">Aprobados</button></a>
 						<a href="listar?filtro=2"><button class="btn-lg">Suspendidos</button></a>
 						<a href="listar"><button class="btn-lg">Todos</button></a>					

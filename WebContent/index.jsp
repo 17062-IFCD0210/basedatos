@@ -59,18 +59,18 @@
  				<h5><strong>Tabla: </strong><span id="bbdd_tabla"></span></h5>
             </div>
 
-            <div id="area">
+            <div>
 	           	<p class="lead">Cargando Driver: <span id="comando">Class.forName("com.mysql.jdbc.Driver");</span></p>
 	           	<%Class.forName("com.mysql.jdbc.Driver");%>
            	</div>
            	
-           	<div id="area">
+           	<div>
 	           	<p class="lead">Establecemos conexión con BBDD</p>
 	           	<span id="comando">Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");</span>
 	           	<%Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");%>
            	</div>
            	
-           	<div id="area">
+           	<div>
 	           		<p class="lead">Preparamos la consulta <span id="comando">SELECT * FROM `test`</span></p>
 	           	<%
 	            	Statement st = conexion.createStatement();
@@ -79,7 +79,7 @@
 	           	%>
            	</div>
            	
-           	<div id="area">
+           	<div>
 	           	<p class="lead">Recorremos los datos del resultado <span id="comando">while (rs.next())+ "</li>");}</span></p>
 	           	<a class="btn btn-default boton-separar" href="form.jsp" role="button">Insertar nuevo registro</a>
 	           	<%
@@ -102,8 +102,8 @@
 	            				<td><%=p.getNota()%></td>
 	            				<td><%=p.getTelefono()%></td>
 	            				<td><%=p.getFecha()%></td>
-	            				<td><a href="#"><img src="img/editar.png"></a></td>
-	            				<td><a href="eliminar?id=<%=p.getId()%> onclick="confirm('Est� seguro?');false;"><img src="img/eliminar.png"></a></td>
+	            				<td><a href="inicio?id=<%=p.getId()%>&accion=1"><img src="img/editar.png"></a></td>
+	            				<td><a href="inicio?id=<%=p.getId()%>&accion=2"><img src="img/eliminar.png"></a></td>
 	            			</tr>
 	            		<%
 	            	} //end for
@@ -127,7 +127,7 @@
 	            
             </div>
             
-            <div id="area">
+            <div>
 	            	<p class="lead">Cerramos la conexión a la BBDD <span id="comando">rs.close(); st.close(); conexion.close();</span></p>
 	           	<%
 	           		rs.close();

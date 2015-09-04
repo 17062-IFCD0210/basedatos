@@ -7,33 +7,45 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.basedatosProfe.bean.Persona;
+import com.ipartek.formacion.basedatosProfe.modelo.DAOPersona;
+import com.sun.org.apache.bcel.internal.generic.DASTORE;
 
 /**
  * Servlet implementation class InicioServlet
  */
 public class InicioServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private RequestDispatcher dispatcher = null;
+	//Modelo DAOPersona
+	DAOPersona dao = null;
+	
+	//Parámetros
+	private String pID;
+	private String pAccion;
+	private String pFiltro;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public InicioServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	@Override //Escribir init y elejir éste
+	public void init(ServletConfig config) throws ServletException {
+		//Se ejecuta una única vez 
+		super.init(config);
+		dao = new DAOPersona();
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		ArrayList<Persona> alumnos = new ArrayList<Persona>();
+		ArrayList<Object> alumnos = new ArrayList<Object>();
 
 		try{
 			/*
@@ -42,48 +54,81 @@ public class InicioServlet extends HttpServlet {
 			 *  la cláusula WHERE a la sentecia sql
 			 */
 			
-			String condicion = "";
+			//Recoger parámetros: acción, id, filtro
+			pID = request.getParameter("id");
+			pAccion = request.getParameter("accion");
+			pFiltro = request.getParameter("filtro");
 			
-			//Recoger parámetros
-			if (request.getParameter("filtro") == null){
+			
+			//En función del parámetro 'accion' realizar la Acción
+			//0.- Listar
+			//1.- Detalle
+			//2.- Eliminar
+			
+			//Detalle
+			if ("1".equals(pAccion)){
+				detalle(request,response);
 				
-			}else if ("0".equals(request.getParameter("filtro"))){ //Si hemos pulsado el botón de Aprobados
-				condicion = " WHERE `nota` >= 5.0 AND `nota`<= 10.0";
-			}else if ("1".equals(request.getParameter("filtro"))){ //Si hemos pulsado el botón de Suspendidos
-				condicion = " WHERE `nota` < 5.0 AND `nota`>= 0.0";
+			//Elimnar
+			}else if ("2".equals(pAccion)){
+				eliminar(request,response);
+			
+			//Listar
+			}else{
+				listar(request,response);
 			}
 			
-			//Realizar consulta bbdd
-			Class.forName("com.mysql.jdbc.Driver");
-	        Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-	        Statement st = conexion.createStatement();
-	        String sql = "SELECT * FROM `test`" + condicion;
-	        ResultSet rs = st.executeQuery(sql);
-	        
-	        //Mapeo resultSet => ArrayList<Persona>
-	        Persona p = null; //Declaramos una variable
-	        while (rs.next()){
-	        	p = new Persona( rs.getString("nombre") ); //vamos sobreescribiendo la var con cada diferente registro
-	        	p.setId(rs.getInt("id"));
-	        	p.setFecha(rs.getTimestamp("fecha"));
-	        	p.setTelefono(rs.getString("telefono"));
-	        	p.setNota(rs.getFloat("nota"));
-	        		        	
-	        	alumnos.add(p); //Añadimos uno más al ArrayList
-	        }
-	        
-	        //Cargar atributos en request
-	        request.setAttribute("alumnos", alumnos); //Enviamos el ArrayList al HOME
+			
+			//forward
+			dispatcher.forward(request, response); //dispatcher variará según lo que haya hecho, listar, insertar, ...
 	        
 		} catch (Exception e){
 			e.printStackTrace();
 			request.setAttribute("msg", e.getMessage());
 		}
-		request.getRequestDispatcher("index.jsp").forward(request, response);
+	
 		
 		
 		
 		//Hacer un forward
+		
+	}
+
+
+
+	private void listar(HttpServletRequest request, HttpServletResponse response) {
+		
+		ArrayList<Object> alumnos = new ArrayList<Object>();
+		
+		if (pFiltro == null){
+			alumnos = dao.getAll();
+		}else if ("0".equals(pFiltro)){ //Si hemos pulsado el botón de Aprobados
+			alumnos = dao.getAprobados();
+		}else if ("1".equals(pFiltro)){ //Si hemos pulsado el botón de Suspendidos
+			alumnos = dao.getSuspendidos();
+		}
+		
+		request.setAttribute("alumnos", alumnos); //Le pasamos un atributo que es la variable alumnos con el nombre 'alumnos'
+		
+		dispatcher = request.getRequestDispatcher("index.jsp");
+	}
+
+	private void eliminar(HttpServletRequest request,
+			HttpServletResponse response) {
+		int id = Integer.valueOf(pID);
+		
+		
+	}
+
+	private void detalle(HttpServletRequest request,
+			HttpServletResponse response) {
+		
+		int id = Integer.valueOf(pID); //o con Integer.parseInt(ipID ya que es un String)
+		Object alumno = dao.getById(id);
+		
+		request.setAttribute("alumno", alumno);
+		dispatcher = request.getRequestDispatcher("form.jsp");
+		
 		
 	}
 

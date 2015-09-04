@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+<%@page import="com.ipartek.formacion.basedatosProfe.bean.Persona"%>
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -40,32 +41,46 @@
             </div>
           </div>
 
+			<%
+				Persona p = (Persona)request.getAttribute("alumno");
+				if ( p == null ){
+					p = new Persona (""); //Si es null que cree el objeto Persona con el nombre vacío
+				}
+			%>
           <div class="inner cover">
-          
-          		<% 
-	          		/*ResultSet rs = request.getAttribute("rs");
-	          		
-	               //mostrar mensajes
-	               	if (request.getAttribute("msg") != null){
-	               		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
-	               	}*/
-               	%>
                   
 	          <form action="insertar" method="post"> <!-- action="insertar" o URL mapping en el controlador (servlet) -->
-	          
-	          	<input type="text"
-	          		   name="nombre"
-	          		   placeholder="Inserta tu nombre"
-	          		   required autofocus tabindex="1">
-	          	<br>
-	          	<input type="text" name="nota" required tabindex="2" placeholder="Inserta tu calificación">
-	          	<br>
-	          	<input type="text" name="telefono" required tabindex="3" placeholder="Inserta tu teléfono">
-	          	
+	          	<div class="area">
+		          	<p>Nombre: 
+			          	<input type="text"
+			          		   name="nombre"
+			          		   value="<%=p.getNombre()%>"
+			          		   placeholder="Inserta tu nombre"
+			          		   required
+			          		   autofocus
+			          		   tabindex="1">
+		          	</p>
+		          	<p>Nota: 
+			          	<input type="text"
+			          		value="<%=p.getNota()%>"
+			          		name="nota"
+			          		required
+			          		tabindex="2"
+			          		placeholder="Inserta tu calificación">
+		          	</p>
+		          	<p>Teléfono: 
+			          	<input type="text"
+			          		value="<%=p.getTelefono()%>"
+			          		name="telefono"
+			          		required
+			          		tabindex="3"
+			          		placeholder="Inserta tu teléfono">
+		          	</p>
+	          	</div>
 	          	<br>
 	          	<br>
 	          	<input type="reset" value="Limpiar">
-	          	<input type="submit" value="Crear">
+	          	<input type="submit" value="Guardar">
 	            
 	          </form>
 	          

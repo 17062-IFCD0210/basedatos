@@ -70,17 +70,7 @@ public class ListarServlet extends HttpServlet {
 				String pTelefono = request.getParameter("telefono");
 	
 				//TODO llamar modelo para inserción
-				Class.forName("com.mysql.jdbc.Driver");
-		        Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-				
-		        Statement st = conexion.createStatement();
-		        String sql = "UPDATE `test` SET `nombre`='" + pNombre + "',`nota`=" + pNota + ",`telefono`='" + pTelefono + "' WHERE  `id`=" + pID + ";";
-		        
-		        if (st.executeUpdate(sql) != 1){ //Si es diferente de 1 es que no se ha insertado ese único registro
-		        	throw new Exception("No se ha realizado la inserción: " + sql);
-		        }
-		        
-		        conexion.close();
+	
 				//Volver a la HOME
 				request.getRequestDispatcher("form.jsp").forward(request, response);
 			}catch  (Exception e){ //Si falla que vuelva al form. Sólo se pueden enviar Atributos, parámetros no

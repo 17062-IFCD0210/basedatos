@@ -51,7 +51,12 @@
 
 				<div class="inner cover">
 					<h1 class="cover-heading">Aprende Base Datos</h1>
-
+<% //Mostrar mensaje
+              	if(request.getAttribute("msg") != null) {
+              		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+              	}
+              
+              %>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="panel panel-info datos">

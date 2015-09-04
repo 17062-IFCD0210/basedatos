@@ -44,4 +44,14 @@
     <servlet-name>InicioServlet</servlet-name>
     <url-pattern>/inicio</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ListadoServlet</display-name>
+    <servlet-name>ListadoServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.ListadoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListadoServlet</servlet-name>
+    <url-pattern>/listado</url-pattern>
+  </servlet-mapping>
 </web-app>

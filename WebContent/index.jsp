@@ -102,8 +102,8 @@
 		            					<td><%=p.getNota()%></td>
 		            					<td><%=p.getTelefono()%></td>
 		            					<td><%=p.getFecha()%></td>
-										<td><a href="">E</a></td>
-										<td><a href="">X</a></td>
+										<td><a href="inicio?id=<%=p.getId()%>&accion=1">E</a></td>
+										<td><a href="inicio?id=<%=p.getId()%>&accion=2">X</a></td>
 		            				</tr>            			
 		            			<%
 		            		}//end for
@@ -121,9 +121,9 @@
             	</table>
             	
             	<br>
-            	<a class="btn btn-warning btn-xs" href="/inicio" role="button" id="0">Aprobados</a>
-            	<a class="btn btn-warning btn-xs" href="/inicio" role="button" id="1">Suspendidos</a>
-            	<a class="btn btn-warning btn-xs" href="/inicio" role="button">Todos</a>
+            	<a class="btn btn-warning btn-xs" href="inicio?filtro=0" role="button" id="0">Aprobados</a>
+            	<a class="btn btn-warning btn-xs" href="inicio?filtro=1" role="button" id="1">Suspendidos</a>
+            	<a class="btn btn-warning btn-xs" href="inicio" role="button">Todos</a>
             	
             	<br>
             	

@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import sun.org.mozilla.javascript.internal.EcmaError;
-
 /**
  * Servlet implementation class InsertarServlet
  */
@@ -29,47 +27,46 @@ public class InsertarServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		doPost(request,response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		try {
-			// Recoger parametros
+			//Recoger par�metros
 			String pNombre = request.getParameter("nombre");
-			String sNota = request.getParameter("nota"); 
+			float pNota = Float.parseFloat(request.getParameter("nota"));
 			String pTelefono = request.getParameter("telefono");
-			float pNota = Float.parseFloat(sNota);
-				
+			String pFecha = request.getParameter("fecha");
 			
-			// Llamar modelo para insercion
+			//Abrir conexion
 			Class.forName("com.mysql.jdbc.Driver");
 	    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-			
-	    	Statement st = conexion.createStatement();
-	    	String sql = "INSERT INTO `test` ( `nombre`, `nota`,  `telefono`) VALUES ( '" + pNombre + "'," + pNota + ",  '" + pTelefono + "')";	
 	    	
-	    			
-	    	if ( st.executeUpdate(sql) != 1 ){
-	    		
-	    		throw new Exception("No se ha realizado insercion: " + sql);
+	    	//Crear SQL
+	    	Statement st = conexion.createStatement();
+	    	String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES ('" + pNombre + "', " + pNota + ", '" + pTelefono + "', '" + pFecha + "');";
+	    	
+			//Ejecutar SQL
+	    	if(st.executeUpdate(sql) != 1) {
+	    		throw new Exception("No se ha realizado insercion " + sql);
 	    	}
 	    	
-	    	conexion.close();
+			//Cerrar conexion
 	    	
-			// Volver a la home
-			request.getRequestDispatcher("/inicio").forward(request, response);
+	    	conexion.close();
 			
-		}catch (Exception e){
-			request.setAttribute( "msg", e.getMessage() );
+			//Volver a la HOME
+			request.getRequestDispatcher("inicio").forward(request, response);
+		} catch(Exception e) {
+			request.setAttribute("msg", e.getMessage());
 			request.getRequestDispatcher("form.jsp").forward(request, response);
 		}
-		
-		
 		
 	}
 

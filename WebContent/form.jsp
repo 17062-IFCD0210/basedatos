@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <html lang="es">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>BBDD insertar</title>
+    <title>BBDD Insertar</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -29,44 +30,75 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              
               <h3 class="masthead-brand">Insertar nuevo registro</h3>
-				
-				<%
-					// Mostrar mensajes
-					if (request.getAttribute("msg") != null ){
-						out.print ("<h4>"+ request.getAttribute("msg")+ "</h4>" );
-					}				
-				%>
-				
+              
+              <% //Mostrar mensaje
+              	if(request.getAttribute("msg") != null) {
+              		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+              	}
+              
+              %>
+              
             </div>
           </div>
 
 		
-
+			<%
+				Persona p = (Persona)request.getAttribute("alumno");
+				if ( p == null){
+					p = new Persona("");
+					
+				}
+			
+			%>
 
           <div class="inner cover">
-           
-           	<form action="insertar" method="post">
-           		
-           		<input type="text" name="nombre" placeholder="Tu nombre" required tabindex="1" autofocus>
-           		<br>
-           		<input type="text" name="nota" placeholder="Tu nota" required tabindex="2">
-           		<br>
-           		<input type="text" name="telefono" placeholder="Tu telefono" required tabindex="3">
-           		<br>
-           		<br>
-           		<input type="reset" value="Limpiar formulario">
-           		<input type="submit" value="Crear">
-           	
-           	
-           	</form>
+          
+         	<form action="insertar" method="post">
+         		<label for="nombre">Nombre: </label>
+         		<br>
+         		<input type="text" 
+         				name="nombre" 
+         				placeholder="Tu Nombre" 
+         				required
+         				autofocus 
+         				tabindex="1" 
+         				value="<%=p.getNombre()%>">
+         		<br><br>
+         		
+         		<label for="nota">Nota: </label>
+         		<br>
+         		<input type="text" 
+         				name="nota" 
+         				placeholder="Tu Nota" 
+         				required
+         				value="<%=p.getNota()%>">
+         		<br><br>
+         		
+         		<label for="telefono">Telefono: </label>
+         		<br>
+         		<input type="text" 
+         				name="telefono" 
+         				placeholder="Tu Telefono"
+         				value="<%=p.getTelefono()%>">
+         		<br><br>
+         		
+         		<label for="fecha">Fecha: </label>
+         		<br>
+         		<input type="date" 
+         				name="fecha"
+         				value="<%=p.getFecha()%>">
+         		<br><br>
+         		
+				<input type="reset" value="Limpiar">         		
+         		<input type="submit" value="Crear">
+         	</form>
             
           </div>
 
           <div class="mastfoot">
             <div class="inner">
-              <p>DocumentaciÃ³n <a href="#">Ipartek Campus</a></p>
+              <p>Documentación <a href="#">Ipartek Campus</a></p>
               <p>Codigo Fuente <a href="#">GITHUB</a></p>
             </div>
           </div>

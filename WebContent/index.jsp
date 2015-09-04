@@ -50,9 +50,22 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base de Datos</h1>
-            <a href="form.jsp">Insertar nuevo registro</a>
+            
+    		<table id="bbdd">      
+	            <tr>
+	            	<td>Servidor: <small>localhost</small></td>
+	            	<td>Base de Datos: <small>skalada</small></td>
+	            	<td>Puerto: <small>3306</small></td>
+	            	<td>Usuario: <small>root</small></td>
+	            	<td>Password: </td>
+	            	<td>Tabla: <small>test</small></td>
+	            </tr>
+            </table>
+            <br>
+            <br>
+            <a href="form.jsp"><i>Insertar nuevo registro</i></a>
                      
-            <p class="lead">Registros</p>
+            <p class="lead">Registros:</p>
             
             	<table>
             		<thead>
@@ -86,14 +99,14 @@
 	            				<td><%=p.getTelefono()%></td>
 	            				<td><%=p.getFecha()%></td>
 	            				<td>
-	            					<a href='eliminar?id="+ rs.getInt("id")+"'>
-	        						<span class="glyphicon glyphicon-trash"></span>
+	            					<a href="inicio?id=<%=p.getId()%>&accion=2">
+	        						<span class="glyphicon glyphicon-trash" style="color: red;"></span>
 	   								</a>
 	            				</td>
 	            				<td>
-	            					<button type="submit" class="btn btn-default">
-	        						<span class="glyphicon glyphicon-pencil"></span>
-	   								</button>
+	            					<a href="inicio?id=<%=p.getId()%>&accion=1">
+	        						<span class="glyphicon glyphicon-pencil" style="color: #2e6da4;"></span>
+	   								</a>
 	            				</td> 
 
 	            			</tr>	            		
@@ -112,9 +125,9 @@
 				</table>
 
           <br>
-            	<a class="btn btn-primary btn-xs" href="" role="button">Aprobados</a>
-            	<a class="btn btn-primary btn-xs" href="" role="button">Suspendidos</a>
-            	<a class="btn btn-primary btn-xs" href="" role="button">Todos</a>
+            	<a class="btn btn-primary btn-sm" href="inicio?filtro=0" role="button">Aprobados</a>
+            	<a class="btn btn-primary btn-sm" href="inicio?filtro=1" role="button">Suspendidos</a>
+            	<a class="btn btn-primary btn-sm" href="inicio" role="button">Todos</a>
            
           <br>
           </div>

@@ -192,12 +192,18 @@ table {
 	background-color: #A9A9A9;
     width: 100%
 }
+
+
+#bbdd td{
+	color:black;
+	
+}
 th{
 	color:black;
 }
 td, th {
 	padding: 0;
-	border-style: groove
+	border-style: groove;
 }
 	/*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print {

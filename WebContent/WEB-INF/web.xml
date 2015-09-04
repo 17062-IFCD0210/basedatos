@@ -44,4 +44,34 @@
     <servlet-name>ListadoServlet</servlet-name>
     <url-pattern>/listado</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DAOPersona</display-name>
+    <servlet-name>DAOPersona</servlet-name>
+    <servlet-class>modelo.DAOPersona</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DAOPersona</servlet-name>
+    <url-pattern>/DAOPersona</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DataBaseHelper</display-name>
+    <servlet-name>DataBaseHelper</servlet-name>
+    <servlet-class>modelo.DataBaseHelper</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DataBaseHelper</servlet-name>
+    <url-pattern>/DataBaseHelper</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Persistable</display-name>
+    <servlet-name>Persistable</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.modelo.Persistable</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Persistable</servlet-name>
+    <url-pattern>/persistable</url-pattern>
+  </servlet-mapping>
 </web-app>

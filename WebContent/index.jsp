@@ -39,7 +39,7 @@
 						<h3 class="masthead-brand">Conexion Base Datos</h3>
 						<nav>
 							<ul class="nav masthead-nav">
-								<li class="active"><a href="index.jsp">Home</a></li>
+								<li class="active"><a href="inicio">Home</a></li>
 								<li class=""><a href="#">JDBC</a></li>
 								<li><a href="#">Patron DAO</a></li>
 								<li><a href="#">Hibernate</a></li>
@@ -59,7 +59,61 @@
 							out.print("<h4>" + request.getAttribute("msg") + "</h4>");
 						}
 					%>
-					<div class="row">
+
+					<a class="btn btn-default mb15" href="inicio?accion=1&id=-1">Insertar nuevos	registros</a>
+					<br>
+					<a class="btn btn-primary" href="inicio?accion=0&filtro=1" role="button">Aprobados</a>
+            		<a class="btn btn-primary" href="inicio?accion=0&filtro=2" role="button">Suspendidos</a>
+            		<a class="btn btn-primary" href="inicio?accion=0&filtro=0" role="button">Todos</a>
+            		<br><br>
+
+					<%
+						//recuperar atributo de listado personas 
+						ArrayList<Persona> alumnos = (ArrayList<Persona>) request.getAttribute("alumnos");
+						if (alumnos == null) {
+							alumnos = new ArrayList<Persona>();
+						}
+					%>
+					<div class="panel panel-info dark-panel">
+						<div class="panel-heading">Registros</div>
+						<div class="panel-body">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<td>ID</td>
+										<td>Nombre</td>
+										<td>Nota</td>
+										<td>Telefono</td>
+										<td>Fecha</td>
+										<td></td>
+										<td></td>
+									</tr>
+								</thead>
+								<tbody>
+									<%
+										Persona p = null;
+										for (int i = 0; i < alumnos.size(); i++) {
+											p = alumnos.get(i);
+									%>
+									<tr>
+										<td><%=p.getNombre()%></td>
+										<td><%=p.getNota()%></td>
+										<td><%=p.getTelefono()%></td>
+										<td><%=p.getFecha()%></td>
+										<td><a href="inicio?accion=1&id=<%=p.getId()%>"><span
+												class='glyphicon glyphicon-pencil editar' aria-hidden='true'></span></a></td>
+										<td><a href="inicio?accion=2&id=<%=p.getId()%>"><span
+												class='glyphicon glyphicon-trash editar' aria-hidden='true'></span></a></td>
+									</tr>
+									<%
+										}//end for
+									%>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+										<div class="row">
 						<div class="col-md-12">
 							<div class="panel panel-info datos">
 								<div class="panel-heading">Datos Conexion</div>
@@ -143,55 +197,7 @@
 							</div>
 						</div>
 					</div>
-
-
-					<a class="btn btn-default mb15" href="form.jsp">Insertar nuevos
-						registros</a>
-					<%
-						//recuperar atributo de listado personas 
-						ArrayList<Persona> alumnos = (ArrayList<Persona>) request.getAttribute("alumnos");
-						if (alumnos == null) {
-							alumnos = new ArrayList<Persona>();
-						}
-					%>
-					<div class="panel panel-info dark-panel">
-						<div class="panel-heading">Registros</div>
-						<div class="panel-body">
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<td>ID</td>
-										<td>Nombre</td>
-										<td>Nota</td>
-										<td>Telefono</td>
-										<td>Fecha</td>
-										<td></td>
-										<td></td>
-									</tr>
-								</thead>
-								<tbody>
-									<%
-										Persona p = null;
-										for (int i = 0; i < alumnos.size(); i++) {
-											p = alumnos.get(i);
-									%>
-									<tr>
-										<td><%=p.getNombre()%></td>
-										<td><%=p.getNota()%></td>
-										<td><%=p.getTelefono()%></td>
-										<td><%=p.getFecha()%></td>
-										<td><a href="editar?id=<%=p.getId()%>"><span
-												class='glyphicon glyphicon-pencil editar' aria-hidden='true'></span></a></td>
-										<td><a href="eliminar?id=<%=p.getId()%>"><span
-												class='glyphicon glyphicon-trash editar' aria-hidden='true'></span></a></td>
-									</tr>
-									<%
-										}//end for
-									%>
-								</tbody>
-							</table>
-						</div>
-					</div>
+					
 				</div>
 
 				<div class="mastfoot">

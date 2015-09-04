@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -30,7 +31,7 @@
 						<h3 class="masthead-brand">Insertar nuevo registro</h3>
 						<nav>
 							<ul class="nav masthead-nav">
-								<li class="active"><a href="index.jsp">Home</a></li>
+								<li class="active"><a href="inicio">Home</a></li>
 								<li class=""><a href="#">JDBC</a></li>
 								<li><a href="#">Patron DAO</a></li>
 								<li><a href="#">Hibernate</a></li>
@@ -39,8 +40,12 @@
 					</div>
 				</div>
 
-
-
+				<%
+					Persona p = (Persona) request.getAttribute("alumno");
+					if (p==null){
+						p = new Persona("");
+					}
+				%>
 
 				<div class="inner cover">
 
@@ -57,16 +62,16 @@
 						<div class="form-group">
 							<label for="nombre">Nombre</label> <input tabindex="1"
 								autofocus="autofocus" class="form-control" name="nombre"
-								id="nombre" placeholder="nombre">
+								id="nombre" value="<%=p.getNombre()%>" placeholder="nombre">
 						</div>
 						<div class="form-group">
 							<label for="nota">Nota</label> <input class="form-control"
-								tabindex="2" id="nota" name="nota" placeholder="nota">
+								tabindex="2" id="nota" name="nota" value="<%=p.getNota()%>" placeholder="nota">
 						</div>
 						<div class="form-group">
 							<label for="telefono">Telefono</label> <input
 								class="form-control" tabindex="3" id="telefono" name="telefono"
-								placeholder="Telefono">
+								value="<%=p.getTelefono()%>" placeholder="Telefono">
 						</div>
 						<button type="submit" tabindex="4" class="btn btn-primary">Crear</button>
 						<button type="reset" tabindex="5" class="btn btn-warning">Limpiar</button>

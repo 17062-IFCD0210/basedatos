@@ -52,7 +52,7 @@
          		Persona p = (Persona)request.getAttribute("alumno");
          		if(p !=null) {
          	%>
-         	<form action="editar" method="post">
+         	<form action="inicio" method="post">
          		<label for="nombre">Nombre: </label>
          		<br>
          		<input type="text" name="nombre" placeholder="Tu Nombre" required autofocus tabindex="1" value="<%=p.getNombre()%>">
@@ -77,7 +77,7 @@
          		<input type="submit" value="Actualizar">
          	</form>
          	<%} else { %>
-         	<form action="insertar" method="post">
+         	<form action="inicio" method="post">
          		<label for="nombre">Nombre: </label>
          		<br>
          		<input type="text" name="nombre" placeholder="Tu Nombre" required autofocus tabindex="1">

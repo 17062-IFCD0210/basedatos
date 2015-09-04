@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 
 public class Persona {
-	
+
 	//Atributos
 	private int id;
 	private String nombre;
@@ -19,6 +19,10 @@ public class Persona {
 		this.id = -1;
 		this.fecha = null;
 		this.nombre = nombre;
+	}
+	
+	public Persona() {
+		super();
 	}
 
 	//Metodos

@@ -44,14 +44,20 @@
 
 				<div class="inner cover">
 
+					<%
+						//Mostrar mensaje
+						if (request.getAttribute("msg") != null) {
+							out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+						}
+					%>
 
 
 
 					<form action="insertar" method="POST">
 						<div class="form-group">
 							<label for="nombre">Nombre</label> <input tabindex="1"
-								autofocus="autofocus" class="form-control" name="nombre" id="nombre"
-								placeholder="nombre">
+								autofocus="autofocus" class="form-control" name="nombre"
+								id="nombre" placeholder="nombre">
 						</div>
 						<div class="form-group">
 							<label for="nota">Nota</label> <input class="form-control"

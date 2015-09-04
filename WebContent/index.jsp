@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
@@ -51,12 +53,12 @@
 
 				<div class="inner cover">
 					<h1 class="cover-heading">Aprende Base Datos</h1>
-<% //Mostrar mensaje
-              	if(request.getAttribute("msg") != null) {
-              		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
-              	}
-              
-              %>
+					<%
+						//Mostrar mensaje
+						if (request.getAttribute("msg") != null) {
+							out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+						}
+					%>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="panel panel-info datos">
@@ -145,18 +147,12 @@
 
 					<a class="btn btn-default mb15" href="form.jsp">Insertar nuevos
 						registros</a>
-
 					<%
-						Class.forName("com.mysql.jdbc.Driver");
-						Connection conexion = DriverManager.getConnection(
-								"jdbc:mysql://localhost/skalada", "root", "");
-
-						// Preparamos la consulta 
-						Statement st = conexion.createStatement();
-						String sql = "SELECT * FROM `test`";
-						ResultSet rs = st.executeQuery(sql);
-
-						//recorrer datos del resultado
+						//recuperar atributo de listado personas 
+						ArrayList<Persona> alumnos = (ArrayList<Persona>) request.getAttribute("alumnos");
+						if (alumnos == null) {
+							alumnos = new ArrayList<Persona>();
+						}
 					%>
 					<div class="panel panel-info dark-panel">
 						<div class="panel-heading">Registros</div>
@@ -175,29 +171,22 @@
 								</thead>
 								<tbody>
 									<%
-										while (rs.next()) {
-
-											out.print("<tr><td>"
-													+ rs.getInt("id")
-													+ "</td><td>"
-													+ rs.getString("nombre")
-													+ "</td><td>"
-													+ rs.getFloat("nota")
-													+ "</td><td>"
-													+ rs.getString("telefono")
-													+ "</td><td>"
-													+ rs.getDate("fecha")
-													+ "</td><td><a href='editar?id="+ rs.getInt("id")+"'>"
-															+"<span class='glyphicon glyphicon-pencil editar' aria-hidden='true'></span></a></td>"
-													+"<td><a href='eliminar?id="+ rs.getInt("id")+"'>"
-													+"<span class='glyphicon glyphicon-trash borrar' aria-hidden='true'></span></a></td></tr>");
-
-										}
-
-										//cerrar conexiones
-										rs.close();
-										st.close();
-										conexion.close();
+										Persona p = null;
+										for (int i = 0; i < alumnos.size(); i++) {
+											p = alumnos.get(i);
+									%>
+									<tr>
+										<td><%=p.getNombre()%></td>
+										<td><%=p.getNota()%></td>
+										<td><%=p.getTelefono()%></td>
+										<td><%=p.getFecha()%></td>
+										<td><a href="editar?id=<%=p.getId()%>"><span
+												class='glyphicon glyphicon-pencil editar' aria-hidden='true'></span></a></td>
+										<td><a href="eliminar?id=<%=p.getId()%>"><span
+												class='glyphicon glyphicon-trash editar' aria-hidden='true'></span></a></td>
+									</tr>
+									<%
+										}//end for
 									%>
 								</tbody>
 							</table>
@@ -208,7 +197,7 @@
 				<div class="mastfoot">
 					<div class="inner">
 						<p>
-							DocumentaciÃ³n <a href="#">Ipartek Campus</a>
+							Documentación <a href="#">Ipartek Campus</a>
 						</p>
 						<p>
 							Codigo Fuente <a href="#">GITHUB</a>

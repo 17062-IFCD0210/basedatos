@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
+import com.ipartek.formacion.basedatos.modelo.DAOPersona;
 
 /**
  * Servlet implementation class InicioServlet
@@ -33,33 +34,23 @@ public class InicioServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		ArrayList<Persona> alumnos = new ArrayList<Persona>();
+		ArrayList<Object> alumnos = new ArrayList<Object>();
 		
 		try{
-			//recoger parametros
+			//recoger parametros			
+			String filtro = request.getParameter("filtro");
 			
+			//llamar modelo
+			DAOPersona dao = new DAOPersona();
 			
-			
-			//realizar consulta BBDD
-			Class.forName("com.mysql.jdbc.Driver");
-	    	Connection con = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-	    	Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test`;";
-	    	ResultSet rs = st.executeQuery (sql);
-	    	
-	    	//mapeo resultSet => ArrayList<Persona>
-	    	Persona p = null;	    	
-	    	while(rs.next()){
-	    		
-	    		p = new Persona( rs.getString("nombre") );
-	    		p.setId( rs.getInt("id"));
-	    		p.setFecha( rs.getTimestamp("fecha"));
-	    		p.setTelefono(rs.getString("telefono"));
-	    		p.setNota(rs.getFloat("nota"));
-	    		
-	    		alumnos.add(p);
-	    	}	
-	    	
+			if ( "0".equals(filtro)){
+				alumnos = dao.getAprobados();
+			}else if ( "1".equals(filtro)){
+				alumnos = dao.getSuspendidos();
+			}else{
+				alumnos = dao.getAll();
+			}	
+						
 			//cargar atributos en request
 	    	request.setAttribute("alumnos", alumnos );
 	    	

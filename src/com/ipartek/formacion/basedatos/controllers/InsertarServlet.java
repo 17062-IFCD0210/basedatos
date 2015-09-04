@@ -38,7 +38,7 @@ public class InsertarServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			//Recoger parámetros
+			//Recoger parï¿½metros
 			String pNombre = request.getParameter("nombre");
 			float pNota = Float.parseFloat(request.getParameter("nota"));
 			String pTelefono = request.getParameter("telefono");
@@ -62,7 +62,7 @@ public class InsertarServlet extends HttpServlet {
 	    	conexion.close();
 			
 			//Volver a la HOME
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("inicio").forward(request, response);
 		} catch(Exception e) {
 			request.setAttribute("msg", e.getMessage());
 			request.getRequestDispatcher("form.jsp").forward(request, response);

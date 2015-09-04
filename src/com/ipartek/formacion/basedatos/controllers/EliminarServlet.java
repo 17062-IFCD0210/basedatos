@@ -51,7 +51,7 @@ public class EliminarServlet extends HttpServlet {
 	    	conexion.close();
 			
 			//Volver a la HOME
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("inicio").forward(request, response);
 		} catch(Exception e) {
 			request.setAttribute("msg2", e.getMessage());
 			request.getRequestDispatcher("form.jsp").forward(request, response);

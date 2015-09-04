@@ -55,20 +55,53 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public Object getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Object resul = new Object();
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			Statement st = con.createStatement(); 
+	    	String sql = "SELECT * FROM `test` where id="+id;
+	    	ResultSet rs = st.executeQuery (sql);
+	    	while(rs.next()){
+	    		resul=mapeo(rs);
+	    	}
+ 	
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		
+		return resul;
 	}
 
 	@Override
 	public boolean update(Object o) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			Statement st = con.createStatement(); 
+			String sql = "DELETE FROM test WHERE id=" + id + ";";
+			//Ejecutar SQL
+	    	if(st.executeUpdate(sql) != 1) {
+	    		throw new Exception("No se ha realizado eliminacion " + sql);
+	    	}
+	    	
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+			
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		
+		return true;
 	}
 
 	@Override

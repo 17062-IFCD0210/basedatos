@@ -44,4 +44,24 @@
     <servlet-name>InicioServlet</servlet-name>
     <url-pattern>/inicio</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EditarServelt</display-name>
+    <servlet-name>EditarServelt</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.EditarServelt</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EditarServelt</servlet-name>
+    <url-pattern>/editar</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EditarServlet</display-name>
+    <servlet-name>EditarServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.EditarServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EditarServlet</servlet-name>
+    <url-pattern>/editar</url-pattern>
+  </servlet-mapping>
 </web-app>

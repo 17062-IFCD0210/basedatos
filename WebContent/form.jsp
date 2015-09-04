@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -29,12 +30,14 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Insertar nuevo registro</h3>
+              <h3 class="masthead-brand">Registros</h3>
               
               <% //Mostrar mensaje
               	if(request.getAttribute("msg") != null) {
               		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
               	}
+              
+              	
               
               %>
               
@@ -45,7 +48,35 @@
 
 
           <div class="inner cover">
-          
+          	<%
+         		Persona p = (Persona)request.getAttribute("alumno");
+         		if(p !=null) {
+         	%>
+         	<form action="editar" method="post">
+         		<label for="nombre">Nombre: </label>
+         		<br>
+         		<input type="text" name="nombre" placeholder="Tu Nombre" required autofocus tabindex="1" value="<%=p.getNombre()%>">
+         		<br><br>
+         		
+         		<label for="nota">Nota: </label>
+         		<br>
+         		<input type="text" name="nota" placeholder="Tu Nota" required value="<%=p.getNota()%>">
+         		<br><br>
+         		
+         		<label for="telefono">Telefono: </label>
+         		<br>
+         		<input type="text" name="telefono" placeholder="Tu Telefono" value="<%=p.getTelefono()%>">
+         		<br><br>
+         		
+         		<label for="fecha">Fecha: </label>
+         		<br>
+         		<input type="date" name="fecha" value="<%=p.getFecha()%>">
+         		<br><br>
+         		
+				<input type="reset" value="Limpiar">         		
+         		<input type="submit" value="Actualizar">
+         	</form>
+         	<%} else { %>
          	<form action="insertar" method="post">
          		<label for="nombre">Nombre: </label>
          		<br>
@@ -70,12 +101,13 @@
 				<input type="reset" value="Limpiar">         		
          		<input type="submit" value="Crear">
          	</form>
+         	<% } %>
             
           </div>
 
           <div class="mastfoot">
             <div class="inner">
-              <p>DocumentaciÃ³n <a href="#">Ipartek Campus</a></p>
+              <p>Documentación <a href="#">Ipartek Campus</a></p>
               <p>Codigo Fuente <a href="#">GITHUB</a></p>
             </div>
           </div>

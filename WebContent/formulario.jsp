@@ -63,15 +63,7 @@
 					<form action="inicio_persona" method="post">
 						
 						<%
-							Persona p = (Persona)request.getAttribute("alumno");
-						
-							/*Usado para ocultar la fecha en un nuevo registro*/
-							String type;
-							if (p.getFecha() != null){
-								type = "text";
-							} else {
-								type = "hidden";
-							}
+							Persona p = (Persona)request.getAttribute("alumno");							
 						%>												
 						<input type="hidden" name="id" value="<%=p.getId()%>">						
 						<label for="nombre">Nombre:</label>
@@ -85,10 +77,16 @@
 						<label for="telefono">Telefono:</label>
 						<input type="text" name="telefono" value="<%=p.getTelefono()%>" 
 						tabindex="3" pattern="[0-9]{9,15}">								
-						<br><br>
-						<input type="<%=type%>" name="fecha" value="<%=p.getFecha()%>" 
-						tabindex="3" placeholder="AAAA-MM-DD HH:MM:SS.SSS">								
-						<br><br>					
+						<br><br>						
+						<% 
+							if (p.getFecha() != null){
+						%>
+							<input type="text" name="fecha" value="<%=p.getFecha()%>" 
+							tabindex="3" placeholder="AAAA-MM-DD HH:MM:SS.SSS">
+							<br><br>
+						<%								
+							}
+						%>										
 						<input type="submit" class="btn-lg" value="<%=request.getAttribute("metodo")%>">
 						
 					</form>

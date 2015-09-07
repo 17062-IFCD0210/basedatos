@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ipartek.formacion.basedatos.Constantes;
 import com.ipartek.formacion.basedatos.bean.Persona;
 import com.ipartek.formacion.basedatos.modelo.DAOPersona;
+import com.ipartek.formacion.basedatos.utilidades.UtilFecha;
 
 
 /**
@@ -200,7 +201,7 @@ public class InicioPersonaServlet extends HttpServlet {
 			}		
 			pTelefono = request.getParameter("telefono");		
 			if(!request.getParameter("fecha").equals("null")){	
-				pFecha = parse_string_timestamp(request);
+				pFecha = UtilFecha.parse_string_timestamp(request.getParameter("fecha"));
 			}
 		} catch (Exception e){
 			e.printStackTrace();
@@ -208,12 +209,4 @@ public class InicioPersonaServlet extends HttpServlet {
 	
 	}
 	
-	public Timestamp parse_string_timestamp(HttpServletRequest request) throws ParseException {
-		String sFecha = request.getParameter("fecha");		
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-	    Date parsedTimeStamp = dateFormat.parse(sFecha);
-	    Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
-	    return timestamp;
-	}
-
 }

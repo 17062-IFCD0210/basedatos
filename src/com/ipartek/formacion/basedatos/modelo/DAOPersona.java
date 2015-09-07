@@ -1,6 +1,7 @@
 package com.ipartek.formacion.basedatos.modelo;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,9 +29,9 @@ public class DAOPersona implements IDAOPersona {
 		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test` ";
-	    	ResultSet rs = st.executeQuery (sql);
+			String sql = "SELECT * FROM `test` ";
+			PreparedStatement pst = con.prepareStatement(sql);
+	    	ResultSet rs = pst.executeQuery();
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>	    	   	
 	    	while(rs.next()){
@@ -50,9 +51,13 @@ public class DAOPersona implements IDAOPersona {
 		Persona p = (Persona) o;		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES ('" + p.getNombre() + "', " + p.getNota() + ", '" + p.getTelefono() + "');";
-	    	if ( st.executeUpdate(sql) != 1 ){
+			String sql = "insert into `test` (`nombre`, `nota`, `telefono`) values (?,?,?)";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setString(1, p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());
+			
+	    	if ( pst.executeUpdate() != 1 ){
 				throw new Exception("No se ha realizado insercion");
 			}
 	    	resul = 1;	    		
@@ -109,24 +114,23 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public boolean delete(int id) {
-		Boolean resul = false;
-		
+		boolean resul = false;
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-			String sql = "DELETE FROM `test` WHERE `id`=" + id + ";";
+			String sql = "delete from `test` where id= ?";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setInt(1, id);
 			
-			if ( st.executeUpdate(sql) != 1 ){
-				throw new Exception("No se ha podido eliminar");
-			} else {
-				resul = true;
-			}	    		
-		} catch (Exception e){
+			if ( pst.executeUpdate() == 1 ){
+				resul=true;
+			}
+			
+		}catch(Exception e){
 			e.printStackTrace();
-		} finally {
+		}finally{
 			DataBaseHelper.closeConnection();
 		}		
-		return resul;	
+		return resul;
 	}
 
 	@Override

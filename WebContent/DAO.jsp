@@ -107,7 +107,7 @@
 														<h2 class="modal-title text-center text-danger"><i class="fa fa-exclamation-triangle"></i> ELIMINAR REGISTRO</h2>
 									  			</div>
 									  			<div class="modal-body">
-									    			<span class="black">¿Estas seguro de que deseas eliminar el registro?</span> 
+									    			<span class="black">Â¿Estas seguro de que deseas eliminar el registro?</span> 
 									  			</div>
 									  			<div class="modal-footer">						    			
 									    			<a href="inicio_persona?accion=<%=Constantes.ACCION_ELIMINAR%>&id=<%=p.getId()%>" id ="boton_eliminar" class="btn btn-danger">Eliminar</a>

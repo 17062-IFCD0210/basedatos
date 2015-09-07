@@ -8,7 +8,7 @@ public class Persona {
 	private String nombre;
 	private float nota;
 	private String telefono;
-	private Timestamp fecha;
+	private Timestamp fecha = new Timestamp(1);
 	
 	/**
 	 * @param nombre

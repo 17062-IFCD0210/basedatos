@@ -199,7 +199,7 @@ public class InicioPersonaServlet extends HttpServlet {
 				pNota = 0;
 			}		
 			pTelefono = request.getParameter("telefono");		
-			if(request.getParameter("fecha") != null){	
+			if(!request.getParameter("fecha").equals("null")){	
 				pFecha = parse_string_timestamp(request);
 			}
 		} catch (Exception e){

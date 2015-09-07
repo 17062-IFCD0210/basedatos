@@ -1,5 +1,8 @@
-<!DOCTYPE html>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page pageEncoding="utf-8"%>
+<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -30,85 +33,99 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Registros</h3>
+              <h3 class="masthead-brand">
               
-              <% //Mostrar mensaje
-              	if(request.getAttribute("msg") != null) {
-              		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
-              	}
+              <% 
+              	boolean edicion=false; 
+              	Persona p = null;
+              	if ( request.getAttribute("alumno") != null ){
+          			out.print("Editar Registro");
+          			p = (Persona)request.getAttribute("alumno");
+          			edicion=true;
+            	}else{
+          			out.print("Insertar Nuevo Registro");
+          		}              
+              %>
+              </h3>
               
-              	
-              
+              <% //mostrar mensajes
+              	 if ( request.getAttribute("msg") != null ){
+              		 out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+              	 }	
               %>
               
             </div>
           </div>
 
-		
-
 
           <div class="inner cover">
-          	<%
-         		Persona p = (Persona)request.getAttribute("alumno");
-         		if(p !=null) {
-         	%>
-         	<form action="editar" method="post">
-         		<label for="nombre">Nombre: </label>
-         		<br>
-         		<input type="text" name="nombre" placeholder="Tu Nombre" required autofocus tabindex="1" value="<%=p.getNombre()%>">
-         		<br><br>
-         		
-         		<label for="nota">Nota: </label>
-         		<br>
-         		<input type="text" name="nota" placeholder="Tu Nota" required value="<%=p.getNota()%>">
-         		<br><br>
-         		
-         		<label for="telefono">Telefono: </label>
-         		<br>
-         		<input type="text" name="telefono" placeholder="Tu Telefono" value="<%=p.getTelefono()%>">
-         		<br><br>
-         		
-         		<label for="fecha">Fecha: </label>
-         		<br>
-         		<input type="date" name="fecha" value="<%=p.getFecha()%>">
-         		<br><br>
-         		
-				<input type="reset" value="Limpiar">         		
-         		<input type="submit" value="Actualizar">
-         	</form>
-         	<%} else { %>
-         	<form action="insertar" method="post">
-         		<label for="nombre">Nombre: </label>
-         		<br>
-         		<input type="text" name="nombre" placeholder="Tu Nombre" required autofocus tabindex="1">
-         		<br><br>
-         		
-         		<label for="nota">Nota: </label>
-         		<br>
-         		<input type="text" name="nota" placeholder="Tu Nota" required>
-         		<br><br>
-         		
-         		<label for="telefono">Telefono: </label>
-         		<br>
-         		<input type="text" name="telefono" placeholder="Tu Telefono">
-         		<br><br>
-         		
-         		<label for="fecha">Fecha: </label>
-         		<br>
-         		<input type="date" name="fecha">
-         		<br><br>
-         		
-				<input type="reset" value="Limpiar">         		
-         		<input type="submit" value="Crear">
-         	</form>
-         	<% } %>
-            
+          
+          <% 
+/*          if(edicion){
+        	 	out.print("<form action='actualizar' method='post'>");
+          }else{
+        	  out.print("<form action='inicio' method='post'>");
+          }
+  */      	  
+          %>
+          <form action='inicio' method='post'>
+          	<input type="hidden" name="id" value="<% if(edicion){out.print(p.getId());}else{out.print("-1");} %>">
+
+	       		<div class="form-group">
+	          		<label for="nombre">Nombre</label>
+	          		<input type="text" 
+	          			   name="nombre" 
+	          		       placeholder="Tu nombre" 
+	          		       required
+	          		       autofocus 
+	          		       tabindex="1"
+	          		       value="<% if(edicion){out.print(p.getNombre());} %>"
+	          		       >
+	          	</div>
+	       		<div class="form-group">
+	          		<label for="nota">Nota</label>
+	          		<input type="number" 
+	          			   name="nota" 
+	          		       placeholder="Tu nota" 
+	          		       required
+	          		       tabindex="2"
+	          		       value="<% if(edicion){out.print(p.getNota());} %>"
+	          		        >
+				</div>
+				<div class="form-group">
+	          		<label for="telefono">Teléfono</label>
+	          		<input type="text" 
+	          			   name="telefono" 
+	          		       placeholder="Tu telefono" 
+	          		       tabindex="3"
+	          		       value="<% if(edicion){out.print(p.getTelefono());} %>"
+	          		        >
+				</div>
+				<div class="form-group">
+	          		<label for="fecha">Fecha</label>
+	           		<input type="date" 
+	          			   name="fecha"  
+	          		       tabindex="4"
+  	          		       value=""
+	          		        >
+	          	</div>          		
+          		<input type="reset" value="Limpiar">
+          		
+          			<input type="submit" value="<% if(edicion){out.print("Modificar");}else{out.print("Crear");} %>">
+          		
+          			
+          		
+          		
+          	
+          	</form>
+          	<br>
+           	<a href="inicio">Volver</a>
           </div>
 
           <div class="mastfoot">
             <div class="inner">
-              <p>Documentaci�n <a href="#">Ipartek Campus</a></p>
-              <p>Codigo Fuente <a href="#">GITHUB</a></p>
+              <p>Documentación <a href="#">Ipartek Campus</a></p>
+              <p>Codigo Fuente <a target="_blank" href="https://github.com/17062-IFCD0210/basedatos">GITHUB</a></p>
             </div>
           </div>
 

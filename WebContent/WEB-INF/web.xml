@@ -5,7 +5,7 @@
     <welcome-file>inicio</welcome-file>
   </welcome-file-list>
   <servlet>
-    <description>Servlet de prueba para insertar un nuevo registro en la tabla test</description>
+    <description>Servlet de prueba para insrtar un nuevo registro en la tabla Test</description>
     <display-name>InsertarServlet</display-name>
     <servlet-name>InsertarServlet</servlet-name>
     <servlet-class>com.ipartek.formacion.basedatos.controllers.InsertarServlet</servlet-class>
@@ -25,14 +25,24 @@
     <url-pattern>/eliminar</url-pattern>
   </servlet-mapping>
   <servlet>
-    <description>Listado de la BBDD segun nota</description>
-    <display-name>ListadoServlet</display-name>
-    <servlet-name>ListadoServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatos.controllers.ListadoServlet</servlet-class>
+    <description></description>
+    <display-name>Filtrar</display-name>
+    <servlet-name>Filtrar</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.Filtrar</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>ListadoServlet</servlet-name>
-    <url-pattern>/lista</url-pattern>
+    <servlet-name>Filtrar</servlet-name>
+    <url-pattern>/filtrar</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EditarServlet</display-name>
+    <servlet-name>EditarServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.EditarServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EditarServlet</servlet-name>
+    <url-pattern>/editar</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -46,22 +56,12 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>EditarServelt</display-name>
-    <servlet-name>EditarServelt</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatos.controllers.EditarServelt</servlet-class>
+    <display-name>ActualizarServlet</display-name>
+    <servlet-name>ActualizarServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.ActualizarServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>EditarServelt</servlet-name>
-    <url-pattern>/editar</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>EditarServlet</display-name>
-    <servlet-name>EditarServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatos.controllers.EditarServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>EditarServlet</servlet-name>
-    <url-pattern>/editar</url-pattern>
+    <servlet-name>ActualizarServlet</servlet-name>
+    <url-pattern>/actualizar</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -29,20 +29,20 @@ public class EliminarServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		try {
-			//Recoger parametros
+		try{
+			//recoger parametros
 			int pId = Integer.parseInt(request.getParameter("id"));
 			
 			DAOPersona dao = new DAOPersona();
 			dao.delete(pId);
-	    	
 			
 			//Volver a la HOME
 			request.getRequestDispatcher("inicio").forward(request, response);
-		} catch(Exception e) {
-			request.setAttribute("msg2", e.getMessage());
+			
+		}catch ( Exception e){
+			
+			request.setAttribute("msg", e.getMessage() );
 			request.getRequestDispatcher("form.jsp").forward(request, response);
 		}
 	}
@@ -50,7 +50,6 @@ public class EliminarServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}

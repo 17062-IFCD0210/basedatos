@@ -1,23 +1,26 @@
 package com.ipartek.formacion.basedatos.modelo;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
 
+
 /**
  * DAO: Data Access Object
- * Clase especializada en mapera una {@code Persona} contra la Base Datos.
+ * Clase especializada en mapear una {@code Persona} contra la Base Datos
  * Dispone de los metodos basicos para realizar las operaciones de CRUD
- * @author ur00
+ * @author Curso
  *
  */
-public class DAOPersona implements IDAOPersona {
+public class DAOPersona implements IDAOPersona{
 
-	
 	/**
 	 * Recupera todas las Personas
 	 * @return {@code ArrayList<Persona>} listado personas
@@ -27,13 +30,25 @@ public class DAOPersona implements IDAOPersona {
 		
 		ArrayList<Object> resul = new ArrayList<Object>();
 		try{
-			Connection con = DataBaseHelper.getConnection();
+			
+			  	Connection con = DataBaseHelper.getConnection();
 			Statement st = con.createStatement(); 
 	    	String sql = "SELECT * FROM `test` ";
 	    	ResultSet rs = st.executeQuery (sql);
-	    	
-	    	while(rs.next()){	    		    		
-	    		resul.add( mapeo(rs));    		
+			 
+			 
+			
+	    	//mapeo resultSet => ArrayList<Persona>
+	    	Persona p = null;	    	
+	    	while(rs.next()){
+	    		
+	    		p = new Persona( rs.getString("nombre") );
+	    		p.setId( rs.getInt("id"));
+	    		p.setFecha( rs.getTimestamp("fecha"));
+	    		p.setTelefono(rs.getString("telefono"));
+	    		p.setNota(rs.getFloat("nota"));
+	    		
+	    		resul.add(p);
 	    	}	
 	    	
 	    	
@@ -49,72 +64,134 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public int save(Object o) {
-		// TODO Auto-generated method stub
+
+		try{
+			
+			  Connection con = DataBaseHelper.getConnection();
+			Statement st = con.createStatement();
+			Persona p=(Persona)o;
+			String pNombre = p.getNombre();
+			Float pNota = p.getNota();
+			String pTelefono = p.getTelefono();
+			Date pFecha = p.getFecha();
+	    	String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES ('" + pNombre + "',"+ pNota + ",'"+ pTelefono +"');";
+	    	System.out.println(p.toString());
+			 
+			
+			
+	    	
+	    	System.out.println(p.toString());
+	    	//ejecutar insert
+	    	if ( st.executeUpdate(sql) != 1){	    		
+	    		throw new Exception("No se ha realizado insercion: " + sql);	    		
+	    	}
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		
 		return 0;
 	}
 
 	@Override
 	public Object getById(int id) {
-		
-		Object resul = new Object();
-		try{
-			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test` where id="+id;
-	    	ResultSet rs = st.executeQuery (sql);
-	    	while(rs.next()){
-	    		resul=mapeo(rs);
-	    	}
- 	
-		}catch(Exception e){
+		Persona p;
+		try {
+			
+			  Connection con = DataBaseHelper.getConnection();    	
+	    	Statement st = con.createStatement();
+	    	String sql   = "SELECT * FROM `test` WHERE `id` = "+id+";";
+	    	ResultSet rs = st.executeQuery (sql);	
+			 
+				    	
+	    	rs.first();
+	    	p = mapeo(rs);
+	    	
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+    		return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+    		return false;
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
-		
-		return resul;
+		return p;
 	}
 
 	@Override
 	public boolean update(Object o) {
-		
-		return false;
+		try {
+			Connection con = DataBaseHelper.getConnection();
+			Statement st = con.createStatement();
+			Persona p = new Persona(null);		
+			p=(Persona) o;
+			String sql = "UPDATE `test` SET `nombre`='"+p.getNombre()+"',`nota`="+p.getNota()+", `telefono`='"+p.getTelefono()+"' WHERE  `id`="+p.getId()+";";
+			
+			
+			//ejecutar update
+	    	if ( st.executeUpdate(sql) != 1){	    		
+	    		throw new Exception("No se ha realizado modificacion: " + sql);
+	    	}
+			
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+    		return false;
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+ 
+		return true;
 	}
 
 	@Override
 	public boolean delete(int id) {
-		
-		try{
-			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-			String sql = "DELETE FROM test WHERE id=" + id + ";";
-			//Ejecutar SQL
-	    	if(st.executeUpdate(sql) != 1) {
-	    		throw new Exception("No se ha realizado eliminacion " + sql);
-	    	}
-	    	
-		}catch(Exception e){
-			e.printStackTrace();
-			return false;
+		boolean resul= false;
+		try {
 			
+			Connection con = DataBaseHelper.getConnection();
+	    	String sql="DELETE FROM `test` WHERE `id` =? ";
+	    	PreparedStatement pst =  con.prepareStatement(sql);
+	    	pst.setInt(1, id);
+
+	    	//ejecutar delete
+	    	if ( pst.executeUpdate() == 1){	 
+	    		resul= true;
+	    		
+	    	}
+		} catch (ClassNotFoundException e) {
+			
+			e.printStackTrace();
+    		return resul;
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+    		return resul;
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
-		
-		return true;
+ 
+		return resul;
 	}
 
 	@Override
 	public ArrayList<Object> getAprobados() {
 		ArrayList<Object> resul = new ArrayList<Object>();
 		try{
-			Connection con = DataBaseHelper.getConnection();
+			
+			
+			  Connection con = DataBaseHelper.getConnection();
 			Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test` where `nota` >= 5 ";
+	    	String sql = "SELECT * FROM `test` WHERE `nota` >= 5";
 	    	ResultSet rs = st.executeQuery (sql);
-	    	
-	    	while(rs.next()){	    		    		
-	    		resul.add( mapeo(rs));    		
+			 
+			
+	    	  	
+	    	while(rs.next()){
+	    		resul.add(mapeo(rs));
 	    	}	
 	    	
 	    	
@@ -123,7 +200,6 @@ public class DAOPersona implements IDAOPersona {
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
-		
 		return resul;
 	}
 
@@ -131,14 +207,15 @@ public class DAOPersona implements IDAOPersona {
 	public ArrayList<Object> getSuspendidos() {
 		ArrayList<Object> resul = new ArrayList<Object>();
 		try{
-			Connection con = DataBaseHelper.getConnection();
+			
+			  Connection con = DataBaseHelper.getConnection();
 			Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test` where `nota` < 5 ";
+	    	String sql = "SELECT * FROM `test` WHERE `nota` < 5";
 	    	ResultSet rs = st.executeQuery (sql);
-	    	
-	    			    	
-	    	while(rs.next()){	    		    		
-	    		resul.add( mapeo(rs));    		
+			
+		
+	    	while(rs.next()){
+	    		resul.add(mapeo(rs));
 	    	}	
 	    	
 	    	
@@ -147,25 +224,21 @@ public class DAOPersona implements IDAOPersona {
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
-		
 		return resul;
 	}
 	
 	/**
-	 * Mapea un ResulSet a una Persona
+	 * Mapea un ResultSer a una Persona
 	 * @param rs
 	 * @return
 	 * @throws SQLException 
 	 */
-	private Persona mapeo ( ResultSet rs ) throws SQLException{
-		
+	private Persona mapeo(ResultSet rs) throws SQLException{
 		Persona p = new Persona( rs.getString("nombre") );
 		p.setId( rs.getInt("id"));
 		p.setFecha( rs.getTimestamp("fecha"));
 		p.setTelefono(rs.getString("telefono"));
-		p.setNota(rs.getFloat("nota"));		
-		
+		p.setNota(rs.getFloat("nota"));
 		return p;
 	}
-	
 }

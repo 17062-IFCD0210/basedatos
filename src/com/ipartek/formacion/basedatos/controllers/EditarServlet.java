@@ -12,14 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
-import com.ipartek.formacion.basedatos.modelo.DAOPersona;
 
 /**
  * Servlet implementation class EditarServlet
  */
 public class EditarServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static int pId;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -32,61 +30,46 @@ public class EditarServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		try {
-			//Recoger parametros			
-			pId = Integer.parseInt(request.getParameter("id"));
+		String sql=null;
+		try{		
+			//Busca en la BD el registro a editar
+			//recoger parametros
+			int pId = Integer.parseInt(request.getParameter("id"));		
 			
-			DAOPersona dao = new DAOPersona();
-			Object p = dao.getById(pId);
+			//TODO llamar modelo para inserccion
+			Class.forName("com.mysql.jdbc.Driver");
+	    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
 	    	
-	    	//Cargar atributos en request
-	    	request.setAttribute("alumno", p);
-	    							
-			//Forward
+	    	Statement st = conexion.createStatement();
+	    	sql = "SELECT * FROM `test` WHERE `id`="+pId+";";
+	   		ResultSet rs = st.executeQuery (sql);
+
+	   		//mapeo resulSet ==> Persona
+	      	Persona p = null;
+	      	rs.first();
+      		p = new Persona(rs.getString("nombre"));
+      		p.setId(rs.getInt("id"));
+      		p.setNota(rs.getFloat("nota"));
+      		p.setTelefono(rs.getString("telefono"));
+      		p.setFecha(rs.getTimestamp("fecha"));
+	      	System.out.println(p.toString());
+			//cargar atributos en request
+	      	request.setAttribute("alumno", p);
 			request.getRequestDispatcher("form.jsp").forward(request, response);
-		} catch(Exception e) {
+			
+		}catch ( Exception e){
 			e.printStackTrace();
-			request.setAttribute("msg", e.getMessage());
-		}
+			request.setAttribute("msg", e.getMessage()+ "SQL: "+sql );
+			request.getRequestDispatcher("inicio").forward(request, response);
+		}			
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		try {
-			//Recoger parámetros
-			String pNombre = request.getParameter("nombre");
-			float pNota = Float.parseFloat(request.getParameter("nota"));
-			String pTelefono = request.getParameter("telefono");
-			String pFecha = request.getParameter("fecha");
-			
-			//Abrir conexion
-			Class.forName("com.mysql.jdbc.Driver");
-	    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-	    	
-	    	//Crear SQL
-	    	Statement st = conexion.createStatement();
-	    	String sql = "UPDATE test SET nombre='" + pNombre + "', nota=" + pNota + ", telefono='" + pTelefono + "', fecha='" + pFecha + "' WHERE id=" + pId + ";"; 
-	    	
-			//Ejecutar SQL
-	    	if(st.executeUpdate(sql) != 1) {
-	    		throw new Exception("No se ha realizado actualizacion " + sql);
-	    	}
-	    	
-			//Cerrar conexion
-	    	
-	    	conexion.close();
-			
-			//Volver a la HOME
-			request.getRequestDispatcher("inicio").forward(request, response);
-		} catch(Exception e) {
-			request.setAttribute("msg", e.getMessage());
-			request.getRequestDispatcher("form.jsp").forward(request, response);
-		}
+		// TODO Auto-generated method stub
 	}
 
 }

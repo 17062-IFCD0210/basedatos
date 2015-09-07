@@ -1,12 +1,14 @@
 package com.ipartek.formacion.basedatos.modelo;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
+
 
 /**
  * DAO: Data Access Object
@@ -85,8 +87,23 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resul = false;
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			String sql = "delete from `test` where id= ?";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setInt(1, id);
+			
+			if ( pst.executeUpdate() == 1 ){
+				resul=true;
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}		
+		return resul;
 	}
 
 	@Override

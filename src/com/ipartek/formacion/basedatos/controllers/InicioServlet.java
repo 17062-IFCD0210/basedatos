@@ -96,32 +96,15 @@ public class InicioServlet extends HttpServlet {
 
 	private void eliminar(HttpServletRequest request,
 			HttpServletResponse response) {
-		
-		try {
-			//Recoger parametros
-			int pId = Integer.parseInt(request.getParameter("id"));
-			
-			//Abrir conexion
-			DataBaseHelper conexion = new DataBaseHelper();
-	    	
-	    	//Crear SQL
-	    	Statement st = conexion.createStatement();
-	    	String sql = "DELETE FROM test WHERE id=" + pId + ";";
-	    	
-			//Ejecutar SQL
-	    	if(st.executeUpdate(sql) != 1) {
-	    		throw new Exception("No se ha realizado eliminacion " + sql);
-	    	}
-	    	
-			
-			//Volver a la HOME
-			request.getRequestDispatcher("inicio").forward(request, response);
-		} catch(Exception e) {
-			request.setAttribute("msg2", e.getMessage());
-			
+	
+		int pId = Integer.parseInt( pID );
+		if ( dao.delete(pId) ){
+			request.setAttribute("msg", "Eliminado con exito");
+		}else{
+			request.setAttribute("msg", "No eliminado");
 		}
-		
-		
+	
+		listar(request, response);
 		
 	}
 
@@ -141,7 +124,43 @@ public class InicioServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		
+		try {
+				// Recoger parametros
+				String sNombre   = request.getParameter("nombre");
+				String sNota     = request.getParameter("nota");
+				String sTelefono = request.getParameter("telefono");
+				String sFecha    = request.getParameter("fecha");
+				String sID       = request.getParameter("id");
+				
+				// Mapear persona
+				Persona p = new Persona(sNombre);
+				p.setId(Integer.parseInt(sID));
+				p.setNota(Float.parseFloat(sNota));
+				p.setTelefono(sTelefono);
+					// TODO fecha
+				
+				// Crear nueva persona
+				if ( "-1".equals(sID) ){
+					dao.save(p);
+					
+				// Modificar persona
+				}else {
+					dao.update(p);
+				}
+				
+				
+		}catch ( Exception e){
+			e.printStackTrace();
+			request.setAttribute( "msg", e.getMessage() );
+			
+		}finally{
+			//volver index
+			listar(request,response);
+		}
+		
+		
+		
 	}
 
 }

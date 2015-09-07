@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.modelo.DAOPersona"%>
 <%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <html lang="es">
   <head>
@@ -54,7 +55,7 @@
 
           <div class="inner cover">
           
-         	<form action="insertar" method="post">
+         	<form action="inicio" method="post">
          		<label for="nombre">Nombre: </label>
          		<br>
          		<input type="text" 
@@ -87,11 +88,19 @@
          		<br>
          		<input type="date" 
          				name="fecha"
-         				value="<%=p.getFecha()%>">
+         				value="<%=p.getTelefono()%>">
          		<br><br>
          		
-				<input type="reset" value="Limpiar">         		
-         		<input type="submit" value="Crear">
+         		<input type="hidden" name="id" value="<%=p.getId()%>">
+
+						<input type="reset" value="Limpiar">  
+						
+						<%if (p.getId() == -1) {%>       		
+         					<input type="submit" value="Crear">
+						<%}else {%>
+							<input type="submit" value="Modificar">
+						<%}%>
+
          	</form>
             
           </div>

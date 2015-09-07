@@ -1,6 +1,7 @@
 package com.ipartek.formacion.basedatos.modelo;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,7 +11,7 @@ import com.ipartek.formacion.basedatos.bean.Persona;
 
 /**
  * DAO: Data Access Object
- * Clase especializada en mapera una {@code Persona} contra la Base Datos.
+ * Clase especializada que mapea una {@code Persona} contra la Base Datos.
  * Dispone de los metodos basicos para realizar las operaciones de CRUD
  * @author ur00
  *
@@ -49,8 +50,29 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public int save(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = -1;
+		
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES (?, ?, ?, ?);";
+			
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setCharacterStream(1, );
+			pst.setFloat(2, );
+			pst.setCharacterStream(3, );
+			pst.setTimestamp(4, );
+			
+	    	if ( pst.executeUpdate() == 1 ){
+	    		result = 1;
+	    	} 
+	
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -80,14 +102,54 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public boolean update(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		int result = -1;
+		
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			String sql = "UPDATE `test` SET `nombre`=?, `nota`=?, `telefono`=?, `fecha`=? WHERE  `id`=?;";
+			
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setCharacterStream(1, reader);
+			pst.setFloat(2, x);
+			pst.setCharacterStream(3, reader);
+			pst.setTimestamp(4, x);
+			
+	    	if ( pst.executeUpdate() == 1 ){
+	    		result = 1;
+	    	} 
+	
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		
+		return result;
 	}
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
+	
+		boolean resul = false;
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			String sql = "delete from `test` where id= ?";
+			
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setInt(1, id);
+			
+	    	if ( pst.executeUpdate() == 1 ){
+	    		resul = true;
+	    	} 
+	
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		
+		return resul;
+
 	}
 
 	@Override

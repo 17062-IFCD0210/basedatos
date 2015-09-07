@@ -36,7 +36,9 @@ public class DataBaseHelper {
 			con = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
 		}
 		return con;
+
 	}
+		
 	
 	/**
 	 * Cierra la conexion, tener cuidado porque al cerrar una conexion con el metodo .close()

@@ -68,8 +68,14 @@
           }
   */      	  
           %>
-          <form action='inicio' method='post'>
-          	<input type="hidden" name="id" value="<% if(edicion){out.print(p.getId());} %>">
+          <form action="inicio" method="post">
+          	<input type="hidden" name="id" value="<% 
+          		if(edicion){
+          			out.print(p.getId());
+          		}else{
+          			out.print("-1");
+          		}
+          	%>">
 
 	       		<div class="form-group">
 	          		<label for="nombre">Nombre</label>
@@ -106,11 +112,11 @@
 	           		<input type="date" 
 	          			   name="fecha"  
 	          		       tabindex="4"
-  	          		       value="<% if(edicion){ out.print(p.getFecha().toString().substring(0, 10));} %>"
+  	          		       value=""
 	          		        >
 	          	</div>          		
           		<input type="reset" value="Limpiar">
-          		<input type="submit" value="Grabar">
+          		<input type="submit" value="<% if(edicion){out.print("Modificar");}else{out.print("Crear");} %>">
           	
           	</form>
           	<br>

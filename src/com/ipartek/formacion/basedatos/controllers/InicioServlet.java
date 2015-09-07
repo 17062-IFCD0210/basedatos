@@ -114,7 +114,6 @@ public class InicioServlet extends HttpServlet {
       	
 		//cargar atributos en request
       	request.setAttribute("alumnos", alumnos);
-      	
       	dispatcher = request.getRequestDispatcher("index.jsp");
       	
 	}
@@ -123,8 +122,11 @@ public class InicioServlet extends HttpServlet {
 			HttpServletResponse response) {
 		
 		int id = Integer.parseInt(pID);
-		dao.delete(id);
-		//dispatcher = request.getRequestDispatcher("inicio?accion=0");
+		if(dao.delete(id)){
+			request.setAttribute("msg", "Persona eliminada");
+		}else{
+			request.setAttribute("msg", "No se ha podido ELIMINAR");
+		};
 		listar(request, response);
 		
 	}
@@ -143,43 +145,71 @@ public class InicioServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
 		
 		String sql=null;
 		try{
 			//recoger parametros
+			String sNombre=request.getParameter("nombre");
+			String sNota=request.getParameter("nota");		
+			String sTelefono=request.getParameter("telefono");
+			String sID=request.getParameter("id");
+			
+			Persona p = new Persona(sNombre);   		
+    		//p.setFecha(Date.parse(sFecha));
+    		p.setTelefono(sTelefono);
+    		p.setNota(Float.parseFloat(sNota));
+			p.setId(Integer.parseInt(sID));
+			//crear nueva persona
+    		if ("-1".equals(sID)){
+    			if(dao.save(p)==-1){
+    				request.setAttribute("msg", "No se ha podido crear");
+    			}else{
+    				request.setAttribute("msg", "Persona creada");    				
+    			};
+    			
+    		//modificar persona
+    		}else{
+    			p.setId(Integer.parseInt(pID));
+    			if(dao.update(p)){
+    				System.out.println("Persona modificada");
+    				request.setAttribute("msg", "Persona modificada");
+    			}else{
+    				request.setAttribute("msg", "No se ha podido modificar");
+    			};
+    		}
+			
+/*			
 			pID=request.getParameter("id");
 			System.out.println(pID);
 			String pNombre = request.getParameter("nombre");
 			float pNota = Float.parseFloat(request.getParameter("nota"));
 			String pTelefono= request.getParameter("telefono");
-			Date pFecha;
-			if(request.getParameter("fecha")!=null){
-				//pFecha = Date.parse(request.getParameter("fecha"));
-			}			
-			
-	    	Persona p = null;	    	
-    		p = new Persona( pNombre );
-    		//p.setFecha(pFecha);
+			//falta la fecha
+			Persona p = null;	    	
+    		p = new Persona( pNombre );   		
+    		//p.setFecha(Date.parse(sFecha));
     		p.setTelefono(pTelefono);
     		p.setNota(pNota);
 
     		if ("-1".equals(pID)){
     			dao.save(p);
     		}else{
-    			dao.update(p);
+    			p.setId(Integer.parseInt(pID));
+    			if(dao.update(p)){
+    				request.setAttribute("msg", "Persona modificada");
+    			}else{
+    				request.setAttribute("msg", "No se ha podido modificar");
+    			};
     		}
-			
-    		dispatcher = request.getRequestDispatcher("inicio?accion=0");
-			
+	*/		
 		}catch ( Exception e){
-			
+			e.printStackTrace();
 			request.setAttribute("msg", e.getMessage() + "SQL: "+sql);
-			dispatcher = request.getRequestDispatcher("form.jsp");
+		}finally{
+			//volver a index
+			listar(request,response);
 		}
-		//forward
-		listar(request,response);
-		//dispatcher.forward(request, response);		
+		doGet(request, response);
 	}
 
 }

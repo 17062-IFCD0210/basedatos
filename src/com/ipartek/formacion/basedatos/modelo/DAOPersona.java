@@ -2,6 +2,7 @@ package com.ipartek.formacion.basedatos.modelo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
+
 
 /**
  * DAO: Data Access Object
@@ -68,7 +70,8 @@ public class DAOPersona implements IDAOPersona{
 			Float pNota = p.getNota();
 			String pTelefono = p.getTelefono();
 			Date pFecha = p.getFecha();
-	    	String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES ('" + pNombre + "',"+ pNota + ",'"+ pTelefono +"','"+ pFecha +"');";
+			//String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES ('" + pNombre + "',"+ pNota + ",'"+ pTelefono +"','"+ pFecha +"');";
+			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES ('" + pNombre + "',"+ pNota + ",'"+ pTelefono +"');";
 	    	System.out.println(p.toString());
 	    	//ejecutar insert
 	    	if ( st.executeUpdate(sql) != 1){	    		
@@ -109,35 +112,57 @@ public class DAOPersona implements IDAOPersona{
 
 	@Override
 	public boolean update(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resul=false;
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			Persona p=(Persona)o;
+			String sql="UPDATE `test` SET `nombre`='"+p.getNombre()+"', `nota`="+p.getNota()+", `telefono`='"+p.getTelefono()+"' where `id`=?;";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setInt(1, p.getId());
+			if(pst.executeUpdate()==1){
+				resul=true;
+			}    	
+			/*
+			Statement st = con.createStatement();
+			Persona p=(Persona)o;
+			String sql = "UPDATE `test` SET `nombre`='"+p.getNombre()+"', `nota`="+p.getNota()+", `telefono`='"+p.getTelefono()+"' where `id`="+p.getId()+";";
+	    	System.out.println(p.toString());
+	    	//ejecutar update
+	    	if ( st.executeUpdate(sql) != 1){	    		
+	    		throw new Exception("No se ha realizado actualización: " + sql);	    		
+	    	}
+			*/
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		return resul;
 	}
 
 	@Override
 	public boolean delete(int id) {
+		boolean resul=false;
 		try {
 			Connection con = DataBaseHelper.getConnection();
-	    	
-	    	Statement st = con.createStatement();
-	    	String sql   = "DELETE FROM `test` WHERE `id` = "+id+";";
+			String sql   = "DELETE FROM `test` WHERE `id` = ?;";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setInt(1, id);
+			if(pst.executeUpdate()==1){
+				resul=true;
+			}    	
 
-	    	//ejecutar delete
-	    	if ( st.executeUpdate(sql) != 1){	    		
-	    		throw new Exception("No se ha realizado eliminacion: " + sql);
-	    	}
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
     		return false;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
     		return false;
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
  
-		return true;
+		return resul;
 	}
 
 	@Override
@@ -185,7 +210,7 @@ public class DAOPersona implements IDAOPersona{
 	}
 	
 	/**
-	 * Mapea un ResultSer a una Persona
+	 * Mapea un ResultSet a una Persona
 	 * @param rs
 	 * @return
 	 * @throws SQLException 

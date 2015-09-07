@@ -73,6 +73,13 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base Datos</h1>
+             <% //Mostrar mensaje
+              	if(request.getAttribute("msg") != null) {
+              		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+              	}
+              
+              %>
+            
             <a href="form.jsp">Insertar nuevo registro</a>
             <p class="lead">Registros</p>
     		<table class="verde tabla">
@@ -87,10 +94,40 @@
 				Persona p = null;
 				for (int i=0;i<alumnos.size();i++){
 					p = alumnos.get(i);
-					out.print("<tr><td>" + p.getNombre() + "</td><td>" + p.getNota() +"</td><td>"+p.getTelefono()+"</td><td>"+p.getFecha() +"</td><td><a href='inicio?accion=1&id="+p.getId()+"'>E</a></td><td><a href='inicio?accion=2&id="+p.getId()+"'>X</a></td></tr>");
+					//out.print("<tr><td>" + p.getNombre() + "</td><td>" + p.getNota() +"</td><td>"+p.getTelefono()+"</td><td>"+p.getFecha() +"</td><td><a href='inicio?accion=1&id="+p.getId()+"'>E</a></td><td><a href='inicio?accion=2&id="+p.getId()+"'>X</a></td></tr>");
+					%>
+					<tr>
+						<td><%=p.getNombre()%></td>
+						<td><%=p.getNota()%></td>
+						<td><%=p.getTelefono()%></td>
+						<td><%=p.getFecha()%></td>
+						<td><a href="inicio?accion=1&id=<%=p.getId()%>">E</a></td>
+						<td><button type="button" data-toggle="modal" data-target="#myModal<%=+i%>">X</button></td>
+						</tr>
+
+					<!-- Ventana Modal -->
+					<div class="modal fade col-md-6 col-md-offset-3" id="myModal<%=+i%>" role="dialog">
+						<div class="modal-dialog">
+					  
+					    <!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h2 class="modal-title text-center text-danger"><i class="fa fa-exclamation-triangle"></i>Confirmacion de eliminacion</h2>
+					  			</div>
+					  			<div class="modal-body">
+					    			<p>Estas seguro de que desea eliminar a <%=p.getNombre()%>?</p>
+					  			<div class="modal-footer">						    			
+					    			<a href="inicio?accion=2&id=<%=p.getId()%>" class="btn btn-danger">Eliminar</a>
+					      			<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					      		</div>
+					      		</div>
+					    	</div> <!-- END Modal content-->
+					  	</div>
+					</div> <!-- END Ventana Modal -->
+				<%
 				}
-            	
-			%>
+				%>
 				</tbody>
 				<tfoot>
 					<tr>

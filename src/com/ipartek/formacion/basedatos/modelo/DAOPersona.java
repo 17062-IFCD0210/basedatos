@@ -83,8 +83,26 @@ public class DAOPersona implements IDAOPersona{
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		boolean resul = false;
+		
+		try {
+			Connection con = DataBaseHelper.getConnection();
+			Statement st = con.createStatement();
+			String sql = "DELETE FROM `test` WHERE  `id`=" + id;
+			
+			if ( st.executeUpdate(sql) == 1){
+				resul=true;
+			}			
+			
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		
+		
+		return resul;
 	}
 	
 	

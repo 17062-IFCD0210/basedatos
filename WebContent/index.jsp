@@ -51,6 +51,16 @@
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base de Datos</h1>
             
+            
+            <% 
+            	//gestion de mensajes
+            	if ( request.getAttribute("msg")!=null ){
+            		out.print("<h4>" + request.getAttribute("msg") + "</h4>");	
+            	}            	
+            
+            %>
+            
+            
     		<table id="bbdd">      
 	            <tr>
 	            	<td>Servidor: <small>localhost</small></td>

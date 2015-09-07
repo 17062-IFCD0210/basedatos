@@ -105,34 +105,18 @@ public class InicioServlet extends HttpServlet {
 
 	private void eliminar(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		try {
-			//Recoger parametros
-			int pId = Integer.parseInt(request.getParameter("id"));
-			
-			//Abrir conexion
-			Class.forName("com.mysql.jdbc.Driver");
-	    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-	    	
-	    	//Crear SQL
-	    	Statement st = conexion.createStatement();
-	    	String sql = "DELETE FROM test WHERE id=" + pId + ";";
-	    	
-			//Ejecutar SQL
-	    	if(st.executeUpdate(sql) != 1) {
-	    		throw new Exception("No se ha realizado eliminacion " + sql);
-	    	}
-	    	
-			//Cerrar conexion
-	    	
-	    	conexion.close();
-			
-			//Volver a la HOME
-			request.getRequestDispatcher("inicio").forward(request, response);
-		} catch(Exception e) {
-			request.setAttribute("msg", e.getMessage());
-			request.getRequestDispatcher("index.jsp").forward(request, response);
-		}
 		
+			//Recoger parametros
+			int id = Integer.parseInt( pID );
+			
+			if ( dao.delete( id ) ){
+				request.setAttribute("msg", "Elimnado con exito");
+			}else{
+				request.setAttribute("msg", "NO  se ha podido Elimnar");
+			}
+			
+			listar(request, response);
+			
 	}
 	
 	/*****************************************

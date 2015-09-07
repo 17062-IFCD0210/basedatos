@@ -1,6 +1,10 @@
 package com.ipartek.formacion.basedatos.controllers;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -27,10 +31,11 @@ public class InicioPersonaServlet extends HttpServlet {
 	//parametros
 	private int pAccion = Constantes.ACCION_LISTAR;
 	private int pFiltro;
-	private int pID;
+	private int pID = -1;
 	private String pNombre;
 	private float pNota;
-	private String pFecha;
+	private String pTelefono;
+	private Timestamp pFecha;
 	
     
     /**
@@ -85,60 +90,130 @@ public class InicioPersonaServlet extends HttpServlet {
 			
 			if(request.getParameter("id") != null && !"".equalsIgnoreCase(request.getParameter("id"))){
 				pID = Integer.parseInt(request.getParameter("id"));
-			}
-			
+			}			
 			if(request.getParameter("filtro") != null && !"".equalsIgnoreCase(request.getParameter("filtro"))){
-				pID = Integer.parseInt(request.getParameter("filtro"));
-			}
-			
+				pFiltro = Integer.parseInt(request.getParameter("filtro"));
+			} else {
+				pFiltro = 0;
+			}			
 		} catch(Exception e){
 			e.printStackTrace();
 		}		
 	}
 	
-	/**
-	 * Obtiene todas las vias del modelo y carga dispatch con index.jsp
-	 * @see backoffice/pages/via/index.jsp
-	 * @param request
-	 * @param response
-	 */
+
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
-		request.setAttribute("alumnos", dao.getAll());
+		if (pFiltro == 1){
+			request.setAttribute("alumnos", dao.getAprobados());
+		} else if (pFiltro == 2){
+			request.setAttribute("alumnos", dao.getSuspendidos());
+		} else {
+			request.setAttribute("alumnos", dao.getAll());
+		}
+		
 		dispatcher = request.getRequestDispatcher("DAO.jsp");		
 	}
 
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) {
 		if(dao.delete(pID)){
-			request.setAttribute("msg-danger", "Se a eliminadocorrectamente");
+			request.setAttribute("msg_ok", "Se ha eliminado correctamente");
 		} else {
-			request.setAttribute("msg-warning", "Error al eliminar[id(" + pID + ")]");
+			request.setAttribute("msg_error", "Error al eliminar[id(" + pID + ")]");
 		}
 		listar(request, response);
 	}
 
 	private void nuevo(HttpServletRequest request, HttpServletResponse response) {
 		persona = new Persona("");
+		persona.setId(-1);
 		request.setAttribute("alumno", persona);
 		request.setAttribute("metodo", "Guardar");
-		dispatcher = request.getRequestDispatcher("form.jsp");		
+		dispatcher = request.getRequestDispatcher("formulario.jsp");		
 	}
 	
 	private void detalle(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute("alumno", dao.getById(pID));
 		request.setAttribute("metodo", "Modificar");
-		dispatcher = request.getRequestDispatcher("form_mod.jsp");		
+		dispatcher = request.getRequestDispatcher("formulario.jsp");		
 	}
 	
-	
-	
-	
-	
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
+		//recoger parametros del formulario
+		getParametersForm(request);
+		
+		//Crear Objeto Via
+		crearObjetoPersona();
+		
+		//Guardar/Modificar Objeto Via
+		if (pID == -1){
+			if( dao.save(persona) != -1){	
+				request.setAttribute("msg_ok", "Registro a&ntilde;adido");
+			} else {
+				request.setAttribute("msg_error", "Error al guardar el registro");
+			}
+		} else {
+			if(dao.update(persona)){
+				request.setAttribute("msg_ok", "Registro modificado correctamente");
+			} else {
+				request.setAttribute("msg_error", "Error al modificar registro");
+			}
+		}
+		
+		listar(request,response);
+		
+		dispatcher.forward(request, response);
+		
+	}
+	
+	/**
+	 * Crea un Objeto {@code Via} Con los parametros recibidos
+	 */
+	private void crearObjetoPersona() {
+		persona = new Persona(pNombre);
+		persona.setId(pID);
+		persona.setNota(pNota);
+		persona.setTelefono(pTelefono);
+		persona.setFecha(pFecha);
+	}
+
+
+	/**
+	* Recoger los parametros enviados desde el formulario
+	* @see backoffice\pages\vias\form.jsp
+	* @param request
+	*/
+	private void getParametersForm(HttpServletRequest request) {
+	
+		try {
+			pID = Integer.parseInt(request.getParameter("id"));
+			pNombre = request.getParameter("nombre");
+			if(request.getParameter("nota") != null && !"".equals(request.getParameter("nota"))){
+				pNota = Float.parseFloat(request.getParameter("nota"));
+			} else {
+				pNota = 0;
+			}		
+			pTelefono = request.getParameter("telefono");		
+			if(request.getParameter("fecha") != null){	
+				pFecha = parse_string_timestamp(request);
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	
+	}
+	
+	public Timestamp parse_string_timestamp(HttpServletRequest request) throws ParseException {
+		String sFecha = request.getParameter("fecha");		
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+	    Date parsedTimeStamp = dateFormat.parse(sFecha);
+	    Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
+	    return timestamp;
 	}
 
 }

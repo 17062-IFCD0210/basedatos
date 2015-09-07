@@ -46,8 +46,22 @@ public class DAOPersona implements IDAOPersona {
 	
 	@Override
 	public int save(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
+		int resul = -1;
+		Persona p = (Persona) o;		
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			Statement st = con.createStatement(); 
+	    	String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES ('" + p.getNombre() + "', " + p.getNota() + ", '" + p.getTelefono() + "');";
+	    	if ( st.executeUpdate(sql) != 1 ){
+				throw new Exception("No se ha realizado insercion");
+			}
+	    	resul = 1;	    		
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			DataBaseHelper.closeConnection();
+		}		
+		return resul;
 	}
 
 	@Override
@@ -75,8 +89,22 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public boolean update(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resul = false;
+		Persona p = (Persona) o;		
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			Statement st = con.createStatement(); 
+			String sql = "UPDATE `test` SET `nombre`='" + p.getNombre() + "', `nota`=" + p.getNota() + ", `telefono`='" + p.getTelefono() + "', `fecha`='" + p.getFecha() + "' WHERE `id`=" + p.getId() + ";";
+	    	if ( st.executeUpdate(sql) != 1 ){
+				throw new Exception("No se ha podido editar");
+			}			
+	    	resul = true;	    		
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			DataBaseHelper.closeConnection();
+		}		
+		return resul;
 	}
 
 	@Override
@@ -112,7 +140,6 @@ public class DAOPersona implements IDAOPersona {
 	    	String sql = "SELECT * FROM `test` WHERE `nota`>=5 ";
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
-	    	//mapeo resultSet => ArrayList<Persona>
 	    	//mapeo resultSet => ArrayList<Persona>	    	   	
 	    	while(rs.next()){
 	    		resul.add(mapeo(rs));

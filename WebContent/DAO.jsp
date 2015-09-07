@@ -94,10 +94,10 @@
 										<td><%=p.getNota()%></td>
 										<td><%=p.getTelefono()%></td>
 										<td><%=p.getFecha()%></td>
-										<td><a><span class='icon-trashcan red' data-toggle="modal" data-target="#myModal"></span></a><a href="inicio_persona?accion=<%=Constantes.ACCION_DETALLE%>&id=<%=p.getId()%>"><span class='icon-edit blue'></span></a></td>
+										<td><a><span class='icon-trashcan red' data-toggle="modal" data-target="#myModal<%=p.getId()%>"></span></a><a href="inicio_persona?accion=<%=Constantes.ACCION_DETALLE%>&id=<%=p.getId()%>"><span class='icon-edit blue'></span></a></td>
 									</tr>	
 									<!-- Ventana Modal -->
-										<div class="modal fade col-md-6 col-md-offset-3" id="myModal" role="dialog">
+										<div class="modal fade col-md-6 col-md-offset-3" id="myModal<%=p.getId()%>" role="dialog">
 										<div class="modal-dialog">
 									  
 									    <!-- Modal content-->
@@ -128,19 +128,15 @@
 							</table>							
 						</div> <!-- END .resultado -->
 												
-						
-						
-						
-												
 					</div>
 					
 					<a href="inicio_persona?accion=<%=Constantes.ACCION_NUEVO%>"><button class="btn-lg">Nuevo Registro</button></a>
 					
 					<div>	
 						<br>					
-						<a href="listar?filtro=1"><button class="btn-lg">Aprobados</button></a>
-						<a href="listar?filtro=2"><button class="btn-lg">Suspendidos</button></a>
-						<a href="listar"><button class="btn-lg">Todos</button></a>					
+						<a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>&filtro=1"><button class="btn-lg">Aprobados</button></a>
+						<a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>&filtro=2"><button class="btn-lg">Suspendidos</button></a>
+						<a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>"><button class="btn-lg">Todos</button></a>					
 					</div>
 									
 				</div>

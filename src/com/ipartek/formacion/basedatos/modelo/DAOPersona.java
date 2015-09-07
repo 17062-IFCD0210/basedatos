@@ -113,20 +113,41 @@ public class DAOPersona implements IDAOPersona{
 
 	@Override
 	public boolean delete(int id) {
+		/**
+		 * Forma con Statement
+		 */
 		try{
 			Connection con = DataBaseHelper.getConnection();
 			Statement st = con.createStatement(); 
 	    	String sql = "DELETE FROM test WHERE id=" + id + ";";
 	    	if(st.executeUpdate(sql) != 1) {
 	    		throw new Exception("No se ha realizado eliminacion " + sql);
-	    	}
-	    	
-	    	
+	    	}    	
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
+		
+		/**
+		 * Forma con PreparedStatement
+		 */
+//		try {
+//			Connection con = DataBaseHelper.getConnection();
+//			String sql = "DELETE FROM `test` WHERE id = ?";
+//			PreparedStatement pst = con.prepareStatement(sql);
+//			pst.setInt(1, id);
+//			if(pst.executeUpdate() != 1) {
+//	    		throw new Exception("No se ha realizado eliminacion " + sql);
+//	    	} else {
+//	    		resul = true;
+//	    	}
+//			
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			DataBaseHelper.closeConnection();
+//		}
 		
 		return true;
 	}

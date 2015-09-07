@@ -28,7 +28,7 @@ public class InicioServlet extends HttpServlet {
 	DAOPersona dao = null;
 
 	// parametros get
-	private static String pID;
+	private String pID;
 	private String pAccion;
 	private String pFiltro;
 	
@@ -61,7 +61,7 @@ public class InicioServlet extends HttpServlet {
 		// 0: listar
 		// 1: Detalle
 		// 2: Eliminar
-		
+		// 4: Detalle_elim
 		
 		if("1".equals(pAccion)){
 			detalle(request, response);	
@@ -69,15 +69,16 @@ public class InicioServlet extends HttpServlet {
 		}else if("2".equals(pAccion)){		
 			eliminar(request, response);				
 		
-		}else{			
-			listar(request, response);			
+		}else if("4".equals(pAccion)){			
+			detalle_elim(request, response);
+			
+		}else {
+			listar(request, response);
 		}
 		
 		dispatcher.forward(request, response);
 		
 	}
-
-	
 
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -102,7 +103,13 @@ public class InicioServlet extends HttpServlet {
 		
 		int id = Integer.parseInt(pID);
 		dao.delete(id);
-			
+		
+//		if(dao.delete(id)) {
+//			request.setAttribute("msg", "Registro Eliminado");
+//		} else {
+//			request.setAttribute("msg", "Registro NO Eliminado");
+//		}
+					
 		//Listar todos los datos en la tabla
 		listar(request, response);
 		
@@ -119,6 +126,15 @@ public class InicioServlet extends HttpServlet {
 			dispatcher = request.getRequestDispatcher( "form.jsp" );		
 		
 	}
+	
+	private void detalle_elim(HttpServletRequest request,
+			HttpServletResponse response) {
+			
+			int id = Integer.parseInt(pID);
+			Object alumno = dao.getById(id);				
+			request.setAttribute("alumno", alumno );							
+			dispatcher = request.getRequestDispatcher( "index.jsp" );
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
@@ -133,24 +149,22 @@ public class InicioServlet extends HttpServlet {
 		pNota = Float.parseFloat(request.getParameter("nota"));
 		pTelefono = request.getParameter("telefono");
 		pFecha = request.getParameter("fecha");
-		pID = request.getParameter("id");
-		
-		int id= Integer.parseInt(pID);
+		pAccion = request.getParameter("accion");
 		
 		Persona p = new Persona(pNombre);
-		p.setId(id);
 		p.setNota(pNota);
 		p.setTelefono(pTelefono);
-		p.setFecha(Timestamp.valueOf(pFecha + " 00:00:00"));
+		p.setFecha(Timestamp.valueOf(pFecha.replace("T", " ") + ":00"));
 		
-		if(p.getId() < 0) {
+		if("3".equals(pAccion)) {
 			dao.save(p);
 		} else {
+			p.setId(Integer.parseInt(pID));
 			dao.update(p);
 		}
 		
 		listar(request, response);
-		request.getRequestDispatcher("inicio").forward(request, response);
+		dispatcher.forward(request, response);
 	}
 
 }

@@ -50,7 +50,7 @@
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base Datos</h1>
             <% //Mostrar mensaje
-              	if(request.getAttribute("msg2") != null) {
+              	if(request.getAttribute("msg") != null) {
               		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
               	}
               
@@ -66,7 +66,7 @@
             
             <br>
             <a class="btn btn-primary btn-xs" href="form.jsp" role="button">Insertar nuevo registro</a>
-            <br><br>
+            <br><br>         
             
             <table class="tabla_blanco">
             	<thead>
@@ -81,6 +81,7 @@
 				<%
 					//Recuperar atributo de listado personas
 					ArrayList<Persona> alumnos = (ArrayList<Persona>)request.getAttribute("alumnos");
+					int id = 0;
 					if(alumnos == null) {
 						alumnos = new ArrayList<Persona>();
 					}
@@ -96,12 +97,11 @@
 								<td><%=p.getTelefono() %></td>
 								<td><%=p.getFecha() %></td>
 								<td><a href="inicio?accion=1&id=<%=p.getId() %>" class="verde">E</a></td>
-								<td><a href="inicio?accion=2&id=<%=p.getId() %>" class="rojo">X</a></td>
+								<td><a href="#myModal<%=p.getId() %>" class="rojo" data-toggle="modal" data-target="#myModal">X</a></td>
 							</tr>
-						
 						<%
 					} // end for
-				%>
+					%>
 				</tbody>     
 				<tfoot>
 					<tr>
@@ -118,6 +118,69 @@
             
           </div>
 
+          <!-- Ventana Modal -->
+				<div class="modal fade col-md-6 col-md-offset-3" id="myModal"
+					role="dialog">
+					<div class="modal-dialog">
+					<%
+						Persona p1 = (Persona)request.getAttribute("alumno");
+							if(p1 != null) {
+					%>
+						<!-- Modal content-->
+						<div class="modal-content text-info">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h2 class="modal-title text-center text-danger">
+									<i class="fa fa-exclamation-triangle"></i> ELIMINAR REGISTRO:
+									</h2>
+							</div>
+							<div class="modal-body">
+								<p>Estas seguro de que desea eliminar el siguiente registro:</p>
+								<div class="row">
+									<div class="form-group col-md-6">
+										<label for="id">Nombre</label> 
+										<input type="text" name="id" class="form-control" value="<%=p1.getNombre() %>" disabled>
+									</div>
+									<div class="form-group col-md-6">
+										<label for="nombre">Nota</label> 
+										<input type="text" name="nombre" class="form-control" value="<%=p1.getNota() %>" disabled>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-md-6">
+										<label for="grado">Telefono</label> 
+										<input type="text" name="grado" class="form-control" value="<%=p1.getTelefono() %>" disabled>
+									</div>
+									<div class="form-group col-md-6">
+										<label for="longitud">Fecha</label> 
+										<input type="text" name="longitud" class="form-control" value="<%=p1.getFecha()%>" disabled>
+									</div>
+								</div>
+								<div class="row checkbox">
+									<div class="form-group col-md-12">
+										<label> <input type="checkbox" id="check_eliminar">S&iacute;,
+											estoy seguro. Deseo eliminar la Via seleccionada.
+										</label>
+										<!-- Habilitar eliminacion mediante checkbox -->
+										<script>
+											document.getElementById('check_eliminar').onclick = function () {
+											document.getElementById('boton_eliminar').classList.toggle("disabled");				
+											}	
+										</script>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<a href="inicio?accion=2&id=<%=p1.getId() %>" id="boton_eliminar" class="btn btn-danger disabled">Eliminar</a>
+								<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+							</div>
+						</div>
+					<%
+							}
+					%>
+						<!-- END Modal content-->
+         			 </div>
+
           <div class="mastfoot">
             <div class="inner">
               <p>Documentación <a href="#">Ipartek Campus</a></p>
@@ -130,7 +193,7 @@
       </div>
 
     </div>
-
+</div>
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

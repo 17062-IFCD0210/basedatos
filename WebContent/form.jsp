@@ -70,14 +70,14 @@
          		
          		<label for="fecha">Fecha: </label>
          		<br>
-         		<input type="date" name="fecha" value="<%=p.getFecha()%>">
+         		<input type="datetime-local" name="fecha" value="<%=p.getFecha().toString().replace(" ", "T") %>">
          		<br><br>
          		
 				<input type="reset" value="Limpiar">         		
          		<input type="submit" value="Actualizar">
          	</form>
          	<%} else { %>
-         	<form action="inicio" method="post">
+         	<form action="inicio?accion=3" method="post">
          		<label for="nombre">Nombre: </label>
          		<br>
          		<input type="text" name="nombre" placeholder="Tu Nombre" required autofocus tabindex="1">
@@ -90,12 +90,12 @@
          		
          		<label for="telefono">Telefono: </label>
          		<br>
-         		<input type="text" name="telefono" placeholder="Tu Telefono">
+         		<input type="text" name="telefono" placeholder="Tu Telefono" required>
          		<br><br>
          		
          		<label for="fecha">Fecha: </label>
          		<br>
-         		<input type="date" name="fecha">
+         		<input type="datetime-local" name="fecha" required>
          		<br><br>
          		
 				<input type="reset" value="Limpiar">         		

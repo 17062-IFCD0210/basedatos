@@ -28,21 +28,25 @@ public class DAOPersona implements IDAOPersona {
 	public ArrayList<Object> getAll(){
 		
 		ArrayList<Object> resul = new ArrayList<Object>();
+		Statement st = null;
+		ResultSet rs = null;
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
+			st = con.createStatement(); 
 	    	String sql = "SELECT * FROM `test` ";
-	    	ResultSet rs = st.executeQuery (sql);
-	    	
+	    	rs = st.executeQuery (sql);	    	
 	    	while(rs.next()){	    		    		
 	    		resul.add( mapeo(rs));    		
-	    	}	
-	    	
+	    	}		    	
 	    	
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if ( rs != null){ rs.close();}
+				if ( st != null){ st.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){e.printStackTrace();}	
 		}
 		
 		return resul;
@@ -52,17 +56,28 @@ public class DAOPersona implements IDAOPersona {
 	@Override
 	public int save(Object o) {
 		int resul = -1;
+		String sql = "";
+		PreparedStatement pst = null;
+		ResultSet rsKeys = null;
 		try{
-			Connection con = DataBaseHelper.getConnection();
-			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES ( ?, ?, ?);";
-			PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS );
 			Persona p = (Persona)o;
+			Connection con = DataBaseHelper.getConnection();
+			if ( p.getFecha() != null ){
+				sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha` ) VALUES ( ?, ?, ?, ?);";
+			}else{
+				sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`  ) VALUES ( ?, ?, ? );";
+			}
+			pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS );
+			
 			pst.setString(1, p.getNombre() );
 			pst.setFloat (2, p.getNota());
 			pst.setString(3, p.getTelefono() );
+			if ( p.getFecha() != null ){
+				pst.setTimestamp( 4, p.getFecha() );
+			}	
 			
 			if ( pst.executeUpdate() == 1 ){
-				ResultSet rsKeys = pst.getGeneratedKeys();
+				rsKeys = pst.getGeneratedKeys();
 				if ( rsKeys.next() ){
 					resul = rsKeys.getInt(1);
 				}else{
@@ -73,7 +88,18 @@ public class DAOPersona implements IDAOPersona {
 		}catch( Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if ( rsKeys != null ){
+					rsKeys.close();
+				}
+				if ( pst != null ){
+					pst.close();
+				}
+				DataBaseHelper.closeConnection();
+				
+			}catch(Exception e){ 
+				e.printStackTrace();
+			}	
 		}
 		
 		
@@ -84,11 +110,14 @@ public class DAOPersona implements IDAOPersona {
 	public Object getById(int id) {
 		
 		Object resul = new Object();
+		Statement st = null;
+		ResultSet rs = null;
+		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
+			st = con.createStatement(); 
 	    	String sql = "SELECT * FROM `test` where id=" + id;
-	    	ResultSet rs = st.executeQuery (sql);
+	    	rs = st.executeQuery (sql);
 	    	
 	    	while(rs.next()){	    		    		
 	    		resul = mapeo(rs);    		
@@ -98,7 +127,11 @@ public class DAOPersona implements IDAOPersona {
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if ( rs != null){ rs.close();}
+				if ( st != null){ st.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){e.printStackTrace();}	
 		}
 		
 		return resul;
@@ -108,15 +141,28 @@ public class DAOPersona implements IDAOPersona {
 	public boolean update(Object o) {
 		boolean resul = false;
 		Persona p = null;
+		String sql = "";
+		PreparedStatement pst = null;
 		try{
-			Connection con = DataBaseHelper.getConnection();			
-			String sql = "UPDATE `test` SET `nombre`= ? , `nota`= ? , `telefono`= ? WHERE  `id`= ? ;";
-			PreparedStatement pst = con.prepareStatement(sql);
 			p = (Persona)o;
+			Connection con = DataBaseHelper.getConnection();
+			if ( p.getFecha() != null ){
+				sql = "UPDATE `test` SET `nombre`= ? , `nota`= ? , `telefono`= ? , `fecha`= ? WHERE  `id`= ? ;";
+			}else{
+				sql = "UPDATE `test` SET `nombre`= ? , `nota`= ? , `telefono`= ?  WHERE  `id`= ? ;";
+			} 
+			pst = con.prepareStatement(sql);
+			
 			pst.setString(1, p.getNombre() );
 			pst.setFloat (2, p.getNota());
 			pst.setString(3, p.getTelefono());
-			pst.setInt   (4, p.getId());
+			
+			if ( p.getFecha() != null ){
+				pst.setTimestamp(4, p.getFecha());
+				pst.setInt   (5, p.getId());
+			}else{
+				pst.setInt   (4, p.getId());
+			}	
 			
 			if ( pst.executeUpdate() == 1 ){
 				resul=true;
@@ -125,7 +171,10 @@ public class DAOPersona implements IDAOPersona {
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if ( pst!=null){pst.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){ e.printStackTrace();}	
 		}
 		return resul;
 	}
@@ -133,10 +182,11 @@ public class DAOPersona implements IDAOPersona {
 	@Override
 	public boolean delete(int id) {
 		boolean resul = false;
+		PreparedStatement pst=null;
 		try{
 			Connection con = DataBaseHelper.getConnection();
 			String sql = "delete from `test` where id= ?";
-			PreparedStatement pst = con.prepareStatement(sql);
+			pst = con.prepareStatement(sql);
 			pst.setInt(1, id);
 			
 			if ( pst.executeUpdate() == 1 ){
@@ -146,7 +196,10 @@ public class DAOPersona implements IDAOPersona {
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if ( pst!=null){pst.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){ e.printStackTrace();}	
 		}		
 		return resul;
 	}
@@ -154,11 +207,14 @@ public class DAOPersona implements IDAOPersona {
 	@Override
 	public ArrayList<Object> getAprobados() {
 		ArrayList<Object> resul = new ArrayList<Object>();
+		Statement st = null;
+		ResultSet rs = null;
+		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
+			st = con.createStatement(); 
 	    	String sql = "SELECT * FROM `test` where `nota` >= 5 ";
-	    	ResultSet rs = st.executeQuery (sql);
+	    	rs = st.executeQuery (sql);
 	    	
 	    	while(rs.next()){	    		    		
 	    		resul.add( mapeo(rs));    		
@@ -168,7 +224,11 @@ public class DAOPersona implements IDAOPersona {
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if ( rs != null){ rs.close();}
+				if ( st != null){ st.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){e.printStackTrace();}	
 		}
 		
 		return resul;
@@ -177,11 +237,13 @@ public class DAOPersona implements IDAOPersona {
 	@Override
 	public ArrayList<Object> getSuspendidos() {
 		ArrayList<Object> resul = new ArrayList<Object>();
+		Statement st = null;
+		ResultSet rs = null;
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
+			st = con.createStatement(); 
 	    	String sql = "SELECT * FROM `test` where `nota` < 5 ";
-	    	ResultSet rs = st.executeQuery (sql);
+	    	rs = st.executeQuery (sql);
 	    	
 	    			    	
 	    	while(rs.next()){	    		    		
@@ -192,7 +254,11 @@ public class DAOPersona implements IDAOPersona {
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if ( rs != null){ rs.close();}
+				if ( st != null){ st.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){e.printStackTrace();}	
 		}
 		
 		return resul;

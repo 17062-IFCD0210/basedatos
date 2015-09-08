@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
 import com.ipartek.formacion.basedatos.modelo.DAOPersona;
+import com.ipartek.formacion.basedatos.util.UtilidadesFecha;
 
 
 /**
@@ -144,6 +145,7 @@ public class InicioServlet extends HttpServlet {
 			p.setId( Integer.parseInt(sID));
 			p.setNota( Float.parseFloat(sNota));
 			p.setTelefono(sTelefono);
+			p.setFecha(UtilidadesFecha.stringToTimeStamp(sFecha));
 			//TODO fecha
 			
 			

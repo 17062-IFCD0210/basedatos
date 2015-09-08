@@ -88,9 +88,9 @@
          		
          		<label for="fecha">Fecha: </label>
          		<br>
-         		<input type="date" 
+         		<input type="datetime-local" 
          			   name="fecha"
-         			   value="<%=p.getTelefono()%>" 
+         			   value="<%=p.getFecha()%>" 
          		>
          		<br><br>
          		

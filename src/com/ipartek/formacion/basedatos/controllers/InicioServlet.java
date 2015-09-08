@@ -1,6 +1,7 @@
 package com.ipartek.formacion.basedatos.controllers;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ipartek.formacion.basedatos.bean.Persona;
 import com.ipartek.formacion.basedatos.modelo.DAOPersona;
 
 /**
@@ -51,21 +53,88 @@ public class InicioServlet extends HttpServlet {
 		// 0: Listar
 		// 1: Detalle
 		// 2: Eliminar
+		// 3: Insertar nuevo
+		// 4: Actualizar
 
-		// Detalle
 		if ("1".equals(pAccion)) {
+			// Detalle
 			detalle(request, response);
-			// Eliminar
 		} else if ("2".equals(pAccion)) {
+			// Eliminar
 			eliminar(request, response);
-			// Listar
 		} else {
+			// Listar
 			listar(request, response);
 		}
 
 		// forward
 		dispatcher.forward(request, response);
 
+	}
+
+	private void actualizar(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		boolean resul = false;
+		String id = request.getParameter("id");
+		String pNombre = request.getParameter("nombre");
+		float pNota = Float.parseFloat(request.getParameter("nota"));
+		String pTelefono = request.getParameter("telefono");
+		String pFechaString = request.getParameter("fecha").replace("T", " ");
+		Timestamp pFecha = null;
+
+		if (pFechaString != "") {
+			pFecha = Timestamp.valueOf(pFechaString.replace("T", " "));
+		}
+
+		Persona p = new Persona(pNombre);
+		p.setId(Integer.valueOf(id));
+		if (pFecha != null) {
+			p.setFecha(pFecha);
+		}
+		p.setNota(pNota);
+		p.setTelefono(pTelefono);
+
+		resul = dao.update(p);
+		if (resul) {
+			request.setAttribute("msg", "Se ha actualizado correctamente");
+		} else {
+			request.setAttribute("msg", "Ha ocurrido un error al actualizar");
+		}
+		listar(request, response);
+
+	}
+
+	private void insertar(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		int newId = 0;
+		String pNombre = request.getParameter("nombre");
+		float pNota = Float.parseFloat(request.getParameter("nota"));
+		String pTelefono = request.getParameter("telefono");
+		String pFechaString = request.getParameter("fecha").replace("T", " ");
+		if (!pFechaString.isEmpty()) {
+			pFechaString = pFechaString.concat(":00");
+		}
+		Timestamp pFecha = null;
+
+		if (pFechaString != "") {
+			pFecha = Timestamp.valueOf(pFechaString);
+		}
+
+		Persona p = new Persona(pNombre);
+		if (pFecha != null) {
+			p.setFecha(pFecha);
+		}
+		p.setNota(pNota);
+		p.setTelefono(pTelefono);
+		newId = dao.save(p);
+		if (newId != -1) {
+			request.setAttribute("msg", "Creado nuevo registro(" + newId + ")");
+		} else {
+			request.setAttribute("msg", "No se ha creado el nuevo registro");
+		}
+		listar(request, response);
 	}
 
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
@@ -98,9 +167,6 @@ public class InicioServlet extends HttpServlet {
 	private void eliminar(HttpServletRequest request,
 			HttpServletResponse response) {
 		dao.delete(Integer.parseInt(pID));
-		// request.setAttribute("accion", "0");
-		// request.setAttribute("filtro", "0");
-		// dispatcher = request.getRequestDispatcher("inicio");
 		listar(request, response);
 	}
 
@@ -125,7 +191,20 @@ public class InicioServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+
+		pID = request.getParameter("id");
+		pAccion = request.getParameter("accion");
+
+		if ("3".equals(pAccion)) {
+			// Insertar nuevo
+			insertar(request, response);
+		} else if ("4".equals(pAccion)) {
+			// Actualizar
+			actualizar(request, response);
+		}
+
+		dispatcher.forward(request, response);
+
 	}
 
 }

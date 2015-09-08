@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.modelo.DAOPersona"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <%@page import="java.sql.ResultSet"%>
@@ -54,25 +55,29 @@
 				<div class="inner cover">
 					<h1 class="cover-heading">Aprende Base Datos</h1>
 					<%
-						//Mostrar mensaje
-						if (request.getAttribute("msg") != null) {
-							out.print("<h4>" + request.getAttribute("msg") + "</h4>");
-						}
+						DAOPersona dao = null;
+											dao = new DAOPersona();
+											
+												//Mostrar mensaje
+											if (request.getAttribute("msg") != null) {
+											out.print("<div class='alert alert-success' role='alert'>" + request.getAttribute("msg") + "</div>");
+											}
 					%>
 
-					<a class="btn btn-default mb15" href="inicio?accion=1&id=-1">Insertar nuevos	registros</a>
+					<a class="btn btn-default mb15" href="inicio?accion=1&id=-1">Insertar
+						nuevos registros</a> <br> <a class="btn btn-primary"
+						href="inicio?accion=0&filtro=1" role="button">Aprobados</a> <a
+						class="btn btn-primary" href="inicio?accion=0&filtro=2"
+						role="button">Suspendidos</a> <a class="btn btn-primary"
+						href="inicio?accion=0&filtro=0" role="button">Todos</a> <br>
 					<br>
-					<a class="btn btn-primary" href="inicio?accion=0&filtro=1" role="button">Aprobados</a>
-            		<a class="btn btn-primary" href="inicio?accion=0&filtro=2" role="button">Suspendidos</a>
-            		<a class="btn btn-primary" href="inicio?accion=0&filtro=0" role="button">Todos</a>
-            		<br><br>
 
 					<%
 						//recuperar atributo de listado personas 
-						ArrayList<Persona> alumnos = (ArrayList<Persona>) request.getAttribute("alumnos");
-						if (alumnos == null) {
-							alumnos = new ArrayList<Persona>();
-						}
+											ArrayList<Persona> alumnos = (ArrayList<Persona>) request.getAttribute("alumnos");
+											if (alumnos == null) {
+											alumnos = new ArrayList<Persona>();
+											}
 					%>
 					<div class="panel panel-info dark-panel">
 						<div class="panel-heading">Registros</div>
@@ -92,17 +97,22 @@
 								<tbody>
 									<%
 										Persona p = null;
-										for (int i = 0; i < alumnos.size(); i++) {
-											p = alumnos.get(i);
+																								for (int i = 0; i < alumnos.size(); i++) {
+																								p = alumnos.get(i);
 									%>
 									<tr>
+										<td><%=p.getId()%></td>
 										<td><%=p.getNombre()%></td>
 										<td><%=p.getNota()%></td>
 										<td><%=p.getTelefono()%></td>
 										<td><%=p.getFecha()%></td>
 										<td><a href="inicio?accion=1&id=<%=p.getId()%>"><span
 												class='glyphicon glyphicon-pencil editar' aria-hidden='true'></span></a></td>
-										<td><a href="inicio?accion=2&id=<%=p.getId()%>"><span
+										<td><a href="#" data-toggle="modal"
+											data-target="#modalBorrar" data-nombre="<%=p.getNombre()%>"
+											data-nota="<%=p.getNota()%>"
+											data-telefono="<%=p.getTelefono()%>"
+											data-fecha="<%=p.getFecha()%>" data-id="<%=p.getId()%>"><span
 												class='glyphicon glyphicon-trash editar' aria-hidden='true'></span></a></td>
 									</tr>
 									<%
@@ -112,8 +122,8 @@
 							</table>
 						</div>
 					</div>
-					
-										<div class="row">
+
+					<div class="row">
 						<div class="col-md-12">
 							<div class="panel panel-info datos">
 								<div class="panel-heading">Datos Conexion</div>
@@ -197,7 +207,57 @@
 							</div>
 						</div>
 					</div>
-					
+
+
+
+					<!-- Modal -->
+					<div class="modal fade" id="modalBorrar" tabindex="-1"
+						role="dialog" aria-labelledby="modalBorrar">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									<h4 class="modal-title black" id="myModalLabel">Seguro que
+										desea eliminar?</h4>
+								</div>
+								<div class="modal-body">
+									<h2 class="black">Datos</h2>
+									<div id="datos_eliminar">
+										<div class="row">
+											<label class="black" for="nombre">Nombre:</label> <input
+												id="nombre" disabled readonly class="black" name="nombre">
+
+											<label class="black" for="nota">Nota:</label> <input
+												id="nota" disabled readonly class="black" name="nota">
+										</div>
+										<div class="row">
+											<label class="black" for="telefono">Telefono:</label> <input
+												id="telefono" disabled readonly class="black"
+												name="telefono"> <label class="black" for="fecha">Fecha:</label>
+											<input id="fecha" disabled readonly class="black"
+												name="fecha">
+										</div>
+										<div class="row black">
+											<label><input type="checkbox" class="black" id="check_comprobacion"> Esta seguro que desea eliminar el registro?</label>
+										</div>
+									</div>
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default"
+										data-dismiss="modal">Cancelar</button>
+									<button type="button" disabled class="btn btn-warning" id="eliminar"
+										data-id="">Eliminar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
 				</div>
 
 				<div class="mastfoot">
@@ -218,10 +278,37 @@
 	</div>
 
 
-
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="js/jquery.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="js/bootstrap.min.js"></script>
+
+	<script type="text/javascript">
+		$('#modalBorrar').on('show.bs.modal', function(event) {
+			var button = $(event.relatedTarget)
+			var id = button.data('id')
+			var nombre = button.data('nombre')
+			var nota = button.data('nota')
+			var telefono = button.data('telefono')
+			var fecha = button.data('fecha')
+			var modal = $(this)
+			modal.find('#eliminar').attr("data-id", id)
+			modal.find('#nombre').val(nombre)
+			modal.find('#nota').val(nota)
+			modal.find('#telefono').val(telefono)
+			modal.find('#fecha').val(fecha)
+		})
+
+		$('#eliminar').on('click', function() {
+			var id = this.dataset.id
+			document.location.href = "inicio?accion=2&id=" + id
+		})
+		
+		$('#check_comprobacion').on('click', function() {
+			$('#eliminar').prop('disabled',!this.checked);
+		})
+	</script>
+
+
 </body>
 </html>

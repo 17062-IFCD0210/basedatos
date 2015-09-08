@@ -1,6 +1,7 @@
 package com.ipartek.formacion.basedatos.modelo;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -49,8 +50,41 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public int save(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
+		int resul = 0;
+
+		try {
+			Persona p = (Persona) o;
+			Connection con = DataBaseHelper.getConnection();
+			String sqlFecha = "INSERT INTO `test` (`nombre`, `nota`, `telefono`,`fecha`) VALUES (?,?,?,?)";
+			String sqlNoFecha = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES (?,?,?)";
+			PreparedStatement pst = null;
+			if (p.getFecha() != null) {
+				pst = con.prepareStatement(sqlFecha);
+				pst.setTimestamp(4, p.getFecha());
+			} else {
+				pst = con.prepareStatement(sqlNoFecha);
+			}
+
+			pst.setString(1, p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());
+
+			if (pst.executeUpdate() == 1) {
+				ResultSet rsKeys = pst.getGeneratedKeys();
+				if (rsKeys.next()) {
+					resul = rsKeys.getInt(1);
+				} else {
+					throw new SQLException("No se ha podido generar ID");
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DataBaseHelper.closeConnection();
+		}
+
+		return resul;
 	}
 
 	@Override
@@ -58,9 +92,10 @@ public class DAOPersona implements IDAOPersona {
 		Object resul = new Object();
 		try {
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement();
-			String sql = "SELECT * FROM `test` WHERE id=" + id;
-			ResultSet rs = st.executeQuery(sql);
+			String sql = "SELECT * FROM `test` WHERE id=?";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setInt(1, id);
+			ResultSet rs = pst.executeQuery();
 
 			while (rs.next()) {
 				resul = mapeo(rs);
@@ -75,8 +110,33 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public boolean update(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+
+		int iResul = 0;
+		Boolean resul = false;
+		try {
+			Persona p = (Persona) o;
+			Connection con = DataBaseHelper.getConnection();
+			String sql = "UPDATE `test` SET `nombre`=?, `nota`=?, `telefono` =?, `fecha` = ? WHERE `id`=?";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setString(1, p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());
+			pst.setTimestamp(4, p.getFecha());
+			pst.setInt(5, p.getId());
+
+			iResul = pst.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DataBaseHelper.closeConnection();
+		}
+
+		if (iResul != 0) {
+			resul = true;
+		}
+
+		return resul;
 	}
 
 	@Override

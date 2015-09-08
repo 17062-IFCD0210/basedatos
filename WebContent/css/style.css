@@ -30,3 +30,12 @@
 
 .editar:hover{
 	color: blue;
+}
+
+.black{
+	color:black;
+}
+
+.modal input{
+	text-align: center;
+}

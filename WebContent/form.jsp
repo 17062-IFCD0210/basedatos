@@ -28,7 +28,21 @@
 
 				<div class="masthead clearfix">
 					<div class="inner">
-						<h3 class="masthead-brand">Insertar nuevo registro</h3>
+						<h3 class="masthead-brand"><%
+						String action;
+						String stringBtn;
+						if (request.getAttribute("alumno")!=null){
+							out.print("Editar registro");
+							action = "4";
+							stringBtn = "Editar";
+						}else{
+							out.print("Insertar nuevo registro");
+							action = "3";
+							stringBtn = "Crear";
+							}
+						String id = request.getParameter("id");
+						%>
+						</h3>
 						<nav>
 							<ul class="nav masthead-nav">
 								<li class="active"><a href="inicio">Home</a></li>
@@ -42,9 +56,6 @@
 
 				<%
 					Persona p = (Persona) request.getAttribute("alumno");
-					if (p==null){
-						p = new Persona("");
-					}
 				%>
 
 				<div class="inner cover">
@@ -58,22 +69,27 @@
 
 
 
-					<form action="insertar" method="POST">
+					<form action="inicio?accion=<%=action%>&id=<%=id %>" method="POST">
 						<div class="form-group">
-							<label for="nombre">Nombre</label> <input tabindex="1"
+							<label for="nombre">Nombre</label> <input required tabindex="1"
 								autofocus="autofocus" class="form-control" name="nombre"
-								id="nombre" value="<%=p.getNombre()%>" placeholder="nombre">
+								id="nombre" value="<%if (p!=null) out.print(p.getNombre());%>" placeholder="nombre">
 						</div>
 						<div class="form-group">
 							<label for="nota">Nota</label> <input class="form-control"
-								tabindex="2" id="nota" name="nota" value="<%=p.getNota()%>" placeholder="nota">
+								tabindex="2" id="nota" required name="nota" value="<%if (p!=null) out.print(p.getNota());%>" placeholder="nota">
 						</div>
 						<div class="form-group">
 							<label for="telefono">Telefono</label> <input
 								class="form-control" tabindex="3" id="telefono" name="telefono"
-								value="<%=p.getTelefono()%>" placeholder="Telefono">
+								value="<%if (p!=null) out.print(p.getTelefono());%>" placeholder="Telefono">
 						</div>
-						<button type="submit" tabindex="4" class="btn btn-primary">Crear</button>
+						<div class="form-group">
+							<label for="fecha">Fecha</label> <input type="datetime-local" class="form-control"
+								tabindex="3" id="fecha" name="fecha"
+								value="<%if (p!=null) out.print(p.getFecha().toString().replace(" ", "T"));%>" placeholder="Fecha">
+						</div>
+						<button type="submit" tabindex="4" class="btn btn-primary"><%=stringBtn %></button>
 						<button type="reset" tabindex="5" class="btn btn-warning">Limpiar</button>
 					</form>
 				</div>

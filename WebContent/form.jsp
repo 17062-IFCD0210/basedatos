@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.util.UtilidadesFecha"%>
 <%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <html lang="es">
   <head>
@@ -88,9 +89,9 @@
          		
          		<label for="fecha">Fecha: </label>
          		<br>
-         		<input type="date" 
+         		<input type="datetime-local" 
          			   name="fecha"
-         			   value="<%=p.getTelefono()%>" 
+         			   value="<%=UtilidadesFecha.timestampToString(p.getFecha())%>" 
          		>
          		<br><br>
          		

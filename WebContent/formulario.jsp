@@ -85,12 +85,13 @@
 						<label for="telefono">Telefono:</label>
 						<input type="text" name="telefono" value="<%=p.getTelefono()%>" 
 						tabindex="3" pattern="[0-9]{9,15}">								
-						<br><br>						
+						<br><br>											
 						<% 
 							if (p.getFecha() != null){
 						%>
+							<!--	Fecha -->
 							<input type="text" name="fecha" value="<%=p.getFecha()%>" 
-							tabindex="3" placeholder="AAAA-MM-DD HH:MM:SS.SSS">
+							tabindex="4" placeholder="AAAA-MM-DD HH:MM:SS.SSS"> 		
 							<br><br>
 						<%								
 							}

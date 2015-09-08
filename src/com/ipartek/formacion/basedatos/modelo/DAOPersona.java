@@ -59,10 +59,12 @@ public class DAOPersona implements IDAOPersona {
 			String sqlNoFecha = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES (?,?,?)";
 			PreparedStatement pst = null;
 			if (p.getFecha() != null) {
-				pst = con.prepareStatement(sqlFecha);
+				pst = con.prepareStatement(sqlFecha,
+						Statement.RETURN_GENERATED_KEYS);
 				pst.setTimestamp(4, p.getFecha());
 			} else {
-				pst = con.prepareStatement(sqlNoFecha);
+				pst = con.prepareStatement(sqlNoFecha,
+						Statement.RETURN_GENERATED_KEYS);
 			}
 
 			pst.setString(1, p.getNombre());
@@ -73,10 +75,12 @@ public class DAOPersona implements IDAOPersona {
 				ResultSet rsKeys = pst.getGeneratedKeys();
 				if (rsKeys.next()) {
 					resul = rsKeys.getInt(1);
+					rsKeys.close();
 				} else {
 					throw new SQLException("No se ha podido generar ID");
 				}
 			}
+			pst.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,13 +145,18 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public boolean delete(int id) {
+		int iResul = -1;
 		boolean resul = false;
 		try {
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement();
-			String sql = "DELETE FROM `test` where `id`=" + id;
-			resul = st.execute(sql);
+			String sql = "DELETE FROM `test` where `id`=?";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setInt(1, id);
+			iResul = pst.executeUpdate();
 
+			if (iResul == 1) {
+				resul = true;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

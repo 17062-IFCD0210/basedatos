@@ -55,13 +55,11 @@
 				<div class="inner cover">
 					<h1 class="cover-heading">Aprende Base Datos</h1>
 					<%
-						DAOPersona dao = null;
-											dao = new DAOPersona();
-											
-												//Mostrar mensaje
-											if (request.getAttribute("msg") != null) {
-											out.print("<div class='alert alert-success' role='alert'>" + request.getAttribute("msg") + "</div>");
-											}
+						//Mostrar mensaje
+						if (request.getAttribute("msg") != null) {
+							String tipo = (String)request.getAttribute("tipo");
+							out.print("<div class='alert alert-dismissible alert-"+tipo+"' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span></button>" + request.getAttribute("msg") + "</div>");
+						}
 					%>
 
 					<a class="btn btn-default mb15" href="inicio?accion=1&id=-1">Insertar
@@ -74,10 +72,10 @@
 
 					<%
 						//recuperar atributo de listado personas 
-											ArrayList<Persona> alumnos = (ArrayList<Persona>) request.getAttribute("alumnos");
-											if (alumnos == null) {
-											alumnos = new ArrayList<Persona>();
-											}
+						ArrayList<Persona> alumnos = (ArrayList<Persona>) request.getAttribute("alumnos");
+						if (alumnos == null) {
+							alumnos = new ArrayList<Persona>();
+						}
 					%>
 					<div class="panel panel-info dark-panel">
 						<div class="panel-heading">Registros</div>
@@ -96,9 +94,9 @@
 								</thead>
 								<tbody>
 									<%
-										Persona p = null;
-																								for (int i = 0; i < alumnos.size(); i++) {
-																								p = alumnos.get(i);
+									Persona p = null;
+									for (int i = 0; i < alumnos.size(); i++) {
+										p = alumnos.get(i);
 									%>
 									<tr>
 										<td><%=p.getId()%></td>
@@ -241,7 +239,9 @@
 												name="fecha">
 										</div>
 										<div class="row black">
-											<label><input type="checkbox" class="black" id="check_comprobacion"> Esta seguro que desea eliminar el registro?</label>
+											<label><input type="checkbox" class="black"
+												id="check_comprobacion"> Esta seguro que desea
+												eliminar el registro?</label>
 										</div>
 									</div>
 
@@ -249,8 +249,8 @@
 								<div class="modal-footer">
 									<button type="button" class="btn btn-default"
 										data-dismiss="modal">Cancelar</button>
-									<button type="button" disabled class="btn btn-warning" id="eliminar"
-										data-id="">Eliminar</button>
+									<button type="button" disabled class="btn btn-warning"
+										id="eliminar" data-id="">Eliminar</button>
 								</div>
 							</div>
 						</div>
@@ -303,9 +303,9 @@
 			var id = this.dataset.id
 			document.location.href = "inicio?accion=2&id=" + id
 		})
-		
+
 		$('#check_comprobacion').on('click', function() {
-			$('#eliminar').prop('disabled',!this.checked);
+			$('#eliminar').prop('disabled', !this.checked);
 		})
 	</script>
 

@@ -98,8 +98,10 @@ public class InicioServlet extends HttpServlet {
 		resul = dao.update(p);
 		if (resul) {
 			request.setAttribute("msg", "Se ha actualizado correctamente");
+			request.setAttribute("tipo", "success");
 		} else {
 			request.setAttribute("msg", "Ha ocurrido un error al actualizar");
+			request.setAttribute("tipo", "danger");
 		}
 		listar(request, response);
 
@@ -108,31 +110,42 @@ public class InicioServlet extends HttpServlet {
 	private void insertar(HttpServletRequest request,
 			HttpServletResponse response) {
 
-		int newId = 0;
-		String pNombre = request.getParameter("nombre");
-		float pNota = Float.parseFloat(request.getParameter("nota"));
-		String pTelefono = request.getParameter("telefono");
-		String pFechaString = request.getParameter("fecha").replace("T", " ");
-		if (!pFechaString.isEmpty()) {
-			pFechaString = pFechaString.concat(":00");
-		}
-		Timestamp pFecha = null;
+		try {
 
-		if (pFechaString != "") {
-			pFecha = Timestamp.valueOf(pFechaString);
-		}
+			int newId = 0;
+			String pNombre = request.getParameter("nombre");
+			float pNota = Float.parseFloat(request.getParameter("nota"));
+			String pTelefono = request.getParameter("telefono");
+			String pFechaString = request.getParameter("fecha").replace("T",
+					" ");
+			if (!pFechaString.isEmpty()) {
+				pFechaString = pFechaString.concat(":00");
+			}
+			Timestamp pFecha = null;
 
-		Persona p = new Persona(pNombre);
-		if (pFecha != null) {
-			p.setFecha(pFecha);
-		}
-		p.setNota(pNota);
-		p.setTelefono(pTelefono);
-		newId = dao.save(p);
-		if (newId != -1) {
-			request.setAttribute("msg", "Creado nuevo registro(" + newId + ")");
-		} else {
+			if (pFechaString != "") {
+				pFecha = Timestamp.valueOf(pFechaString);
+			}
+
+			Persona p = new Persona(pNombre);
+			if (pFecha != null) {
+				p.setFecha(pFecha);
+			}
+			p.setNota(pNota);
+			p.setTelefono(pTelefono);
+			newId = dao.save(p);
+			if (newId != -1) {
+				request.setAttribute("msg", "Creado nuevo registro(" + newId
+						+ ")");
+				request.setAttribute("tipo", "success");
+			} else {
+				request.setAttribute("msg", "No se ha creado el nuevo registro");
+				request.setAttribute("tipo", "danger");
+			}
+
+		} catch (Exception e) {
 			request.setAttribute("msg", "No se ha creado el nuevo registro");
+			request.setAttribute("tipo", "danger");
 		}
 		listar(request, response);
 	}
@@ -166,7 +179,13 @@ public class InicioServlet extends HttpServlet {
 
 	private void eliminar(HttpServletRequest request,
 			HttpServletResponse response) {
-		dao.delete(Integer.parseInt(pID));
+		if (dao.delete(Integer.parseInt(pID))) {
+			request.setAttribute("msg", "Se ha borrado correctamente");
+			request.setAttribute("tipo", "success");
+		} else {
+			request.setAttribute("msg", "Se ha producido un error al borrar");
+			request.setAttribute("tipo", "danger");
+		}
 		listar(request, response);
 	}
 

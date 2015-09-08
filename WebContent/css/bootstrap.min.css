@@ -3490,7 +3490,8 @@ a.btn.disabled, fieldset[disabled] a.btn {
 .btn-success {
 	color: #fff;
 	background-color: #449d44;
-	border-color: #4cae4c
+	border-color: #4cae4c;
+	float: right;
 }
 
 .btn-success.focus, .btn-success:focus {

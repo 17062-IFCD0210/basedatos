@@ -128,8 +128,8 @@
 			</table>
 
           	<br>
-            <a class="btn btn-primary btn-sm" href="inicio?filtro=0" role="button">Aprobados</a>
-            <a class="btn btn-primary btn-sm" href="inicio?filtro=1" role="button">Suspendidos</a>
+            <a class="btn btn-primary btn-sm" href="inicio?filtro=0" role="button">Aprobados</a>&nbsp;&nbsp;
+            <a class="btn btn-primary btn-sm" href="inicio?filtro=1" role="button">Suspendidos</a>&nbsp;&nbsp;
             <a class="btn btn-primary btn-sm" href="inicio" 		 role="button">Todos</a>
             <a class="btn btn-success btn-sm" href="inicio?accion=3" role="button">Crear</a>
            

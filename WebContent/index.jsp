@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatosProfe.modelo.DataBaseHelper"%>
 <%@page import="com.ipartek.formacion.basedatosProfe.bean.Persona"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.sql.ResultSet"%>
@@ -50,6 +51,15 @@
           <div class="inner cover">
             <h1 class="cover-heading">Conexión Base Datos</h1>
             
+            <%
+            
+            	if (request.getAttribute("msg") != null){
+            		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+            	}
+            
+            %>
+            
+            
             <div id="bbdd">
  				<h5><strong>Servidor: </strong><span id="location_host"></span></h5>
  				<h5><strong>Base Datos: </strong><span id="bbdd_nombre"></span></h5>
@@ -81,9 +91,8 @@
            	
            	<div>
 	           	<p class="lead">Recorremos los datos del resultado <span id="comando">while (rs.next())+ "</li>");}</span></p>
-	           	<a class="btn btn-default boton-separar" href="form.jsp" role="button">Insertar nuevo registro</a>
-	           	<%
 	           	
+	           	<%
 	            	out.print("<table class='tabla_blanco'><thead><tr><th>Nombre</th><th>Nota</th><th>Tel&eacute;fono</th><th>Fecha</th><th>Editar</th><th>Eliminar</th></tr><thead>");
             		out.print("<tbody>");
 
@@ -102,7 +111,7 @@
 	            				<td><%=p.getNota()%></td>
 	            				<td><%=p.getTelefono()%></td>
 	            				<td><%=p.getFecha()%></td>
-	            				<td><a href="inicio?id=<%=p.getId()%>&accion=1"><img src="img/editar.png"></a></td>
+	            				<td><a href="inicio?id=<%=p.getId()%>&accion=3"><img src="img/editar.png"></a></td>
 	            				<td><a href="inicio?id=<%=p.getId()%>&accion=2"><img src="img/eliminar.png"></a></td>
 	            			</tr>
 	            		<%
@@ -121,19 +130,15 @@
 	            </tfoot>
             	</table>
 	            
-	            <a class="btn btn-default" href="inicio" role="button">Todos</a>
-	            <a class="btn btn-default" href="inicio?filtro=0" role="button">Aprobados</a>
-	            <a class="btn btn-default" href="inicio?filtro=1" role="button">Suspendidos</a>
+	            <a class="btn btn-info btn-xs"    href="inicio" 		 role="button">Todos</a>
+	            <a class="btn btn-info btn-xs"    href="inicio?filtro=0" role="button">Aprobados</a>
+	            <a class="btn btn-info btn-xs"    href="inicio?filtro=1" role="button">Suspendidos</a>
+	            <a class="btn btn-success btn-xs" href="inicio?accion=3" role="button">Crear</a>
 	            
             </div>
             
             <div>
-	            	<p class="lead">Cerramos la conexión a la BBDD <span id="comando">rs.close(); st.close(); conexion.close();</span></p>
-	           	<%
-	           		rs.close();
-	           		st.close();
-	           		conexion.close();
-	           	%>
+	            	<p class="lead">Cerramos la conexión a la BBDD <span id="comando">DataBaseHelper.closeConnection();</span></p>
 	        </div>
           </div>
 

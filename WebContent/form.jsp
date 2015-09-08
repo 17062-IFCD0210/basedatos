@@ -31,30 +31,44 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Base Datos</h3>
+            
+            <%
+				Persona alumno = (Persona)request.getAttribute("alumno");
+				String titulo = "Insertar nuevo registro";
+				if ( alumno == null){
+					alumno = new Persona("sin nombre");
+				}else{
+					titulo = "Modificando a " + alumno.getNombre();
+				}
+				
+			%>
+            
+              <h3 class="masthead-brand"><%=titulo%></h3>
               <nav>
                 <ul class="nav masthead-nav">
-                	<li class="active"><a href="inicio">Home</a></li>
-                	<li class="active"><a href="#">Insertar Nuevo Registro</a></li>
+                	<li><a href="inicio">Home</a></li>
+                	<!-- <li class="active"><a href="#">Insertar Nuevo Registro</a></li> -->
                 </ul>
               </nav>
             </div>
           </div>
 
-			<%
-				Persona p = (Persona)request.getAttribute("alumno");
-				if ( p == null ){
-					p = new Persona (""); //Si es null que cree el objeto Persona con el nombre vacío
-				}
-			%>
+			
           <div class="inner cover">
-                  
-	          <form action="insertar" method="post"> <!-- action="insertar" o URL mapping en el controlador (servlet) -->
+              	
+              	<%
+              		String msg = (String)request.getAttribute("msg");
+	              	if ( msg != null){
+						out.print("<p>" + msg + "</p>");
+					}
+				%>
+				
+	          <form action="inicio" method="post"> <!-- action="insertar" o URL mapping en el controlador (servlet) -->
 	          	<div class="area">
 		          	<p>Nombre: 
 			          	<input type="text"
 			          		   name="nombre"
-			          		   value="<%=p.getNombre()%>"
+			          		   value="<%=alumno.getNombre()%>"
 			          		   placeholder="Inserta tu nombre"
 			          		   required
 			          		   autofocus
@@ -62,7 +76,7 @@
 		          	</p>
 		          	<p>Nota: 
 			          	<input type="text"
-			          		value="<%=p.getNota()%>"
+			          		value="<%=alumno.getNota()%>"
 			          		name="nota"
 			          		required
 			          		tabindex="2"
@@ -70,17 +84,33 @@
 		          	</p>
 		          	<p>Teléfono: 
 			          	<input type="text"
-			          		value="<%=p.getTelefono()%>"
+			          		value="<%=alumno.getTelefono()%>"
 			          		name="telefono"
 			          		required
 			          		tabindex="3"
 			          		placeholder="Inserta tu teléfono">
 		          	</p>
+		          	<p>Fecha: 
+			          	<input type="text"
+			          		value="<%=alumno.getFecha()%>"
+			          		name="fecha"
+			          		required
+			          		tabindex="4"
+			          		placeholder="Inserta la fecha">
+		          	</p>
 	          	</div>
 	          	<br>
 	          	<br>
-	          	<input type="reset" value="Limpiar">
-	          	<input type="submit" value="Guardar">
+	          	
+	          	<input type="hidden" name="id" value="<%=alumno.getId()%>">
+	          	
+	          	<button type="reset" class="btn btn-success">Limpiar</button>
+	          	
+	          	<% if ( alumno.getId() == -1){ %>
+	          		<button type="submit" class="btn btn-danger">Crear</button>
+	          	<% }else{ %>
+	          		<button type="submit" class="btn btn-danger">Modificar</button>
+	          	<% } %>
 	            
 	          </form>
 	          

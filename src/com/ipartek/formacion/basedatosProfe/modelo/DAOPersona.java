@@ -2,6 +2,7 @@ package com.ipartek.formacion.basedatosProfe.modelo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,7 +27,7 @@ public class DAOPersona implements IDAOPersona{
 		ArrayList<Object> resul = new ArrayList<Object>();
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
+			Statement st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
 	    	String sql = "SELECT * FROM `test`";
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
@@ -34,7 +35,6 @@ public class DAOPersona implements IDAOPersona{
 	    	while(rs.next()){
 	    		resul.add(mapear(rs));
 	    	}	
-	    	
 	    	
 		}catch(Exception e){
 			e.printStackTrace();
@@ -48,8 +48,36 @@ public class DAOPersona implements IDAOPersona{
 
 	@Override
 	public int save(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		int resul = -1;
+		Persona p = null;
+		
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES (?, ?, ?);";
+			PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); //Ejecuta la sql y devuelve la key generada, useasé un 1
+			p = (Persona)o;
+			pst.setString(1, p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());
+			
+			if (pst.executeUpdate() == 1){//Si ha creado un nuevo registro
+				//Para devolver la id
+				ResultSet rsKeys = pst.getGeneratedKeys(); //Guardamos en un ResulSet la tabla que el método getGeneratedKeys() ha generado del nuevo registro
+				if (rsKeys.next()){ //si hay registros
+					resul = rsKeys.getInt(1); //coge el valor de la primera columna del nuevo registro generado
+				}else{
+					throw new SQLException("No se ha podido generar ID");
+				}
+			}
+			
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+
+		return resul;
 	}
 
 	@Override
@@ -59,7 +87,7 @@ public class DAOPersona implements IDAOPersona{
 		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
+			Statement st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
 	    	String sql = "SELECT * FROM `test` WHERE id=" + id;
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
@@ -67,6 +95,7 @@ public class DAOPersona implements IDAOPersona{
 	    	while(rs.next()){
 	    		resul = mapear(rs);
 	    	}	
+	    	
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -79,57 +108,58 @@ public class DAOPersona implements IDAOPersona{
 	@Override
 	public boolean update(Object o) {
 		
+		boolean resul = false;
 		
-		boolean modificado = false;
 		try{
-			//TODO llamar modelo para inserción
-			Class.forName("com.mysql.jdbc.Driver");
-	        Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
+			Connection con = DataBaseHelper.getConnection();
+			String sql = "UPDATE `test` SET `nombre`= ? , `nota` = ? , `telefono` = ? WHERE `id`= ? ;";
+			PreparedStatement pst = con.prepareStatement(sql); //No permite la inyección de SQL. Es más seguro y es más rápido
+			//Cojo los parámetros y se los envío a la sql en el orden requerido en la propia sql
+			Persona p = (Persona)o; //Casteo
+			pst.setString(1, p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());
+			pst.setInt(4, p.getId());
 			
-	        Statement st = conexion.createStatement();
-	        String sql = ""; //"UPDATE `test` SET `nombre`='" + pNombre + "',`nota`=" + pNota + ",`telefono`='" + pTelefono + "' WHERE  `id`=" + pID + ";";
-	        
-	        if (st.executeUpdate(sql) != 1){ //Si es diferente de 1 es que no se ha insertado ese único registro
-	        	throw new Exception("No se ha realizado la inserción: " + sql);
-	        }
-	        
-	        conexion.close();
-	        modificado = true;
-		}catch  (Exception e){ //Si falla que vuelva al form. Sólo se pueden enviar Atributos, parámetros no
-
-		}finally{
-			DataBaseHelper.closeConnection();
-		}
+			if (pst.executeUpdate() == 1){
+				resul = true;
+			}
+			
+			}catch (Exception e){ //Si falla que vuelva al form. Sólo se pueden enviar Atributos, parámetros no
+				e.printStackTrace();
+			}finally{
+				DataBaseHelper.closeConnection();
+			}
 		
-		return modificado;
+		return resul;
+		
 	}
 
 	@Override
 	public boolean delete(int id) {
 		
-		boolean borrado = false;
+		boolean resul = false;
 		
 		try{
-			Class.forName("com.mysql.jdbc.Driver");
-	        Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
 			
-	        Statement st = conexion.createStatement();
-	        String sql = "DELETE FROM `test` WHERE  `id`=" + id;
+	        Connection conexion = DataBaseHelper.getConnection();
+	        //String sql = "DELETE FROM `test` WHERE  `id`=" + id;
 	        
-	        if (st.executeUpdate(sql) != 1){ //Si es diferente de 1 es que no se ha insertado ese �nico registro
-	        	throw new Exception("No se ha realizado el borrado: " + sql);
-	        }else{
-	        	borrado = true;
+	        String sql = "DELETE FROM `test` WHERE  `id`= ?";
+	        PreparedStatement pst = conexion.prepareStatement(sql); //No permite la inyección de SQL y es más rápido
+	        pst.setInt(1,  id);
+	        
+	        if (pst.executeUpdate() == 1){
+	        	resul = true;
 	        }
-	        
-	        conexion.close();
+
 		}catch  (Exception e){ //Si falla que vuelva al form. S�lo se pueden enviar Atributos, par�metros no
-			
+			e.printStackTrace();
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
 		
-		return borrado;
+		return resul;
 	}
 
 	/**
@@ -142,7 +172,7 @@ public class DAOPersona implements IDAOPersona{
 		ArrayList<Object> resul = new ArrayList<Object>();
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
+			Statement st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
 	    	String sql = "SELECT * FROM `test` WHERE `nota` >= 5.0 ";
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
@@ -167,7 +197,7 @@ public class DAOPersona implements IDAOPersona{
 		ArrayList<Object> resul = new ArrayList<Object>();
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
+			Statement st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
 	    	String sql = "SELECT * FROM `test`  WHERE `nota` < 5.0 ";
 	    	ResultSet rs = st.executeQuery (sql);
 	    	

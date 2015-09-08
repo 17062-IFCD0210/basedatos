@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.util.UtilidadesFecha"%>
 <%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <html lang="es">
   <head>
@@ -23,15 +24,15 @@
 
 
  <div class="site-wrapper">
-
+	
       <div class="site-wrapper-inner">
-
+		
         <div class="cover-container">
 
           <div class="masthead clearfix">
             <div class="inner">
               <h3 class="masthead-brand">Registros</h3>
-              
+              <a class="btn btn-primary btn-xs" href="inicio" role="button">Volver</a>
               <% //Mostrar mensaje
               	if(request.getAttribute("msg") != null) {
               		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
@@ -70,14 +71,14 @@
          		
          		<label for="fecha">Fecha: </label>
          		<br>
-         		<input type="datetime-local" name="fecha" value="<%=p.getFecha().toString().replace(" ", "T") %>">
+         		<input type="datetime-local" name="fecha" value="<%=UtilidadesFecha.timestampToString(p.getFecha()) %>">
          		<br><br>
          		
 				<input type="reset" value="Limpiar">         		
          		<input type="submit" value="Actualizar">
          	</form>
          	<%} else { %>
-         	<form action="inicio?accion=3" method="post">
+         	<form action="inicio?accion=5" method="post">
          		<label for="nombre">Nombre: </label>
          		<br>
          		<input type="text" name="nombre" placeholder="Tu Nombre" required autofocus tabindex="1">

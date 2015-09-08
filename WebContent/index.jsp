@@ -65,7 +65,7 @@
             </ul>
             
             <br>
-            <a class="btn btn-primary btn-xs" href="form.jsp" role="button">Insertar nuevo registro</a>
+            <a class="btn btn-primary btn-xs" href="inicio?accion=3" role="button">Insertar nuevo registro</a>
             <br><br>         
             
             <table class="tabla_blanco">

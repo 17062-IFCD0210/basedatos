@@ -27,3 +27,7 @@
 	color:green;
 	text-decoration: none;
 }
+
+tr:hover, td:hover {
+	background-color: #00ff99;
+}

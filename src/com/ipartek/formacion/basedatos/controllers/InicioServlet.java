@@ -1,7 +1,6 @@
 package com.ipartek.formacion.basedatos.controllers;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -13,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
 import com.ipartek.formacion.basedatos.modelo.DAOPersona;
+import com.ipartek.formacion.basedatos.util.UtilidadesFecha;
 
 
 /**
@@ -61,23 +61,27 @@ public class InicioServlet extends HttpServlet {
 		// 0: listar
 		// 1: Detalle
 		// 2: Eliminar
+		// 3: Nuevo
 		// 4: Detalle_elim
 		
 		if("1".equals(pAccion)){
 			detalle(request, response);	
-		
 		}else if("2".equals(pAccion)){		
-			eliminar(request, response);				
-		
+			eliminar(request, response);
+		}else if("3".equals(pAccion)){		
+			nuevo(request, response);
 		}else if("4".equals(pAccion)){			
 			detalle_elim(request, response);
-			
 		}else {
 			listar(request, response);
 		}
 		
 		dispatcher.forward(request, response);
 		
+	}
+
+	private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+		dispatcher = request.getRequestDispatcher( "form.jsp" );
 	}
 
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
@@ -102,13 +106,12 @@ public class InicioServlet extends HttpServlet {
 			HttpServletResponse response) {
 		
 		int id = Integer.parseInt(pID);
-		dao.delete(id);
 		
-//		if(dao.delete(id)) {
-//			request.setAttribute("msg", "Registro Eliminado");
-//		} else {
-//			request.setAttribute("msg", "Registro NO Eliminado");
-//		}
+		if(dao.delete(id)) {
+			request.setAttribute("msg", "Registro Eliminado");
+		} else {
+			request.setAttribute("msg", "Registro NO Eliminado");
+		}
 					
 		//Listar todos los datos en la tabla
 		listar(request, response);
@@ -144,6 +147,8 @@ public class InicioServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		
+		// 5: Accion insertar nuevo
+		
 		//Recoger Parametros
 		pNombre = request.getParameter("nombre");
 		pNota = Float.parseFloat(request.getParameter("nota"));
@@ -151,13 +156,16 @@ public class InicioServlet extends HttpServlet {
 		pFecha = request.getParameter("fecha");
 		pAccion = request.getParameter("accion");
 		
+		int i = 0;
+		
 		Persona p = new Persona(pNombre);
 		p.setNota(pNota);
 		p.setTelefono(pTelefono);
-		p.setFecha(Timestamp.valueOf(pFecha.replace("T", " ") + ":00"));
+		p.setFecha(UtilidadesFecha.stringToTimestamp(pFecha));
 		
-		if("3".equals(pAccion)) {
-			dao.save(p);
+		if("5".equals(pAccion)) {
+			i = dao.save(p);
+			request.setAttribute("msg", "Se ha creado con id" + i);
 		} else {
 			p.setId(Integer.parseInt(pID));
 			dao.update(p);

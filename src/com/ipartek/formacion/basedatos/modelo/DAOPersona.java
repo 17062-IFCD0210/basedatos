@@ -1,6 +1,7 @@
 package com.ipartek.formacion.basedatos.modelo;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -27,9 +28,9 @@ public class DAOPersona implements IDAOPersona{
 		ArrayList<Object> resul = new ArrayList<Object>();
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test` ";
-	    	ResultSet rs = st.executeQuery (sql);
+			String sql = "SELECT * FROM `test` ";
+			PreparedStatement pst = con.prepareStatement(sql); 
+	    	ResultSet rs = pst.executeQuery (sql);
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>	    	
 	    	while(rs.next()) {
@@ -52,9 +53,10 @@ public class DAOPersona implements IDAOPersona{
 		try{
 			Persona p = (Persona) o;
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES ('" + p.getNombre() + "', " + p.getNota() + ", '" + p.getTelefono() + "', '" + p.getFecha() + "');";
-	    	if(st.executeUpdate(sql) != 1) {
+			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES ('" + p.getNombre() + "', " + p.getNota() + ", '" + p.getTelefono() + "', '" + p.getFecha() + "');";
+			PreparedStatement st = con.prepareStatement(sql);
+	    	
+	    	if(st.executeUpdate() != 1) {
 	    		throw new Exception("No se ha realizado insercion " + sql);
 	    	}
 	    		    	
@@ -72,8 +74,8 @@ public class DAOPersona implements IDAOPersona{
 		Persona p = null;
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test` WHERE id=" + id + ";";
+			String sql = "SELECT * FROM `test` WHERE id=" + id + ";";
+			PreparedStatement st = con.prepareStatement(sql); 
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>	    	
@@ -96,9 +98,9 @@ public class DAOPersona implements IDAOPersona{
 		try{
 			Persona p = (Persona) o;
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "UPDATE test SET nombre='" + p.getNombre() + "', nota=" + p.getNota() + ", telefono='" + p.getTelefono() + "', fecha='" + p.getFecha() + "' WHERE id=" + p.getId() + ";";
-	    	if(st.executeUpdate(sql) != 1) {
+			String sql = "UPDATE test SET nombre='" + p.getNombre() + "', nota=" + p.getNota() + ", telefono='" + p.getTelefono() + "', fecha='" + p.getFecha() + "' WHERE id=" + p.getId() + ";";
+			PreparedStatement st = con.prepareStatement(sql); 
+	    	if(st.executeUpdate() != 1) {
 	    		throw new Exception("No se ha realizado actualizacion " + sql);
 	    	}
 	    		    	
@@ -116,38 +118,37 @@ public class DAOPersona implements IDAOPersona{
 		/**
 		 * Forma con Statement
 		 */
-		try{
-			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "DELETE FROM test WHERE id=" + id + ";";
-	    	if(st.executeUpdate(sql) != 1) {
-	    		throw new Exception("No se ha realizado eliminacion " + sql);
-	    	}    	
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			DataBaseHelper.closeConnection();
-		}
+//		try{
+//			Connection con = DataBaseHelper.getConnection();
+//			Statement st = con.createStatement(); 
+//	    	String sql = "DELETE FROM test WHERE id=" + id + ";";
+//	    	if(st.executeUpdate(sql) != 1) {
+//	    		throw new Exception("No se ha realizado eliminacion " + sql);
+//	    	}    	
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}finally{
+//			DataBaseHelper.closeConnection();
+//		}
 		
 		/**
 		 * Forma con PreparedStatement
 		 */
-//		try {
-//			Connection con = DataBaseHelper.getConnection();
-//			String sql = "DELETE FROM `test` WHERE id = ?";
-//			PreparedStatement pst = con.prepareStatement(sql);
-//			pst.setInt(1, id);
-//			if(pst.executeUpdate() != 1) {
-//	    		throw new Exception("No se ha realizado eliminacion " + sql);
-//	    	} else {
-//	    		resul = true;
-//	    	}
-//			
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			DataBaseHelper.closeConnection();
-//		}
+		try {
+			Connection con = DataBaseHelper.getConnection();
+			String sql = "DELETE FROM `test` WHERE id = ?";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setInt(1, id);
+			
+			if(pst.executeUpdate() != 1) {
+	    		throw new Exception("No se ha realizado eliminacion " + sql);
+	    	}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			DataBaseHelper.closeConnection();
+		}
 		
 		return true;
 	}
@@ -181,8 +182,8 @@ public class DAOPersona implements IDAOPersona{
 		ArrayList<Object> resul = new ArrayList<Object>();
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test` WHERE nota<5;";
+			String sql = "SELECT * FROM `test` WHERE nota<5;";
+			PreparedStatement st = con.prepareStatement(sql); 
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>   	

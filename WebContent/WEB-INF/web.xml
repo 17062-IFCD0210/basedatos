@@ -10,10 +10,6 @@
     <servlet-name>InsertarServlet</servlet-name>
     <servlet-class>com.ipartek.formacion.basedatos.controllers.InsertarServlet</servlet-class>
   </servlet>
-  <servlet-mapping>
-    <servlet-name>InsertarServlet</servlet-name>
-    <url-pattern>/insertar</url-pattern>
-  </servlet-mapping>
   <servlet>
     <description></description>
     <display-name>InicioServlet</display-name>

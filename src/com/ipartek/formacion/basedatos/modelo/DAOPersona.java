@@ -1,12 +1,6 @@
 package com.ipartek.formacion.basedatos.modelo;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,7 +22,7 @@ public class DAOPersona implements IDAOPersona{
 	 * Recupera todas las Personas, el get all devuelve un ArrayList de personas
 	 * @return {@code ArrayList<Persona>} listado personas
 	 */
-	
+	@Override
 	public ArrayList<Object> getAll(){
 		
 		ArrayList<Object> resul = new ArrayList<Object>();
@@ -51,19 +45,34 @@ public class DAOPersona implements IDAOPersona{
 
 	@Override
 	public int save(Object o) {
-		Object resul = new Object();
+		int resul = -1;
 		try{
-			
-	    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
-	    	//Crear SQL
-	    	Statement st = conexion.createStatement();
-	    	String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES ('" + sql + "', " + sql + ", '" + sql + "');";
-		}catch (Exception e){
+			Connection con = DataBaseHelper.getConnection();
+	    	String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES ( ?, ?, ? );";
+	    	PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS ); // Constante que nos devuelve
+	    	
+	    	Persona p = (Persona)o;
+	    	pst.setString (1, p.getNombre() );
+			pst.setFloat  (2, p.getNota() );
+			pst.setString (3, p.getTelefono() );
+	    	
+	    	if ( pst.executeUpdate() == 1 ){
+	    		ResultSet rsKeys = pst.getGeneratedKeys();
+	    		if( rsKeys.next() ){
+	    			resul = rsKeys.getInt(1);
+	    		}else{
+	    			throw new SQLException("No se ha podido generar ID");
+	    		}
+	    		
+	    	}
+	    	
+		}catch( Exception e ){
 			e.printStackTrace();
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
-		return resul; 
+		
+		return resul;
 	}
 
 	@Override
@@ -92,14 +101,20 @@ public class DAOPersona implements IDAOPersona{
 	public boolean update(Object o) {
 	
 			boolean resul = false;
+			Persona p = null;
 			
 			try {
 				Connection con = DataBaseHelper.getConnection();
-				Statement st = con.createStatement(); 
-		    	String sql = "UPDATE `test` SET `nombre`, `nota`, `telefono` WHERE nombre= ?, nota=?, telefono=? ";
-		    	ResultSet rs = st.executeQuery (sql);
+		    	String sql = "UPDATE `test` SET `nombre`= ? , `nota`= ?, `telefono` = ? WHERE `id`= ? ;";
+		    	PreparedStatement pst = con.prepareStatement(sql);
+		    	
+		    	p = (Persona)o; // Casteamos un objeto a persona
+				pst.setString (1, p.getNombre() );
+				pst.setFloat  (2, p.getNota() );
+				pst.setString (3, p.getTelefono() );
+				pst.setInt	  (4, p.getId() );
 				
-				if ( st.executeUpdate(sql) == 1){
+				if ( pst.executeUpdate() == 1){
 					resul=true;
 				}			
 				
@@ -108,13 +123,11 @@ public class DAOPersona implements IDAOPersona{
 			}finally{
 				DataBaseHelper.closeConnection();
 			}
-			
 			return resul;
 	}
 
 	@Override
 	public boolean delete(int id) {
-		
 		boolean resul = false;
 		
 		try {
@@ -127,17 +140,14 @@ public class DAOPersona implements IDAOPersona{
 				resul=true;
 			}			
 			
-		} catch (Exception e) {			
+		}catch (Exception e) {			
 			e.printStackTrace();
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
-		
 		return resul;
 	}
 	
-	
-
 	@Override
 	public ArrayList<Object> getAprobados() {
 		ArrayList<Object> resul = new ArrayList<Object>();
@@ -172,7 +182,7 @@ public class DAOPersona implements IDAOPersona{
 	    	ResultSet rs = st.executeQuery (sql);
 	    	   	
 	    	while(rs.next()){
-	    		resul.add(mapeo(rs));	
+	    		resul.add( mapeo(rs) );	
 	    	}	
 	    	
 	    	

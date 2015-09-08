@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 
-<%@page import="java.util.ArrayList"%>
 <%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
-
-
+<%@page import="java.util.ArrayList"%>
 
 <html lang="es">
   <head>
@@ -52,9 +50,8 @@
             <h1 class="cover-heading">Aprende Base de Datos</h1>
             
             
-            <% 
-            	//gestion de mensajes
-            	if ( request.getAttribute("msg")!=null ){
+            <% // Mostrar mensaje
+            	if ( request.getAttribute("msg") !=null ){
             		out.print("<h4>" + request.getAttribute("msg") + "</h4>");	
             	}            	
             
@@ -73,28 +70,26 @@
             </table>
             <br>
             <br>
-            <a href="form.jsp"><i>Insertar nuevo registro</i></a>
                      
             <p class="lead">Registros:</p>
             
             	<table>
             		<thead>
-            	
-            	<tr>
-	            	<th>Nombre</th>
-	            	<th>Nota</th>
-	            	<th>Telefono</th>
-	            	<th>Fecha</th>
-	            	<th>Eliminar</th>
-	            	<th>Editar</th>
-	            </tr>
-	            </thead>
+            			<tr>
+			            	<th>Nombre</th>
+			            	<th>Nota</th>
+			            	<th>Telefono</th>
+			            	<th>Fecha</th>
+			            	<th>Eliminar</th>
+			            	<th>Editar</th>
+	           			</tr>
+	            	</thead>
   
 	            <tbody>
 	            <%
 	            	//recuperar atributo de listado personas
 	            	ArrayList<Persona> alumnos = 
-		            	(ArrayList<Persona>)request.getAttribute("alumnos");
+	            		(ArrayList<Persona>)request.getAttribute("alumnos");
 	            	if ( alumnos == null ){
 	            		alumnos = new ArrayList<Persona>();
 	            	}
@@ -108,13 +103,11 @@
 	            				<td><%=p.getNota()%></td>
 	            				<td><%=p.getTelefono()%></td>
 	            				<td><%=p.getFecha()%></td>
-	            				<td>
-	            					<a href="inicio?id=<%=p.getId()%>&accion=2">
+	            				<td><a href="inicio?id=<%=p.getId()%>&accion=2">
 	        						<span class="glyphicon glyphicon-trash" style="color: red;"></span>
 	   								</a>
 	            				</td>
-	            				<td>
-	            					<a href="inicio?id=<%=p.getId()%>&accion=1">
+	            				<td><a href="inicio?id=<%=p.getId()%>&accion=1">
 	        						<span class="glyphicon glyphicon-pencil" style="color: #2e6da4;"></span>
 	   								</a>
 	            				</td> 
@@ -132,20 +125,21 @@
 	           	 	</tr>
 	           	 </tfoot>	
 
-				</table>
+			</table>
 
-          <br>
-            	<a class="btn btn-primary btn-sm" href="inicio?filtro=0" role="button">Aprobados</a>
-            	<a class="btn btn-primary btn-sm" href="inicio?filtro=1" role="button">Suspendidos</a>
-            	<a class="btn btn-primary btn-sm" href="inicio" role="button">Todos</a>
+          	<br>
+            <a class="btn btn-primary btn-sm" href="inicio?filtro=0" role="button">Aprobados</a>
+            <a class="btn btn-primary btn-sm" href="inicio?filtro=1" role="button">Suspendidos</a>
+            <a class="btn btn-primary btn-sm" href="inicio" 		 role="button">Todos</a>
+            <a class="btn btn-success btn-sm" href="inicio?accion=3" role="button">Crear</a>
            
           <br>
-          </div>
+         </div>
 
           <div class="mastfoot">
             <div class="inner">
-              <p>Documentación <a href="#">Ipartek Campus</a></p>
-              <p>Codigo Fuente <a href="#">GITHUB</a></p>
+              <p>Documentación <a href="http://www.formacion.ipartek.com/campus/">Ipartek Campus</a></p>
+              <p>Codigo Fuente <a href="https://github.com/">GITHUB</a></p>
             </div>
           </div>
 

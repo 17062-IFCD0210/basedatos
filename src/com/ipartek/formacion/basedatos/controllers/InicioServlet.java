@@ -57,8 +57,8 @@ public class InicioServlet extends HttpServlet {
 		// 0: listar
 		// 1: Detalle
 		// 2: Eliminar
-		
-		
+		// 3: CrearNuevo
+			
 		// Detalle
 		if("1".equals(pAccion)){
 			detalle(request, response);
@@ -66,7 +66,8 @@ public class InicioServlet extends HttpServlet {
 		// Eliminar
 		}else if("2".equals(pAccion)){
 			eliminar(request, response);
-			
+		}else if("3".equals(pAccion)){
+			nuevo(request, response);
 		// Listar
 		}else{
 			listar(request, response);
@@ -75,6 +76,11 @@ public class InicioServlet extends HttpServlet {
 		dispatcher.forward(request, response);
 	}
 	
+	private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+		dispatcher = request.getRequestDispatcher( "form.jsp" );
+		
+	}
+
 	/************************************
 	 ***			 LISTAR		      ***
 	 ************************************/
@@ -93,18 +99,16 @@ public class InicioServlet extends HttpServlet {
 			
 			request.setAttribute("alumnos", alumnos);
 			
-			dispatcher = request.getRequestDispatcher("index.jsp");
+			dispatcher = request.getRequestDispatcher( "index.jsp" );
 		
 	}
 
 	/***************************************
-	 ***		 	ELIMINAR	  		 
-	 * @throws IOException 
-	 * @throws ServletException ***
+	 ***		 	ELIMINAR	  		 ***
 	 ***************************************/
 
 	private void eliminar(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+			HttpServletResponse response) {
 		
 			//Recoger parametros
 			int id = Integer.parseInt( pID );
@@ -113,10 +117,8 @@ public class InicioServlet extends HttpServlet {
 				request.setAttribute("msg", "Eliminado con exito");
 			}else{
 				request.setAttribute("msg", "No se ha podido Eliminar");
-			}
-			
-			listar(request, response);
-			
+			}			
+			listar(request, response);			
 	}
 	
 	/*****************************************
@@ -132,15 +134,13 @@ public class InicioServlet extends HttpServlet {
 			dispatcher = request.getRequestDispatcher("form.jsp");
 		
 	}
-
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 		try{
-		//recoger parametros copiar los names de la form.jsp para no confuncirnos
+		//recoger parametros copiar los names de la form.jsp para no confundirnos
 		String sNombre 		= request.getParameter("nombre");
 		String sNota 		= request.getParameter("nota");
 		String sTelefono 	= request.getParameter("telefono");
@@ -157,26 +157,30 @@ public class InicioServlet extends HttpServlet {
 		
 		//crear nueva persona
 		if( "-1".equals(sID) ){
-			dao.save(p);
-			request.setAttribute("msg", "Nueva persona creada");
+			if ( dao.save(p) != -1){
+				request.setAttribute("msg", "Creado nuevo registro");
+			}else{
+				request.setAttribute("msg", "No se ha creado nuevo registro");
+			}
 		//modificar persona
 		}else{
 			
 			if (dao.update(p) ){
-			request.setAttribute("msg", p.getNombre() + " Persona modificada con exito");
+				request.setAttribute("msg", p.getNombre() + " Persona modificada con exito");
 			}else{
-				request.setAttribute("msg", p.getNombre() + " No se ha realizado la modificacion");
+				request.setAttribute("msg", " No se ha realizado la modificaci&oacute;n" +  p.getNombre() );
 			}
 		}
 		}catch (Exception e){
 			e.printStackTrace();
 			request.setAttribute("msg", e.getMessage() );
+			
 		}finally{
 			//volver index
 			listar(request, response);
+			dispatcher.forward(request, response);
 		}
 		
-	
 	}
 
 }

@@ -45,12 +45,11 @@
               
               <h3 class="masthead-brand"><%=titulo%></h3> 
               
-              <% //mostrar mensajes
+              <% //mostrar mensaje
               	if( request.getAttribute("msg")!= null ){
               		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
               	}
               
-
               %>
                          
             </div>
@@ -68,7 +67,7 @@
 						   name= "nombre" 
 						   value="<%=p.getNombre()%>"
 						   id="nombre"
-						   required pattern="[a-zA-ZáéíóúñÁÉÍÓÚÑ]{2,256}"	 
+						   required	 
 					       placeholder="Tu nombre"				       
 					       autofocus
 					       tabindex="1"			       
@@ -106,10 +105,11 @@
 	          		<br>
 	          		<!-- Pasamos el atributo id hidden para que no se pueda visualizar -->
 	          		<input type="hidden" name ="id" value="<%=p.getId()%>">
-	          		<input type="reset"  value="Limpiar">
+	          		
+	          		<input type="reset"  value="Limpiar" class="btn btn-warning">
 	          		
 	          		<% if( p.getId() == -1){%>
-	          			<input type="submit" value="Crear">
+	          			<input type="submit" value="Crear" class="btn btn-success">
 	          		<%}else{ %>
 	          			<input type="submit" value="Modificar">
 	          		<%} %>

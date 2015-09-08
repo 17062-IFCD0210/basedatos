@@ -20,7 +20,12 @@ ul li{
 .area{
 	border: 1px solid #A4A4A4;
 	padding: 5px;
+	display: inline-block;
 	margin-bottom: 2px;
+}
+
+.area input{
+	color: black;
 }
 
 .tabla_blanco{

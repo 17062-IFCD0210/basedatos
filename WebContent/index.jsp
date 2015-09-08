@@ -6,6 +6,7 @@
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
+
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -17,8 +18,7 @@
 		<link rel="stylesheet" type="text/css" href="css/styles.css?v=1.0">
 
 	<!-- Bootstrap -->
-	    <link href="css/bootstrap.min.css" rel="stylesheet">
-	    <link href="css/basedatos.css" rel="stylesheet">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
     
 	<!-- Custom styles for this template -->
     <link href="css/cover.css" rel="stylesheet">
@@ -165,9 +165,6 @@
 		document.getElementById("bbdd_pass").innerHTML = "";
 		document.getElementById("bbdd_tabla").innerHTML = "test";
 	</script>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
- 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="js/jquery.min.js"></script>

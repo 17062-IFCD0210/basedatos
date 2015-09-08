@@ -9,7 +9,8 @@
     <title>BBDD Insertar</title>
     
 	<!-- Estilos CSS -->
-		<link rel="stylesheet" type="text/css" href="css/styles.css?v=1.0">
+	<link rel="stylesheet" type="text/css" href="css/styles.css?v=1.0">
+		
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
@@ -128,19 +129,6 @@
       </div>
 
     </div>
-
-	<script type="text/javascript">
-		document.getElementById("location_host").innerHTML = window.location.hostname;
-		document.getElementById("bbdd_nombre").innerHTML = "skalada";
-		document.getElementById("location_port").innerHTML = window.location.port;
-		document.getElementById("bbdd_usuario").innerHTML = "root";
-		document.getElementById("bbdd_pass").innerHTML = "";
-		document.getElementById("bbdd_tabla").innerHTML = "test";
-	</script>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="js/jquery.min.js"></script>

@@ -121,7 +121,8 @@
             	<br>
             	<a class="btn btn-primary btn-xs" href="inicio?filtro=0" role="button">Aprobados</a>
             	<a class="btn btn-primary btn-xs" href="inicio?filtro=1" role="button">Suspendidos</a>
-            	<a class="btn btn-primary btn-xs" href="inicio" role="button">Todos</a>
+            	<a class="btn btn-primary btn-xs" href="inicio"          role="button">Todos</a>
+            	<a class="btn btn-success btn-xs" href="inicio?accion=3" role="button">Crear</a>
             	
             	<br>
             	

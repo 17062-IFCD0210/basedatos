@@ -57,14 +57,15 @@ public class InicioServlet extends HttpServlet {
 		// 0: listar
 		// 1: Detalle
 		// 2: Eliminar
+		// 3: CrearNuevo
 		
 		
 		if("1".equals(pAccion)){
-			detalle(request, response);	
-		
+			detalle(request, response);		
 		}else if("2".equals(pAccion)){		
 			eliminar(request, response);				
-		
+		}else if("3".equals(pAccion)){		
+			nuevo(request, response);			
 		}else{			
 			listar(request, response);			
 		}
@@ -74,6 +75,10 @@ public class InicioServlet extends HttpServlet {
 	}
 
 	
+
+	private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+		dispatcher = request.getRequestDispatcher( "form.jsp" );				
+	}
 
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -95,7 +100,17 @@ public class InicioServlet extends HttpServlet {
 
 	private void eliminar(HttpServletRequest request,
 			HttpServletResponse response) {
-		// TODO Auto-generated method stub
+		
+		int id = Integer.parseInt(pID);
+		
+		if ( dao.delete(id) ){
+			request.setAttribute("msg", "Persona eliminada");
+		}else{
+			request.setAttribute("msg", "No se ha podido ELIMINAR");
+		}
+		
+		listar(request, response);
+		
 		
 	}
 
@@ -115,7 +130,53 @@ public class InicioServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+
+		try{
+			//recoger parametros
+			String sNombre   = request.getParameter("nombre");
+			String sNota     = request.getParameter("nota");
+			String sTelefono = request.getParameter("telefono");
+			String sFecha    = request.getParameter("fecha");
+			String sID       = request.getParameter("id");
+			
+			//mapear Persona
+			Persona p = new Persona(sNombre);
+			p.setId( Integer.parseInt(sID));
+			p.setNota( Float.parseFloat(sNota));
+			p.setTelefono(sTelefono);
+			//TODO fecha
+			
+			
+			//crear nueva Persona
+			if ( "-1".equals(sID) ){
+				if ( dao.save(p) != -1 ){
+					request.setAttribute("msg", "Creado nuevo registro");
+				}else{
+					request.setAttribute("msg", "No se ha creado el nuevo registro");	
+				}
+			//modificar persona	
+			}else{
+				
+				if ( dao.update(p) ){
+					request.setAttribute("msg", p.getNombre() + " Modificado con Exito" );
+				}else{
+					request.setAttribute("msg", "No se ha realizado la modificación para " + p.getNombre() );
+				}
+			}
+			
+			
+			
+		}catch ( Exception e){
+			e.printStackTrace();
+			request.setAttribute("msg", e.getMessage() );
+			
+		}finally{
+			//volver index
+			listar(request, response);
+			dispatcher.forward(request, response);
+		}	
+		
+		
 	}
 
 }

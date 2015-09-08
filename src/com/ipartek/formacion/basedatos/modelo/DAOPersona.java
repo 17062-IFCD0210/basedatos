@@ -51,8 +51,33 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public int save(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
+		int resul = -1;
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES ( ?, ?, ?);";
+			PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS );
+			Persona p = (Persona)o;
+			pst.setString(1, p.getNombre() );
+			pst.setFloat (2, p.getNota());
+			pst.setString(3, p.getTelefono() );
+			
+			if ( pst.executeUpdate() == 1 ){
+				ResultSet rsKeys = pst.getGeneratedKeys();
+				if ( rsKeys.next() ){
+					resul = rsKeys.getInt(1);
+				}else{
+					throw new SQLException("No se ha podido generar ID");
+				}
+			}
+			
+		}catch( Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		
+		
+		return resul;
 	}
 
 	@Override
@@ -81,8 +106,28 @@ public class DAOPersona implements IDAOPersona {
 
 	@Override
 	public boolean update(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resul = false;
+		Persona p = null;
+		try{
+			Connection con = DataBaseHelper.getConnection();			
+			String sql = "UPDATE `test` SET `nombre`= ? , `nota`= ? , `telefono`= ? WHERE  `id`= ? ;";
+			PreparedStatement pst = con.prepareStatement(sql);
+			p = (Persona)o;
+			pst.setString(1, p.getNombre() );
+			pst.setFloat (2, p.getNota());
+			pst.setString(3, p.getTelefono());
+			pst.setInt   (4, p.getId());
+			
+			if ( pst.executeUpdate() == 1 ){
+				resul=true;
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		return resul;
 	}
 
 	@Override

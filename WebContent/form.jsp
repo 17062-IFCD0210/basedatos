@@ -30,7 +30,22 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Insertar nuevo registro</h3>
+              <a href="inicio" class="btn btn-info">Volver</a>	
+              <%
+		
+				Persona p = (Persona)request.getAttribute("alumno");
+                String titulo = "Insertar nuevo registro";
+				if ( p == null ){
+					p = new Persona("");
+				}else{
+					titulo= "Modificar a " + p.getNombre();
+				}
+				
+			%>
+              
+              <h3 class="masthead-brand"><%=titulo%></h3>
+              
+              
               
               <% //Mostrar mensaje
               	if(request.getAttribute("msg") != null) {
@@ -42,19 +57,9 @@
             </div>
           </div>
 
-		<%
-		
-			Persona p = (Persona)request.getAttribute("alumno");
-			if ( p == null ){
-				p = new Persona("");
-			}
-		
-		%>
-
-
           <div class="inner cover">
           
-         	<form action="insertar" method="post">
+         	<form action="inicio" method="post">
          		<label for="nombre">Nombre: </label>
          		<br>
          		<input type="text" 
@@ -68,21 +73,36 @@
          		
          		<label for="nota">Nota: </label>
          		<br>
-         		<input type="text" name="nota" placeholder="Tu Nota" required>
+         		<input type="text" 
+         			   value="<%=p.getNota()%>"
+         			   name="nota" placeholder="Tu Nota" 
+         			   required>
          		<br><br>
          		
          		<label for="telefono">Telefono: </label>
          		<br>
-         		<input type="text" name="telefono" placeholder="Tu Telefono">
+         		<input type="text"
+         		       value="<%=p.getTelefono()%>" 
+         			   name="telefono" placeholder="Tu Telefono">
          		<br><br>
          		
          		<label for="fecha">Fecha: </label>
          		<br>
-         		<input type="date" name="fecha">
+         		<input type="date" 
+         			   name="fecha"
+         			   value="<%=p.getTelefono()%>" 
+         		>
          		<br><br>
          		
-				<input type="reset" value="Limpiar">         		
-         		<input type="submit" value="Crear">
+         		<input type="hidden" name="id" value="<%=p.getId()%>">
+         		
+				<input type="reset" value="Limpiar"  class="btn btn-warning">
+				
+				<% if ( p.getId() == -1 ) {%>         		
+         			<input type="submit" value="Crear"  class="btn btn-success">
+         		<%}else{ %>	
+         			<input type="submit" value="Modificar" class="btn btn-success">
+         		<%} %>
          	</form>
             
           </div>

@@ -39,14 +39,16 @@
               	boolean edicion=false; 
               	Persona p = null;
               	if ( request.getAttribute("alumno") != null ){
-          			out.print("Editar Registro");
           			p = (Persona)request.getAttribute("alumno");
           			edicion=true;
+          			out.print("Editar datos de "+p.getNombre());          			
             	}else{
           			out.print("Insertar Nuevo Registro");
           		}              
               %>
               </h3>
+              
+              <a href="inicio" class="btn btn-primary">Volver</a>
               
               <% //mostrar mensajes
               	 if ( request.getAttribute("msg") != null ){
@@ -60,14 +62,6 @@
 
           <div class="inner cover">
           
-          <% 
-/*          if(edicion){
-        	 	out.print("<form action='actualizar' method='post'>");
-          }else{
-        	  out.print("<form action='inicio' method='post'>");
-          }
-  */      	  
-          %>
           <form action="inicio" method="post">
           	<input type="hidden" name="id" value="<% 
           		if(edicion){
@@ -115,18 +109,18 @@
   	          		       value=""
 	          		        >
 	          	</div>          		
-          		<input type="reset" value="Limpiar">
-          		<input type="submit" value="<% if(edicion){out.print("Modificar");}else{out.print("Crear");} %>">
+          		<input type="reset" class="btn btn-warning" value="Limpiar">
+          		<input type="submit" class="btn btn-success" value="<% if(edicion){out.print("Modificar");}else{out.print("Crear");} %>">
           	
           	</form>
           	<br>
-           	<a href="inicio">Volver</a>
+
           </div>
 
           <div class="mastfoot">
             <div class="inner">
-              <p>Documentación <a href="#">Ipartek Campus</a></p>
-              <p>Codigo Fuente <a target="_blank" href="https://github.com/17062-IFCD0210/basedatos">GITHUB</a></p>
+              <p>Documentación <a href="http://formacion.ipartek.com/campus/">Ipartek Campus</a></p>
+              <p>Código Fuente <a target="_blank" href="https://github.com/17062-IFCD0210/basedatos">GITHUB</a></p>
             </div>
           </div>
 

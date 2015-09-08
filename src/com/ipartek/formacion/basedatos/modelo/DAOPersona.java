@@ -38,17 +38,44 @@ public class DAOPersona implements IDAOPersona{
 	    	//mapeo resultSet => ArrayList<Persona>
 	    	Persona p = null;	    	
 	    	while(rs.next()){
-	    		
 	    		p = new Persona( rs.getString("nombre") );
 	    		p.setId( rs.getInt("id"));
 	    		p.setFecha( rs.getTimestamp("fecha"));
 	    		p.setTelefono(rs.getString("telefono"));
 	    		p.setNota(rs.getFloat("nota"));
-	    		
 	    		resul.add(p);
 	    	}	
-	    	
-	    	
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		return resul;
+		
+	}
+
+	@Override
+	public int save(Object o) {
+		int resul=-1;
+		try{
+			Connection con = DataBaseHelper.getConnection();
+			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES (?, ?, ?);";
+			PreparedStatement pst = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			//el segundo argumento sirve para obtener datos de la consulta, asi podremos acceder al nuevo id creado
+			Persona p=(Persona)o;			
+			pst.setString(1, p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());			
+			//pst.setInt(4, p.getId());
+			if(pst.executeUpdate()==1){
+				//aqui recuperamos la id del registro recien insertado para devolverlo
+				ResultSet rsKeys = pst.getGeneratedKeys();
+				if (rsKeys.next()){
+					resul=rsKeys.getInt(1);
+				}else{
+					throw new SQLException("No se ha podido generar ID");
+				}
+			}    	
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -56,35 +83,6 @@ public class DAOPersona implements IDAOPersona{
 		}
 		
 		return resul;
-		
-	}
-
-	@Override
-	public int save(Object o) {
-
-		try{
-			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement();
-			Persona p=(Persona)o;
-			String pNombre = p.getNombre();
-			Float pNota = p.getNota();
-			String pTelefono = p.getTelefono();
-			Date pFecha = p.getFecha();
-			//String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES ('" + pNombre + "',"+ pNota + ",'"+ pTelefono +"','"+ pFecha +"');";
-			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES ('" + pNombre + "',"+ pNota + ",'"+ pTelefono +"');";
-	    	System.out.println(p.toString());
-	    	//ejecutar insert
-	    	if ( st.executeUpdate(sql) != 1){	    		
-	    		throw new Exception("No se ha realizado insercion: " + sql);	    		
-	    	}
-
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			DataBaseHelper.closeConnection();
-		}
-		
-		return 0;
 	}
 
 	@Override
@@ -115,23 +113,16 @@ public class DAOPersona implements IDAOPersona{
 		boolean resul=false;
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Persona p=(Persona)o;
-			String sql="UPDATE `test` SET `nombre`='"+p.getNombre()+"', `nota`="+p.getNota()+", `telefono`='"+p.getTelefono()+"' where `id`=?;";
+			String sql="UPDATE `test` SET `nombre`=?, `nota`=?, `telefono`=? where `id`=?;";
 			PreparedStatement pst = con.prepareStatement(sql);
-			pst.setInt(1, p.getId());
+			Persona p=(Persona)o;			
+			pst.setString(1, p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());			
+			pst.setInt(4, p.getId());
 			if(pst.executeUpdate()==1){
 				resul=true;
 			}    	
-			/*
-			Statement st = con.createStatement();
-			Persona p=(Persona)o;
-			String sql = "UPDATE `test` SET `nombre`='"+p.getNombre()+"', `nota`="+p.getNota()+", `telefono`='"+p.getTelefono()+"' where `id`="+p.getId()+";";
-	    	System.out.println(p.toString());
-	    	//ejecutar update
-	    	if ( st.executeUpdate(sql) != 1){	    		
-	    		throw new Exception("No se ha realizado actualización: " + sql);	    		
-	    	}
-			*/
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -173,12 +164,9 @@ public class DAOPersona implements IDAOPersona{
 			Statement st = con.createStatement(); 
 	    	String sql = "SELECT * FROM `test` WHERE `nota` >= 5";
 	    	ResultSet rs = st.executeQuery (sql);
-	    	  	
 	    	while(rs.next()){
 	    		resul.add(mapeo(rs));
 	    	}	
-	    	
-	    	
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -195,12 +183,9 @@ public class DAOPersona implements IDAOPersona{
 			Statement st = con.createStatement(); 
 	    	String sql = "SELECT * FROM `test` WHERE `nota` < 5";
 	    	ResultSet rs = st.executeQuery (sql);
-	    	
 	    	while(rs.next()){
 	    		resul.add(mapeo(rs));
 	    	}	
-	    	
-	    	
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{

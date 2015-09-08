@@ -51,6 +51,7 @@ public class InicioServlet extends HttpServlet {
 		// 0: Listar
 		// 1: Detalle
 		// 2: Eliminar
+		// 3: CrearNuevo
 
 		//Detalle
 		if("1".equals(pAccion)){
@@ -60,6 +61,10 @@ public class InicioServlet extends HttpServlet {
 		}else if("2".equals(pAccion)){
 			eliminar(request, response);
 			
+		//CrearNuevo	
+		}else if("3".equals(pAccion)){
+			nuevo(request,response);
+	
 		//Listar
 		}else {
 			listar(request, response);
@@ -100,6 +105,10 @@ public class InicioServlet extends HttpServlet {
 	}
 
 	
+
+	private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+		dispatcher=request.getRequestDispatcher("form.jsp");
+	}
 
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
 		ArrayList<Object> alumnos = new ArrayList<Object>();
@@ -161,18 +170,19 @@ public class InicioServlet extends HttpServlet {
 			p.setId(Integer.parseInt(sID));
 			//crear nueva persona
     		if ("-1".equals(sID)){
-    			if(dao.save(p)==-1){
+    			int indice=dao.save(p);
+    			if(indice==-1){
     				request.setAttribute("msg", "No se ha podido crear");
     			}else{
-    				request.setAttribute("msg", "Persona creada");    				
+    				request.setAttribute("msg", indice+" "+p.getNombre()+" creado con éxito");  				
     			};
     			
     		//modificar persona
     		}else{
-    			p.setId(Integer.parseInt(pID));
+    			p.setId(Integer.parseInt(sID));
     			if(dao.update(p)){
     				System.out.println("Persona modificada");
-    				request.setAttribute("msg", "Persona modificada");
+    				request.setAttribute("msg", p.getId()+" "+p.getNombre()+" modificado con éxito");
     			}else{
     				request.setAttribute("msg", "No se ha podido modificar");
     			};
@@ -208,8 +218,8 @@ public class InicioServlet extends HttpServlet {
 		}finally{
 			//volver a index
 			listar(request,response);
+			dispatcher.forward(request, response);
 		}
-		doGet(request, response);
 	}
 
 }

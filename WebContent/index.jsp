@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <%@page import="java.util.ArrayList"%>
+<%@page pageEncoding="utf-8"%>
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -40,7 +41,21 @@
 	}
 	
 	td{
-		padding:10px;
+		padding:5px;
+	}
+	
+	.textonegro{
+		color:black;
+	}
+	
+	.blanco {
+		list-style-type: none;
+		background-color: white;
+		color: black;
+	}
+	
+	.mensaje{
+		border
 	}
 </style>        
   </head>
@@ -73,17 +88,28 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base Datos</h1>
-             <% //Mostrar mensaje
+  
+            <ul class="blanco">
+            	<li>Servidor: <small>localhost</small></li>
+            	<li>Base de Datos: <small>skalada</small></li>
+            	<li>Puerto: <small>3306</small></li>
+            	<li>Usuario: <small>root</small></li>
+            	<li>Password: </li>
+            	<li>Tabla: <small>test</small></li>
+            </ul>
+            <p class="lead">Registros</p>
+           
+            <% //Mostrar mensaje
               	if(request.getAttribute("msg") != null) {
+              		out.print(" <div class='alert alert-success' role='alert'>");
               		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+              		out.print("</div>");
               	}
               
               %>
-            
-            <a href="form.jsp">Insertar nuevo registro</a>
-            <p class="lead">Registros</p>
+
     		<table class="verde tabla">
-            	<thead><tr><td>Nombre</td><td>Nota</td><td>Telefono</td><td>Fecha</td><td>Editar</td><td>Eliminar</td></tr></thead>
+            	<thead class="blanco"><tr><td>Nombre</td><td>Nota</td><td>Telefono</td><td>Fecha</td><td>Editar</td><td>Eliminar</td></tr></thead>
 
 				<tbody>
  			<% 	//recuperar atributo de listado personas
@@ -94,14 +120,13 @@
 				Persona p = null;
 				for (int i=0;i<alumnos.size();i++){
 					p = alumnos.get(i);
-					//out.print("<tr><td>" + p.getNombre() + "</td><td>" + p.getNota() +"</td><td>"+p.getTelefono()+"</td><td>"+p.getFecha() +"</td><td><a href='inicio?accion=1&id="+p.getId()+"'>E</a></td><td><a href='inicio?accion=2&id="+p.getId()+"'>X</a></td></tr>");
 					%>
 					<tr>
 						<td><%=p.getNombre()%></td>
 						<td><%=p.getNota()%></td>
 						<td><%=p.getTelefono()%></td>
 						<td><%=p.getFecha()%></td>
-						<td><a href="inicio?accion=1&id=<%=p.getId()%>">E</a></td>
+						<td><a href="inicio?accion=1&id=<%=p.getId()%>"><span class="glyphicon glyphicon-pencil"></span></a></td>
 						<td><button type="button" data-toggle="modal" data-target="#myModal<%=+i%>">X</button></td>
 						</tr>
 
@@ -115,7 +140,7 @@
 									<button type="button" class="close" data-dismiss="modal">&times;</button>
 										<h2 class="modal-title text-center text-danger"><i class="fa fa-exclamation-triangle"></i>Confirmacion de eliminacion</h2>
 					  			</div>
-					  			<div class="modal-body">
+					  			<div class="modal-body textonegro">
 					    			<p>Estas seguro de que desea eliminar a <%=p.getNombre()%>?</p>
 					  			<div class="modal-footer">						    			
 					    			<a href="inicio?accion=2&id=<%=p.getId()%>" class="btn btn-danger">Eliminar</a>
@@ -129,22 +154,24 @@
 				}
 				%>
 				</tbody>
-				<tfoot>
+				<tfoot class="blanco">
 					<tr>
 						<td colspan="6">Mostrando: <%=alumnos.size()%></td>
 					</tr>
 				</tfoot>
 			</table>
-
-            <a href="inicio?filtro=0">Aprobados</a><br>
-            <a href="inicio?filtro=1">Suspendidos</a><br>
-            <a href="inicio">Todos</a><br>
+			<br>
+            <a href="inicio?filtro=0" class="btn btn-primary">Aprobados</a>
+            <a href="inicio?filtro=1" class="btn btn-primary">Suspendidos</a>
+            <a href="inicio" class="btn btn-primary">Todos</a>
+            <a href="inicio?accion=3" class="btn btn-success">Crear</a>
+            <br>
           </div>
 
           <div class="mastfoot">
             <div class="inner">
-              <p>Documentación <a href="#">Ipartek Campus</a></p>
-              <p>Codigo Fuente <a target="_blank" href="https://github.com/17062-IFCD0210/basedatos">GITHUB</a></p>
+              <p>Documentación <a href="http://formacion.ipartek.com/campus/">Ipartek Campus</a></p>
+              <p>Código Fuente <a target="_blank" href="https://github.com/17062-IFCD0210/basedatos">GITHUB</a></p>
             </div>
           </div>
 

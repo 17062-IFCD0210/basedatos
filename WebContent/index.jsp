@@ -33,7 +33,7 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Conexión Base Datos</h3>
+              <h3 class="masthead-brand">Conexión Base de Datos</h3>
               <nav>
                 <ul class="nav masthead-nav">
                   <li class="active"><a href="#">Home</a></li>
@@ -47,7 +47,7 @@
 
 
           <div class="inner cover">
-            <h1 class="cover-heading">Aprende Base de Datos</h1>
+            <h1 class="cover-heading">Aprende Bases de Datos</h1>
             
             
             <% // Mostrar mensaje

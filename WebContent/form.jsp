@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.util.UtilidadesFecha"%>
 <%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -63,13 +65,11 @@
 					<legend>Datos Registro</legend>
 	          		<p>
 	          		<label for="nombre">Nombre: </label><br>
-					<input type="text"
-						   name= "nombre" 
-						   value="<%=p.getNombre()%>"
-						   id="nombre"
-						   required	 
+					<input type="text" name= "nombre" id="nombre"
+						   value="<%=p.getNombre()%>"				   						    
 					       placeholder="Tu nombre"				       
 					       autofocus
+					       required
 					       tabindex="1"			       
 					       >
 					</p>
@@ -85,19 +85,20 @@
 					
 					<p>
 					<label for="telefono">Tel&eacute;fono: </label><br>
-	    			<input type="tel" 
-	    				   id="telefono" name="telefono" 
+	    			<input type="tel" id="telefono" name="telefono" 
 	    				   value="<%=p.getTelefono()%>"
-	    				   required
 	    				   placeholder="Tu telefono"
+	    				   required
 	    				   >
 	          		</p>
 	          		
 	          		<br>
 	          		<p>
+	          		 <!-- Mejor usar datepicker JQuery -->
 	          		<label for="date">Fecha: </label><br>
-	          		<input type="date" max="2015-12-31" min="2012-01-01" name="fecha"
-	          			   value="<%=p.getFecha()%>"
+	          		<input type="datetime-local" name="fecha"
+	          			   value="<%=UtilidadesFecha.timestampToString(p.getFecha())%>"
+	          			   required
 	          			   >
 	          		</p>
 	          		

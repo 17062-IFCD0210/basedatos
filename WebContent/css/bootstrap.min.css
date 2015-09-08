@@ -86,6 +86,10 @@ sub {
 img {
 	border: 0
 }
+tr:hover, td:hover{
+	background-color: #2ECCFA
+	
+}
 
 svg:not (:root ){
 	overflow: hidden
@@ -3441,7 +3445,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-primary:hover {
 	color: #fff;
-	background-color: #286090;
+	background-color: #2ECCFA;
 	border-color: #204d74
 }
 
@@ -3485,7 +3489,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-success {
 	color: #fff;
-	background-color: #5cb85c;
+	background-color: #449d44;
 	border-color: #4cae4c
 }
 
@@ -3497,8 +3501,8 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-success:hover {
 	color: #fff;
-	background-color: #449d44;
-	border-color: #398439
+	background-color: #00FF66;
+	border-color: white
 }
 
 .btn-success.active, .btn-success:active, .open>.dropdown-toggle.btn-success

@@ -9,6 +9,12 @@ a:hover {
   color: #2ECCFA;
   font-size: 16px;
 }
+
+i{
+	color: #2ECCFA;
+	font-variant: small-caps;
+	text-decoration: underline;
+}
 #volver{
 	background-color: #2ECCFA;
 }
@@ -85,7 +91,7 @@ body {
   font-size: 16px;
   font-weight: bold;
   color: #fff; /* IE8 proofing */
-  color: rgba(255,255,255,.75);
+  color: #fff;
   border-bottom: 2px solid transparent;
 }
 .masthead-nav > li > a:hover,
@@ -97,7 +103,7 @@ body {
 .masthead-nav > .active > a,
 .masthead-nav > .active > a:hover,
 .masthead-nav > .active > a:focus {
-  color: #fff;
+  color: #2ECCFA;
   border-bottom-color: #fff;
 }
 

@@ -44,6 +44,27 @@ public class UtilFecha {
 	}
 	
 	
+	/**
+	 * Combierte una fecha ontenida de la base de datos {@code Timestamp} a {@code String}
+	 * para usarlo en los zinput type=datetime-local
+	 * @param tfecha con formato {@code Timestamp} 
+	 * @return {@code String} con formato: "yyyy-MM-ddThh:mm", "" si falla
+	 */
+	public static String datetime_TimestampToString(Timestamp tfecha){
+		String resul = " ";
+		
+		String sFecha;
+		try {
+			//yyyy-MM-dd hh:mm:ss.fffffffff
+			sFecha = tfecha.toString();
+			sFecha = sFecha.replace(" ", "T");
+			//yyyy-MM-dd hh:mm
+			resul = sFecha.substring(0, 16);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
 
 }
 

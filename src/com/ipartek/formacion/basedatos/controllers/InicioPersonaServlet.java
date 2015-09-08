@@ -2,9 +2,6 @@ package com.ipartek.formacion.basedatos.controllers;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -87,7 +84,9 @@ public class InicioPersonaServlet extends HttpServlet {
 	private void getParameters(HttpServletRequest request, HttpServletResponse response) {
 		
 		try {
-			pAccion = Integer.parseInt(request.getParameter("accion"));	
+			if (request.getParameter("accion") != null && !"".equalsIgnoreCase(request.getParameter("accion"))){
+				pAccion = Integer.parseInt(request.getParameter("accion"));	
+			}
 			
 			if(request.getParameter("id") != null && !"".equalsIgnoreCase(request.getParameter("id"))){
 				pID = Integer.parseInt(request.getParameter("id"));
@@ -155,19 +154,21 @@ public class InicioPersonaServlet extends HttpServlet {
 		if (pID == -1){
 			if( dao.save(persona) != -1){	
 				request.setAttribute("msg_ok", "Registro a&ntilde;adido");
+				listar(request,response);
 			} else {
 				request.setAttribute("msg_error", "Error al guardar el registro");
+				dispatcher = request.getRequestDispatcher("formulario.jsp");				
 			}
 		} else {
 			if(dao.update(persona)){
 				request.setAttribute("msg_ok", "Registro modificado correctamente");
+				listar(request,response);
 			} else {
 				request.setAttribute("msg_error", "Error al modificar registro");
+				dispatcher = request.getRequestDispatcher("formulario.jsp");
 			}
 		}
-		
-		listar(request,response);
-		
+				
 		dispatcher.forward(request, response);
 		
 	}
@@ -200,7 +201,7 @@ public class InicioPersonaServlet extends HttpServlet {
 				pNota = 0;
 			}		
 			pTelefono = request.getParameter("telefono");		
-			if(!request.getParameter("fecha").equals("null")){	
+			if (pID != -1) {
 				pFecha = UtilFecha.parse_string_timestamp(request.getParameter("fecha"));
 			}
 		} catch (Exception e){

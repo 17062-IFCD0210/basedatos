@@ -47,8 +47,20 @@
 				</div>
 
 				<div class="inner cover">
+				
+					<%
+						Persona p = (Persona)request.getAttribute("alumno");
+						String titulo = "Insertar nuevo registro";						
+						if (p.getId() == -1){
+							p = new Persona("");
+						} else {
+							titulo = "Modificar a " + p.getNombre();
+						}		
+					%>
+					
+					<a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>"><button class="btn-lg">Volver</button></a>
 										
-					<h1 class="cover-heading">Insertar/Modificar registro</h1>
+					<h1 class="cover-heading"><%=titulo%></h1>
 					
 					<%
 						//Mostrar mensajes
@@ -56,15 +68,11 @@
 							out.print("<div class='msg_error'>");
 							out.print("<h2>" + request.getAttribute("msg_error") + "</h2>");
 							out.print("</div><br>");
-						}		
-											
+						}						
 					%>
 															
-					<form action="inicio_persona" method="post">
-						
-						<%
-							Persona p = (Persona)request.getAttribute("alumno");							
-						%>												
+					<form action="inicio_persona" method="post">						
+																	
 						<input type="hidden" name="id" value="<%=p.getId()%>">						
 						<label for="nombre">Nombre:</label>
 						<input type="text" name="nombre" value="<%=p.getNombre()%>"

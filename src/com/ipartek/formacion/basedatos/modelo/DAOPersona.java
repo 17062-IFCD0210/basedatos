@@ -48,19 +48,32 @@ public class DAOPersona implements IDAOPersona {
 	@Override
 	public int save(Object o) {
 		int resul = -1;
-		Persona p = (Persona) o;		
+		Persona p = (Persona)o;		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			String sql = "insert into `test` (`nombre`, `nota`, `telefono`) values (?,?,?)";
-			PreparedStatement pst = con.prepareStatement(sql);
+			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES (?,?,?)";
+			PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pst.setString(1, p.getNombre());
 			pst.setFloat(2, p.getNota());
-			pst.setString(3, p.getTelefono());
-			
+			pst.setString(3, p.getTelefono());			
 	    	if ( pst.executeUpdate() != 1 ){
-				throw new Exception("No se ha realizado insercion");
-			}
-	    	resul = 1;	    		
+				throw new Exception("No se ha realizado la insercion");
+			} else {				
+//				//Codigo para obtener el ultimo id de la tabla
+//				sql = "SELECT MAX(ID) FROM `test`";
+//				pst = con.prepareStatement(sql);
+//				ResultSet rs ;
+//				rs = pst.executeQuery();
+//				rs.next();
+//				resul = rs.getInt(1);				
+				
+				ResultSet rsKeys = pst.getGeneratedKeys();
+				if (rsKeys.next()) {
+					resul = rsKeys.getInt(1);
+				} else {
+					throw new Exception("No se ha podido generar ID");
+				}
+			}	    		    		
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
@@ -76,9 +89,10 @@ public class DAOPersona implements IDAOPersona {
 		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test` WHERE `id`="+id;
-	    	ResultSet rs = st.executeQuery (sql);
+			String sql = "SELECT * FROM `test` WHERE `id`=?;";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setInt(1, id);
+	    	ResultSet rs = pst.executeQuery();
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>	    	   	
 	    	while(rs.next()){
@@ -98,9 +112,15 @@ public class DAOPersona implements IDAOPersona {
 		Persona p = (Persona) o;		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-			String sql = "UPDATE `test` SET `nombre`='" + p.getNombre() + "', `nota`=" + p.getNota() + ", `telefono`='" + p.getTelefono() + "', `fecha`='" + p.getFecha() + "' WHERE `id`=" + p.getId() + ";";
-	    	if ( st.executeUpdate(sql) != 1 ){
+			String sql = "UPDATE `test` SET `nombre`= ? , `nota`= ? , `telefono`= ? , `fecha`= ? WHERE `id`= ? ;";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setString(1, p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());
+			pst.setTimestamp(4, p.getFecha());
+			pst.setInt(5, p.getId());
+			
+	    	if ( pst.executeUpdate() != 1 ){
 				throw new Exception("No se ha podido editar");
 			}			
 	    	resul = true;	    		
@@ -117,7 +137,7 @@ public class DAOPersona implements IDAOPersona {
 		boolean resul = false;
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			String sql = "delete from `test` where id= ?";
+			String sql = "DELETE FROM `test` WHERE id= ?";
 			PreparedStatement pst = con.prepareStatement(sql);
 			pst.setInt(1, id);
 			
@@ -140,9 +160,9 @@ public class DAOPersona implements IDAOPersona {
 		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test` WHERE `nota`>=5 ";
-	    	ResultSet rs = st.executeQuery (sql);
+			String sql = "SELECT * FROM `test` WHERE `nota`>=5 ";
+			PreparedStatement pst = con.prepareStatement(sql);	    	
+	    	ResultSet rs = pst.executeQuery();
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>	    	   	
 	    	while(rs.next()){
@@ -162,9 +182,9 @@ public class DAOPersona implements IDAOPersona {
 		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test` WHERE `nota`<5 ";
-	    	ResultSet rs = st.executeQuery (sql);
+			String sql = "SELECT * FROM `test` WHERE `nota`<5 ";
+			PreparedStatement pst = con.prepareStatement(sql); 	    	
+	    	ResultSet rs = pst.executeQuery ();
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>	    	   	
 	    	while(rs.next()){

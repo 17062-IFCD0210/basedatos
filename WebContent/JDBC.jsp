@@ -167,6 +167,8 @@
     <script>
     $(document).ready(function() {
         $('#tabla').DataTable({
+       		"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        	"iDisplayLength": 10
         });
     });
     </script>

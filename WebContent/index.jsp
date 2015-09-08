@@ -133,14 +133,22 @@
 												<input type="text" name="longitud" class="form-control" value="<%=p.getFecha()%>" disabled>
 											</div>
 										</div>
+										<div class="row checkbox">
+											<div class="form-group col-md-12">
+												<label> <input type="checkbox" id="check_eliminar<%=+i%>">S&iacute;,
+													estoy seguro. Deseo eliminar la Via seleccionada.
+												</label>
+											</div>
+										</div>
 									</div>
 									<div class="modal-footer">
-										<a href="inicio?accion=2&id=<%=p.getId() %>" id="boton_eliminar" class="btn btn-danger">Eliminar</a>
+										<a href="inicio?accion=2&id=<%=p.getId() %>" class="btn btn-danger disabled boton_eliminar">Eliminar</a>
 										<button type="button" id="boton_cancelar" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 									</div>
 								</div>
 							</div>
- 		         		</div> <!-- END Modal content-->
+						<!-- END Modal content-->
+ 		         		</div>
 					<%
 					} // end for
 					%>
@@ -179,5 +187,11 @@
     <script src="js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+    
+    <script>
+    	$(".modal-body input[type='checkbox']").on('click', function() {
+    		$(".boton_eliminar").toggleClass('disabled');
+    	});
+     </script>
   </body>
 </html>

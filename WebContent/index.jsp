@@ -193,6 +193,7 @@
 						    			<li class="lista_eliminar"><p>Id:<%=p.getId()%></p></li>
 						    			<li class="lista_eliminar"><p> Nombre:<%=p.getNombre()%></p></li>						    			
 						    			<li class="lista_eliminar"><p>Telefono:<%=p.getTelefono()%></p></li>
+						    			<li class="lista_eliminar"><p>Fecha:<%=p.getFecha()%></p></li>
 					    			</ul>
 					  			<div class="modal-footer">						    			
 					    			<a href="inicio?accion=2&id=<%=p.getId()%>" class="btn btn-danger">Eliminar</a>
@@ -219,6 +220,7 @@
 						    			<li class="lista_editar"><p>Id:<%=p.getId()%></p></li>
 						    			<li class="lista_editar"><p> Nombre:<%=p.getNombre()%></p></li>						    			
 						    			<li class="lista_editar"><p>Telefono:<%=p.getTelefono()%></p></li>
+						    			<li class="lista_editar"><p>Telefono:<%=p.getFecha()%></p></li>
 					    			</ul>
 					  			<div class="modal-footer">						    			
 					    			<a href="inicio?accion=1&id=<%=p.getId()%>" class="btn btn-danger">Editar</a>

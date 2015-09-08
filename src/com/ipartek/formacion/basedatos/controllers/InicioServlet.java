@@ -1,8 +1,11 @@
 package com.ipartek.formacion.basedatos.controllers;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -13,205 +16,167 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
 import com.ipartek.formacion.basedatos.modelo.DAOPersona;
-
+import com.ipartek.formacion.basedatos.util.UtilidadesFecha;
 
 
 /**
  * Servlet implementation class InicioServlet
  */
 public class InicioServlet extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 
-	private RequestDispatcher dispatcher = null;       
-	//Modelo DAOPersona
+	private RequestDispatcher dispatcher = null;
+	
+	// Modelo DAOPersona
 	DAOPersona dao = null;
-	
-	//parametros
+
+	// parametros
+	private String pID;
 	private String pAccion;
-	private String pID; 
 	private String pFiltro;
-	
+
 	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
+	public void init(ServletConfig config) throws ServletException {		
+		super.init(config);		
 		dao = new DAOPersona();
 	}
-	
+
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		//Recoger parametros: accion, id, filtro
-		pID = request.getParameter("id");
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		// Recoger Parametros: accion, id, filtro
+		pID     = request.getParameter("id");
 		pAccion = request.getParameter("accion");
 		pFiltro = request.getParameter("filtro");
 		
-		//En funcion del parametro 'accion' realizar la accion
-		// 0: Listar
+		// En funcion del parametro 'accion' realizar la Accion
+		// 0: listar
 		// 1: Detalle
 		// 2: Eliminar
-		// 3:crear nuevo
-
-		//Detalle
+		// 3: CrearNuevo
+		
+		
 		if("1".equals(pAccion)){
-			detalle(request, response);
-			
-		//Eliminar
-		}else if("2".equals(pAccion)){
-			eliminar(request, response);
-			
-		//Nuevo
-		}else if("3".equals(pAccion)){
-			nuevo(request, response);
-			
-		//Listar
-		}else {
-			listar(request, response);
+			detalle(request, response);		
+		}else if("2".equals(pAccion)){		
+			eliminar(request, response);				
+		}else if("3".equals(pAccion)){		
+			nuevo(request, response);			
+		}else{			
+			listar(request, response);			
 		}
 		
-		//forward
 		dispatcher.forward(request, response);
-				
 		
-	/*	
-		
-		ArrayList<Object> alumnos = new ArrayList<Object>();
-		
-		try{
-			//recoger parametros
-			String filtro = request.getParameter("filtro");
-			
-			//llamar al modelo
-			DAOPersona dao = new DAOPersona();
-			if("0".equals(filtro)){
-				alumnos=dao.getAprobados();
-			}else if ("1".equals(filtro)){
-				alumnos=dao.getSuspendidos();
-			}else{
-				alumnos = dao.getAll();
-			}
-	      	
-			//cargar atributos en request
-	      	request.setAttribute("alumnos", alumnos);
-	      	
-		}catch ( Exception e){			
-			e.printStackTrace();
-			request.setAttribute("msg", e.getMessage() );
-		}	      	
-		//forward
-		request.getRequestDispatcher("index.jsp").forward(request, response);
-*/			
 	}
 
 	
 
 	private void nuevo(HttpServletRequest request, HttpServletResponse response) {
-	 	dispatcher = request.getRequestDispatcher("form.jsp");
-		
+		dispatcher = request.getRequestDispatcher( "form.jsp" );				
 	}
 
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
+		
 		ArrayList<Object> alumnos = new ArrayList<Object>();
 		
-		if("0".equals(pFiltro)){
-			alumnos=dao.getAprobados();
-		}else if ("1".equals(pFiltro)){
-			alumnos=dao.getSuspendidos();
+		if ( "0".equals(pFiltro)){
+			alumnos = dao.getAprobados();
+		}else if ( "1".equals(pFiltro)){
+			alumnos = dao.getSuspendidos();
 		}else{
 			alumnos = dao.getAll();
-		}
-      	
-		//cargar atributos en request
-      	request.setAttribute("alumnos", alumnos);
-      	
-      	dispatcher = request.getRequestDispatcher("index.jsp");
-      	
+		}	
+		
+		request.setAttribute("alumnos", alumnos );		
+		
+		dispatcher = request.getRequestDispatcher( "index.jsp" );		
+		
 	}
 
 	private void eliminar(HttpServletRequest request,
 			HttpServletResponse response) {
 		
 		int id = Integer.parseInt(pID);
-		if(dao.delete(id)){
-			request.setAttribute("msg",	"Persona eliminada:"+"-->"+ "ID:"+ " "+ id);
+		
+		if ( dao.delete(id) ){
+			request.setAttribute("msg", "Persona eliminada");
 		}else{
-			request.setAttribute("msg",	"No se ha podido eliminar");
+			request.setAttribute("msg", "No se ha podido ELIMINAR");
 		}
-		//dispatcher = request.getRequestDispatcher("inicio?accion=0");
+		
 		listar(request, response);
+		
 		
 	}
 
 	private void detalle(HttpServletRequest request,
 			HttpServletResponse response) {
-
-		int id = Integer.parseInt(pID);
-		Object alumno = dao.getById(id);
-      	request.setAttribute("alumno", alumno);     	
-      	dispatcher = request.getRequestDispatcher("form.jsp");
+		
+			int id = Integer.parseInt(pID);
+			Object alumno = dao.getById(id);				
+			request.setAttribute("alumno", alumno );					
+			dispatcher = request.getRequestDispatcher( "form.jsp" );		
 		
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//doGet(request, response);
-		
-		String sql=null;
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
 		try{
-			//recoger parametros 
-			pID=request.getParameter("id");
-			System.out.println(pID);
-			String sNombre = request.getParameter("nombre");
-			String sNota = request.getParameter("nota");
-			String sTelefono= request.getParameter("telefono");
-			String sFecha = request.getParameter("fecha");
-			Date pFecha;
-			if(request.getParameter("fecha")!=null){
-				//pFecha = Date.parse(request.getParameter("fecha"));
-			}			
-			//mapear persona
-	    	Persona p = new Persona( sNombre );	    	
-    		
-    		//p.setFecha(pFecha);
-	    	p.setId(Integer.parseInt(pID));
-    		p.setTelefono(sTelefono);
-    		p.setNota(Float.parseFloat(sNota));
-    		
-    		//crear nueva persona
-    		if ("-1".equals(pID)){
-    			if(dao.save(p) !=-1){
-    				int j = dao.save(p);
-    				request.setAttribute("msg","Creado con exito:" +" "+  "ID:"+ j+" "+ "Nombre:"+ p.getNombre() );
-    				
-    			}else{
-    				request.setAttribute("msg","NO Creado con exito");
-    			}
-    		//modificar persona
-    		}else{
-    			if(dao.update(p)){
-    				request.setAttribute("msg", "ID:"+ p.getId() +" "+ "Nombre:"+ p.getNombre()+  " "+ "Mofificado con exito");
-    			}else{
-    				request.setAttribute("msg", "NO Mofificado con exito");
-    			}
-    		}
-    		
-    		
+			//recoger parametros
+			String sNombre   = request.getParameter("nombre");
+			String sNota     = request.getParameter("nota");
+			String sTelefono = request.getParameter("telefono");
+			String sFecha    = request.getParameter("fecha");
+			String sID       = request.getParameter("id");
 			
-    	//	dispatcher = request.getRequestDispatcher("inicio?accion=0");
+			//mapear Persona
+			Persona p = new Persona(sNombre);
+			p.setId( Integer.parseInt(sID));
+			p.setNota( Float.parseFloat(sNota));
+			p.setTelefono( sTelefono );
+			p.setFecha( UtilidadesFecha.stringToTimeStamp(sFecha));
+						
+			//crear nueva Persona
+			if ( "-1".equals(sID) ){
+				if ( dao.save(p) != -1 ){
+					request.setAttribute("msg", "Creado nuevo registro");
+				}else{
+					request.setAttribute("msg", "No se ha creado el nuevo registro");	
+				}
+			//modificar persona	
+			}else{
+				
+				if ( dao.update(p) ){
+					request.setAttribute("msg", p.getNombre() + " Modificado con Exito" );
+				}else{
+					request.setAttribute("msg", "No se ha realizado la modificación para " + p.getNombre() );
+				}
+			}
+			
+			
 			
 		}catch ( Exception e){
 			e.printStackTrace();
-			request.setAttribute("msg", e.getMessage() + "SQL: "+sql);
-			//dispatcher = request.getRequestDispatcher("form.jsp");
+			request.setAttribute("msg", e.getMessage() );
+			
 		}finally{
-			//volver a la index vamos a listar
-			listar(request,response);
+			//volver index
+			listar(request, response);
 			dispatcher.forward(request, response);
+		}	
 		
-		}
+		
 	}
 
 }

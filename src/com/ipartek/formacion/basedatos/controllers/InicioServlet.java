@@ -105,7 +105,7 @@ public class InicioServlet extends HttpServlet {
 		int id = Integer.parseInt(pID);
 		
 		if ( dao.delete(id) ){
-			request.setAttribute("msg", "Persona eliminada");
+			request.setAttribute("msg", "Persona eliminada:"+ " " + id);
 		}else{
 			request.setAttribute("msg", "No se ha podido ELIMINAR");
 		}
@@ -150,15 +150,15 @@ public class InicioServlet extends HttpServlet {
 			//crear nueva Persona
 			if ( "-1".equals(sID) ){
 				if ( dao.save(p) != -1 ){
-					request.setAttribute("msg", "Creado nuevo registro");
+					request.setAttribute("msg", "Creado nuevo registro:");
 				}else{
-					request.setAttribute("msg", "No se ha creado el nuevo registro");	
+					request.setAttribute("msg", "No creado el nuevo registro");	
 				}
 			//modificar persona	
 			}else{
 				
 				if ( dao.update(p) ){
-					request.setAttribute("msg", p.getNombre() + " Modificado con Exito" );
+					request.setAttribute("msg",p.getId()+ p.getNombre() + " Modificado con Exito" );
 				}else{
 					request.setAttribute("msg", "No se ha realizado la modificación para " + p.getNombre() );
 				}

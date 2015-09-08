@@ -35,8 +35,13 @@ body {
   text-shadow: 0 1px 3px rgba(0,0,0,.5);
 }
 
+<<<<<<< HEAD
 input{
 	color: #000000;
+=======
+input {
+	color: #000;
+>>>>>>> branch 'master' of https://github.com/17062-IFCD0210/basedatos.git
 }
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */

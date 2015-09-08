@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <%@page import="com.ipartek.formacion.basedatosProfe.modelo.DataBaseHelper"%>
 <%@page import="com.ipartek.formacion.basedatosProfe.bean.Persona"%>
 <%@page import="java.util.ArrayList"%>
@@ -6,6 +7,12 @@
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
+=======
+
+<%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
+<%@page import="java.util.ArrayList"%>
+
+>>>>>>> branch 'master' of https://github.com/17062-IFCD0210/basedatos.git
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -17,6 +24,11 @@
 		<link rel="stylesheet" type="text/css" href="css/styles.css?v=1.0">
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+<<<<<<< HEAD
+=======
+    <link href="css/cover.css" rel="stylesheet">
+    <link href="css/basedatos.css" rel="stylesheet">
+>>>>>>> branch 'master' of https://github.com/17062-IFCD0210/basedatos.git
 
 	<!-- Custom styles for this template -->
     <link href="css/cover.css" rel="stylesheet">
@@ -49,6 +61,7 @@
           </div>
 
           <div class="inner cover">
+<<<<<<< HEAD
             <h1 class="cover-heading">Conexión Base Datos</h1>
             
             <%
@@ -58,6 +71,86 @@
             	}
             
             %>
+=======
+            <h1 class="cover-heading">Aprende Base Datos</h1>
+            <% //Mostrar mensaje
+              	if(request.getAttribute("msg") != null) {
+              		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+              	}
+              
+              %>
+            <ul class="blanco">
+            	<li>Servidor: <small>localhost</small></li>
+            	<li>Base de Datos: <small>skalada</small></li>
+            	<li>Puerto: <small>3306</small></li>
+            	<li>Usuario: <small>root</small></li>
+            	<li>Password: </li>
+            	<li>Tabla: <small>test</small></li>
+            </ul>
+            
+           
+            
+            	<table class="tabla_blanco">
+	            	<thead>
+	            		<tr>	
+	            			<th>Nombre</th>
+	            			<th>Nota</th>
+	            			<th>Telefono</th>
+	            			<th>Fecha</th>
+	            			<th>Editar</th>
+	            			<th>Eliminar</th>
+	            		</tr>
+	            	</thead>
+	            	
+	            	
+	            	
+	            	<tbody>	
+		            	<%    	
+		            		//recuperar atributo de listado personas
+		            		ArrayList<Persona> alumnos = 
+		            		      (ArrayList<Persona>)request.getAttribute("alumnos");
+		            		if ( alumnos == null ){ 
+		            			alumnos = new ArrayList<Persona>();
+		            		}
+		            		
+		            		Persona p = null;
+		            		for (int i=0; i < alumnos.size(); i++){
+		            			p = alumnos.get(i);
+		            			%>
+		            				<tr>            					
+		            					<td><%=p.getNombre()%></td>
+		            					<td><%=p.getNota()%></td>
+		            					<td><%=p.getTelefono()%></td>
+		            					<td><%=p.getFecha()%></td>
+		            					<td><a href="inicio?id=<%=p.getId()%>&accion=1">E</a></td>
+		            					<td><a href="inicio?id=<%=p.getId()%>&accion=2">X</a></td>
+		            				</tr>            			
+		            			<%
+		            		}//end for
+		            	
+		            	%>
+            		</tbody>
+            		
+            		<tfoot>
+	            		<tr>
+	            			<td colspan="6">Mostrando: <%=alumnos.size()%> </td>
+	            		</tr>
+	            	</tfoot>
+	            	
+	            	
+            	</table>
+            	
+            	<br>
+            	<a class="btn btn-primary btn-xs" href="inicio?filtro=0" role="button">Aprobados</a>
+            	<a class="btn btn-primary btn-xs" href="inicio?filtro=1" role="button">Suspendidos</a>
+            	<a class="btn btn-primary btn-xs" href="inicio"          role="button">Todos</a>
+            	<a class="btn btn-success btn-xs" href="inicio?accion=3" role="button">Crear</a>
+            	
+            	<br>
+            	
+           
+            
+>>>>>>> branch 'master' of https://github.com/17062-IFCD0210/basedatos.git
             
             
             <div id="bbdd">

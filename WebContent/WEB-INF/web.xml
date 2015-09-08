@@ -4,6 +4,7 @@
   <welcome-file-list>
     <welcome-file>inicio</welcome-file>
   </welcome-file-list>
+<<<<<<< HEAD
   <servlet>
     <description>Servlet de prueba para insertar un nuevo registro en la tabla test</description>
     <display-name>insertarServlet</display-name>
@@ -44,4 +45,18 @@
     <servlet-name>InicioServlet</servlet-name>
     <url-pattern>/inicio</url-pattern>
   </servlet-mapping>
+=======
+  
+  <servlet>
+    <description></description>
+    <display-name>InicioServlet</display-name>
+    <servlet-name>InicioServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.basedatos.controllers.InicioServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InicioServlet</servlet-name>
+    <url-pattern>/inicio</url-pattern>
+  </servlet-mapping>
+  
+>>>>>>> branch 'master' of https://github.com/17062-IFCD0210/basedatos.git
 </web-app>

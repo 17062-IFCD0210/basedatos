@@ -98,7 +98,7 @@
 									for (int i = 0; i < alumnos.size(); i++) {
 										p = alumnos.get(i);
 									%>
-									<tr>
+									<tr class="mark">
 										<td><%=p.getId()%></td>
 										<td><%=p.getNombre()%></td>
 										<td><%=p.getNota()%></td>
@@ -111,7 +111,7 @@
 											data-nota="<%=p.getNota()%>"
 											data-telefono="<%=p.getTelefono()%>"
 											data-fecha="<%=p.getFecha()%>" data-id="<%=p.getId()%>"><span
-												class='glyphicon glyphicon-trash editar' aria-hidden='true'></span></a></td>
+												class='glyphicon glyphicon-trash borrar' aria-hidden='true'></span></a></td>
 									</tr>
 									<%
 										}//end for

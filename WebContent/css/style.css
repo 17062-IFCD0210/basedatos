@@ -39,3 +39,7 @@
 .modal input{
 	text-align: center;
 }
+
+.mark:hover{
+	background-color: #777676 !important;
+}

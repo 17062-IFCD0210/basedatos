@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
@@ -119,6 +120,10 @@ public class DAOPersona implements IDAOPersona {
 		Boolean resul = false;
 		try {
 			Persona p = (Persona) o;
+			if (p.getFecha() == null) {
+				java.util.Date date = new java.util.Date();
+				p.setFecha(new Timestamp(date.getTime()));
+			}
 			Connection con = DataBaseHelper.getConnection();
 			String sql = "UPDATE `test` SET `nombre`=?, `nota`=?, `telefono` =?, `fecha` = ? WHERE `id`=?";
 			PreparedStatement pst = con.prepareStatement(sql);

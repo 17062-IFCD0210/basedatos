@@ -98,8 +98,7 @@
 	          		<label for="date">Fecha: </label><br>
 	          		<input type="date" max="2015-12-31" min="2012-01-01" name="fecha"
 	          			   value="<%=p.getFecha()%>"
-	          			   required
-	          				/>
+	          			   >
 	          		</p>
 	          		
 	          		<br>

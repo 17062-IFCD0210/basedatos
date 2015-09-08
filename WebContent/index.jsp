@@ -71,7 +71,7 @@
             <br>
             <br>
                      
-            <p class="lead">Registros:</p>
+            <p class="lead"><i>Registros:</i></p>
             
             	<table>
             		<thead>

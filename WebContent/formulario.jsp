@@ -38,8 +38,8 @@
 						<nav>
 							<ul class="nav masthead-nav">
 								<li><a href="index.jsp">Home</a></li>
-								<li><a href="listar">JDBC</a></li>
-								<li><a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>">Patron DAO</a></li>
+								<li><a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>">JDBC</a></li>
+								<li><a href="#">Patron DAO</a></li>
 								<li><a href="#">Hibernate</a></li>
 							</ul>
 						</nav>

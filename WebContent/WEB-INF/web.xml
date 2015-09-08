@@ -4,46 +4,7 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <description>Servlet para insertar un nuevo registro en la tabla Test</description>
-    <display-name>InsertarServlet</display-name>
-    <servlet-name>InsertarServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatos.controllers.InsertarServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>InsertarServlet</servlet-name>
-    <url-pattern>/insertar</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>EliminarServlet</display-name>
-    <servlet-name>EliminarServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatos.controllers.EliminarServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>EliminarServlet</servlet-name>
-    <url-pattern>/eliminar</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>EditarServlet</display-name>
-    <servlet-name>EditarServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatos.controllers.EditarServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>EditarServlet</servlet-name>
-    <url-pattern>/editar</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ListarServlet</display-name>
-    <servlet-name>ListarServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatos.controllers.ListarServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ListarServlet</servlet-name>
-    <url-pattern>/listar</url-pattern>
-  </servlet-mapping>
+  
   <servlet>
     <description></description>
     <display-name>InicioPersonaServlet</display-name>
@@ -54,4 +15,5 @@
     <servlet-name>InicioPersonaServlet</servlet-name>
     <url-pattern>/inicio_persona</url-pattern>
   </servlet-mapping>
+  
 </web-app>

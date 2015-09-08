@@ -40,8 +40,8 @@
 						<nav>
 							<ul class="nav masthead-nav">
 								<li><a href="index.jsp">Home</a></li>
-								<li class="active"><a href="listar">JDBC</a></li>
-								<li><a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>">Patron DAO</a></li>
+								<li><a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>">JDBC</a></li>
+								<li><a href="#">Patron DAO</a></li>
 								<li><a href="#">Hibernate</a></li>
 							</ul>
 						</nav>
@@ -49,7 +49,7 @@
 				</div>
 
 				<div class="inner cover">
-					<h1 class="cover-heading">JDBC - Java Database Connectivity</h1>
+					<h1 class="cover-heading">Base de Datos BBDD</h1>
 					<div>
 						<%
 							//Mostrar mensajes
@@ -94,8 +94,28 @@
 										<td><%=p.getNota()%></td>
 										<td><%=p.getTelefono()%></td>
 										<td><%=p.getFecha()%></td>
-										<td><span class='icon-trashcan red' data-toggle="modal" data-target="#myModal"></span></a> <a href="editar?id=<%=p.getId()%>"><span class='icon-edit blue'></span></a></td>
-									</tr>										
+										<td><a><span class='icon-trashcan red' data-toggle="modal" data-target="#myModal<%=p.getId()%>"></span></a><a href="inicio_persona?accion=<%=Constantes.ACCION_DETALLE%>&id=<%=p.getId()%>"><span class='icon-edit blue'></span></a></td>
+									</tr>	
+									<!-- Ventana Modal -->
+										<div class="modal fade col-md-6 col-md-offset-3" id="myModal<%=p.getId()%>" role="dialog">
+										<div class="modal-dialog">
+									  
+									    <!-- Modal content-->
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+														<h2 class="modal-title text-center text-danger"><i class="fa fa-exclamation-triangle"></i> ELIMINAR REGISTRO</h2>
+									  			</div>
+									  			<div class="modal-body">
+									    			<span class="black">¿Estas seguro de que deseas eliminar el registro?</span> 
+									  			</div>
+									  			<div class="modal-footer">						    			
+									    			<a href="inicio_persona?accion=<%=Constantes.ACCION_ELIMINAR%>&id=<%=p.getId()%>" id ="boton_eliminar" class="btn btn-danger">Eliminar</a>
+									      			<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+									      		</div>
+									    	</div> <!-- END Modal content-->
+									  	</div>
+									</div> <!-- END Ventana Modal -->									
 								<%
 									}	//END for									
 								%>
@@ -108,38 +128,15 @@
 							</table>							
 						</div> <!-- END .resultado -->
 												
-						<!-- Ventana Modal -->
-						<div class="modal fade col-md-6 col-md-offset-3" id="myModal" role="dialog">
-							<div class="modal-dialog">
-						  
-						    <!-- Modal content-->
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal">&times;</button>
-											<h2 class="modal-title text-center text-danger"><i class="fa fa-exclamation-triangle"></i> ELIMINAR REGISTRO</h2>
-						  			</div>
-						  			<div class="modal-body">
-						    			<span class="black">¿Estas seguro de que deseas eliminar el registro?</span> 
-						  			</div>
-						  			<div class="modal-footer">						    			
-						    			<a href="eliminar?id=<%=p.getId()%>" id ="boton_eliminar" class="btn btn-danger">Eliminar</a>
-						      			<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-						      		</div>
-						    	</div> <!-- END Modal content-->
-						  	</div>
-						</div> <!-- END Ventana Modal -->
-						
-						
-												
 					</div>
 					
-					<a href="form.jsp"><button class="btn-lg">Nuevo Registro</button></a>
+					<a href="inicio_persona?accion=<%=Constantes.ACCION_NUEVO%>"><button class="btn-lg">Nuevo Registro</button></a>
 					
 					<div>	
 						<br>					
-						<a href="listar?filtro=1"><button class="btn-lg">Aprobados</button></a>
-						<a href="listar?filtro=2"><button class="btn-lg">Suspendidos</button></a>
-						<a href="listar"><button class="btn-lg">Todos</button></a>					
+						<a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>&filtro=1"><button class="btn-lg">Aprobados</button></a>
+						<a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>&filtro=2"><button class="btn-lg">Suspendidos</button></a>
+						<a href="inicio_persona?accion=<%=Constantes.ACCION_LISTAR%>"><button class="btn-lg">Todos</button></a>					
 					</div>
 									
 				</div>
@@ -167,8 +164,6 @@
     <script>
     $(document).ready(function() {
         $('#tabla').DataTable({
-       		"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        	"iDisplayLength": 10
         });
     });
     </script>

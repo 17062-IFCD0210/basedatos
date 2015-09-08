@@ -111,7 +111,7 @@ public class InicioPersonaServlet extends HttpServlet {
 			request.setAttribute("alumnos", dao.getAll());
 		}
 		
-		dispatcher = request.getRequestDispatcher("DAO.jsp");		
+		dispatcher = request.getRequestDispatcher("JDBC.jsp");		
 	}
 
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) {

@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
@@ -30,7 +29,7 @@ public class DAOPersona implements IDAOPersona{
 			Connection con = DataBaseHelper.getConnection();
 			String sql = "SELECT * FROM `test` ";
 			PreparedStatement pst = con.prepareStatement(sql); 
-	    	ResultSet rs = pst.executeQuery (sql);
+	    	ResultSet rs = pst.executeQuery ();
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>	    	
 	    	while(rs.next()) {
@@ -50,23 +49,33 @@ public class DAOPersona implements IDAOPersona{
 
 	@Override
 	public int save(Object o) {
+		int resul = -1;
 		try{
 			Persona p = (Persona) o;
 			Connection con = DataBaseHelper.getConnection();
-			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES ('" + p.getNombre() + "', " + p.getNota() + ", '" + p.getTelefono() + "', '" + p.getFecha() + "');";
-			PreparedStatement st = con.prepareStatement(sql);
+			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES (?,?,?,?);";
+			PreparedStatement pst = con.prepareStatement(sql);
+			
+			pst.setString(1, p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());
+			pst.setTimestamp(4, p.getFecha());
 	    	
-	    	if(st.executeUpdate() != 1) {
-	    		throw new Exception("No se ha realizado insercion " + sql);
-	    	}
-	    		    	
+	    	if(pst.executeUpdate() == 1) {
+	    		ResultSet rsKeys = pst.getGeneratedKeys();
+	    		if(rsKeys.next()) {
+	    			rsKeys.getInt(1);
+	    		} else {
+	    			throw new Exception("No se ha realizado insercion " + sql);
+	    		}
+	    	}    	
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
 		
-		return 0;
+		return resul;
 	}
 
 	@Override
@@ -74,9 +83,12 @@ public class DAOPersona implements IDAOPersona{
 		Persona p = null;
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			String sql = "SELECT * FROM `test` WHERE id=" + id + ";";
-			PreparedStatement st = con.prepareStatement(sql); 
-	    	ResultSet rs = st.executeQuery (sql);
+			String sql = "SELECT * FROM `test` WHERE id= ?";
+			PreparedStatement pst = con.prepareStatement(sql);
+			
+			pst.setInt(1, id);
+			
+	    	ResultSet rs = pst.executeQuery ();
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>	    	
 	    	while(rs.next()) {
@@ -95,13 +107,21 @@ public class DAOPersona implements IDAOPersona{
 
 	@Override
 	public boolean update(Object o) {
+		boolean resul = false;
 		try{
 			Persona p = (Persona) o;
 			Connection con = DataBaseHelper.getConnection();
-			String sql = "UPDATE test SET nombre='" + p.getNombre() + "', nota=" + p.getNota() + ", telefono='" + p.getTelefono() + "', fecha='" + p.getFecha() + "' WHERE id=" + p.getId() + ";";
-			PreparedStatement st = con.prepareStatement(sql); 
-	    	if(st.executeUpdate() != 1) {
-	    		throw new Exception("No se ha realizado actualizacion " + sql);
+			String sql = "UPDATE test SET nombre= ?, nota= ?, telefono=?, fecha=? WHERE id=?;";
+			PreparedStatement pst = con.prepareStatement(sql);
+			
+			pst.setString(1, p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());
+			pst.setTimestamp(4, p.getFecha());
+			pst.setInt(5, p.getId());
+			
+	    	if(pst.executeUpdate() == 1) {
+	    		resul = true;
 	    	}
 	    		    	
 		}catch(Exception e){
@@ -110,38 +130,20 @@ public class DAOPersona implements IDAOPersona{
 			DataBaseHelper.closeConnection();
 		}
 		
-		return true;
+		return resul;
 	}
 
 	@Override
 	public boolean delete(int id) {
-		/**
-		 * Forma con Statement
-		 */
-//		try{
-//			Connection con = DataBaseHelper.getConnection();
-//			Statement st = con.createStatement(); 
-//	    	String sql = "DELETE FROM test WHERE id=" + id + ";";
-//	    	if(st.executeUpdate(sql) != 1) {
-//	    		throw new Exception("No se ha realizado eliminacion " + sql);
-//	    	}    	
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}finally{
-//			DataBaseHelper.closeConnection();
-//		}
-		
-		/**
-		 * Forma con PreparedStatement
-		 */
+		boolean resul = false;
 		try {
 			Connection con = DataBaseHelper.getConnection();
 			String sql = "DELETE FROM `test` WHERE id = ?";
 			PreparedStatement pst = con.prepareStatement(sql);
 			pst.setInt(1, id);
 			
-			if(pst.executeUpdate() != 1) {
-	    		throw new Exception("No se ha realizado eliminacion " + sql);
+			if(pst.executeUpdate() == 1) {
+	    		resul = true;
 	    	}
 			
 		} catch(Exception e) {
@@ -150,7 +152,7 @@ public class DAOPersona implements IDAOPersona{
 			DataBaseHelper.closeConnection();
 		}
 		
-		return true;
+		return resul;
 	}
 
 	@Override
@@ -158,9 +160,12 @@ public class DAOPersona implements IDAOPersona{
 		ArrayList<Object> resul = new ArrayList<Object>();
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
-	    	String sql = "SELECT * FROM `test` WHERE nota>=5;";
-	    	ResultSet rs = st.executeQuery (sql);
+	    	String sql = "SELECT * FROM `test` WHERE nota>=?;";
+	    	PreparedStatement pst = con.prepareStatement(sql); 
+	    	
+	    	pst.setFloat(1, 5f);
+	    	
+	    	ResultSet rs = pst.executeQuery();
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>    	
 	    	while(rs.next()){
@@ -182,11 +187,14 @@ public class DAOPersona implements IDAOPersona{
 		ArrayList<Object> resul = new ArrayList<Object>();
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			String sql = "SELECT * FROM `test` WHERE nota<5;";
-			PreparedStatement st = con.prepareStatement(sql); 
-	    	ResultSet rs = st.executeQuery (sql);
+	    	String sql = "SELECT * FROM `test` WHERE nota<?;";
+	    	PreparedStatement pst = con.prepareStatement(sql); 
 	    	
-	    	//mapeo resultSet => ArrayList<Persona>   	
+	    	pst.setFloat(1, 5f);
+	    	
+	    	ResultSet rs = pst.executeQuery();
+	    	
+	    	//mapeo resultSet => ArrayList<Persona>    	
 	    	while(rs.next()){
 	    		resul.add(mapeo(rs));
 	    	}	

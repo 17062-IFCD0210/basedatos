@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -49,8 +51,19 @@ public class DAOPersona implements IDAOPersona{
 
 	@Override
 	public int save(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
+		Object resul = new Object();
+		try{
+			
+	    	Connection conexion = DriverManager.getConnection ("jdbc:mysql://localhost/skalada","root", "");
+	    	//Crear SQL
+	    	Statement st = conexion.createStatement();
+	    	String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES ('" + sql + "', " + sql + ", '" + sql + "');";
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally{
+			DataBaseHelper.closeConnection();
+		}
+		return resul; 
 	}
 
 	@Override
@@ -77,8 +90,26 @@ public class DAOPersona implements IDAOPersona{
 
 	@Override
 	public boolean update(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+	
+			boolean resul = false;
+			
+			try {
+				Connection con = DataBaseHelper.getConnection();
+				Statement st = con.createStatement(); 
+		    	String sql = "UPDATE `test` SET `nombre`, `nota`, `telefono` WHERE nombre= ?, nota=?, telefono=? ";
+		    	ResultSet rs = st.executeQuery (sql);
+				
+				if ( st.executeUpdate(sql) == 1){
+					resul=true;
+				}			
+				
+			} catch (Exception e) {			
+				e.printStackTrace();
+			}finally{
+				DataBaseHelper.closeConnection();
+			}
+			
+			return resul;
 	}
 
 	@Override
@@ -88,10 +119,11 @@ public class DAOPersona implements IDAOPersona{
 		
 		try {
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement();
-			String sql = "DELETE FROM `test` WHERE  `id`=" + id;
+			String sql = "DELETE FROM `test` WHERE id= ?";
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setInt(1, id);
 			
-			if ( st.executeUpdate(sql) == 1){
+			if ( pst.executeUpdate() == 1){
 				resul=true;
 			}			
 			
@@ -100,7 +132,6 @@ public class DAOPersona implements IDAOPersona{
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
-		
 		
 		return resul;
 	}

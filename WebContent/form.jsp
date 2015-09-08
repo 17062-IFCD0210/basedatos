@@ -30,7 +30,20 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Insertar nuevo registro</h3> 
+              <a href="inicio" id="volver" class="btn btn-info">Volver</a>
+              
+            <%
+			
+				Persona p = (Persona)request.getAttribute("alumno");
+				String titulo = "Insertar Nuevo Registro";
+				if ( p == null ){
+					 p = new Persona("");
+				}else{
+					titulo = "Modificar a " + p.getNombre();
+				}
+			%>
+              
+              <h3 class="masthead-brand"><%=titulo%></h3> 
               
               <% //mostrar mensajes
               	if( request.getAttribute("msg")!= null ){
@@ -42,20 +55,11 @@
                          
             </div>
           </div>
-			
-			<%
-		
-			Persona p = (Persona)request.getAttribute("alumno");
-			if ( p == null ){
-				 p = new Persona("");
-			}
-		
-			%>
 
 
           <div class="inner cover">
           	
-          	<form action="insertar" method="post">
+          	<form action="inicio" method="post">
           		<fieldset>
 					<legend>Datos Registro</legend>
 	          		<p>
@@ -74,6 +78,7 @@
 					<p>
 					<label for="nota">Nota: </label><br>
 					<input type="text" id="nota" name="nota"
+						   value="<%=p.getNota()%>"
 					       placeholder="Tu nota de 0-10"
 					       required				        
 						   >
@@ -83,6 +88,7 @@
 					<label for="telefono">Tel&eacute;fono: </label><br>
 	    			<input type="tel" 
 	    				   id="telefono" name="telefono" 
+	    				   value="<%=p.getTelefono()%>"
 	    				   required
 	    				   placeholder="Tu telefono"
 	    				   >
@@ -90,16 +96,24 @@
 	          		
 	          		<br>
 	          		<p>
-	          		<label for="date">Fecha: </label>
+	          		<label for="date">Fecha: </label><br>
 	          		<input type="date" max="2015-12-31" min="2012-01-01" name="fecha"
-	          				required
+	          			   value="<%=p.getFecha()%>"
+	          			   required
 	          				/>
 	          		</p>
 	          		
 	          		<br>
-	          		<input type="submit" value="Crear">
+	          		<!-- Pasamos el atributo id hidden para que no se pueda visualizar -->
+	          		<input type="hidden" name ="id" value="<%=p.getId()%>">
 	          		<input type="reset"  value="Limpiar">
-	          	
+	          		
+	          		<% if( p.getId() == -1){%>
+	          			<input type="submit" value="Crear">
+	          		<%}else{ %>
+	          			<input type="submit" value="Modificar">
+	          		<%} %>
+	          		
           		</fieldset>
           	</form>
                                      

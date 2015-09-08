@@ -110,9 +110,9 @@ public class InicioServlet extends HttpServlet {
 			int id = Integer.parseInt( pID );
 			
 			if ( dao.delete( id ) ){
-				request.setAttribute("msg", "Elimnado con exito");
+				request.setAttribute("msg", "Eliminado con exito");
 			}else{
-				request.setAttribute("msg", "NO  se ha podido Elimnar");
+				request.setAttribute("msg", "No se ha podido Eliminar");
 			}
 			
 			listar(request, response);
@@ -139,6 +139,44 @@ public class InicioServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
+		try{
+		//recoger parametros copiar los names de la form.jsp para no confuncirnos
+		String sNombre 		= request.getParameter("nombre");
+		String sNota 		= request.getParameter("nota");
+		String sTelefono 	= request.getParameter("telefono");
+		String sFecha 		= request.getParameter("fecha");
+		String sID			= request.getParameter("id");
+		
+		//mapear persona
+		Persona p = new Persona(sNombre);
+		p.setId(Integer.parseInt(sID) );
+		p.setNota(Float.parseFloat(sNota) );
+		p.setTelefono(sTelefono);
+		//TODO fecha
+			
+		
+		//crear nueva persona
+		if( "-1".equals(sID) ){
+			dao.save(p);
+			request.setAttribute("msg", "Nueva persona creada");
+		//modificar persona
+		}else{
+			
+			if (dao.update(p) ){
+			request.setAttribute("msg", p.getNombre() + " Persona modificada con exito");
+			}else{
+				request.setAttribute("msg", p.getNombre() + " No se ha realizado la modificacion");
+			}
+		}
+		}catch (Exception e){
+			e.printStackTrace();
+			request.setAttribute("msg", e.getMessage() );
+		}finally{
+			//volver index
+			listar(request, response);
+		}
+		
+	
 	}
 
 }

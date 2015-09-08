@@ -47,3 +47,7 @@ td, th{
 	padding-left: 15px !important;
 	padding-bottom: 4px !important;
 }
+
+tr:hover{
+	background: #FF0000;
+}

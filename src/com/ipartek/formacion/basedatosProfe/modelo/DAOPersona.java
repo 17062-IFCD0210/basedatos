@@ -25,9 +25,11 @@ public class DAOPersona implements IDAOPersona{
 	public ArrayList<Object> getAll(){
 		
 		ArrayList<Object> resul = new ArrayList<Object>();
+		Statement st = null;
+		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
+			st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
 	    	String sql = "SELECT * FROM `test`";
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
@@ -39,7 +41,10 @@ public class DAOPersona implements IDAOPersona{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if (st != null){st.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){e.printStackTrace();}
 		}
 		
 		return resul;
@@ -50,20 +55,30 @@ public class DAOPersona implements IDAOPersona{
 	public int save(Object o) {
 		
 		int resul = -1;
+		PreparedStatement pst = null;
+		ResultSet rsKeys = null;
+		String sql = "";
 		Persona p = null;
 		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES (?, ?, ?);";
-			PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); //Ejecuta la sql y devuelve la key generada, useasé un 1
+			if (p.getFecha() != null){
+				sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES (?, ?, ?, ?);";
+			}else{ //Si es null que se encargue MySQL de generar la fecha actual que es c�mo lo hemos predefinido
+				sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES (?, ?, ?);";
+			}
+			pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); //Ejecuta la sql y devuelve la key generada, useasé un 1
 			p = (Persona)o;
 			pst.setString(1, p.getNombre());
 			pst.setFloat(2, p.getNota());
 			pst.setString(3, p.getTelefono());
+			if (p.getFecha() != null){
+				pst.setTimestamp(4, p.getFecha());
+			}
 			
 			if (pst.executeUpdate() == 1){//Si ha creado un nuevo registro
 				//Para devolver la id
-				ResultSet rsKeys = pst.getGeneratedKeys(); //Guardamos en un ResulSet la tabla que el método getGeneratedKeys() ha generado del nuevo registro
+				rsKeys = pst.getGeneratedKeys(); //Guardamos en un ResulSet la tabla que el método getGeneratedKeys() ha generado del nuevo registro
 				if (rsKeys.next()){ //si hay registros
 					resul = rsKeys.getInt(1); //coge el valor de la primera columna del nuevo registro generado
 				}else{
@@ -74,7 +89,11 @@ public class DAOPersona implements IDAOPersona{
 		}catch (Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if (rsKeys != null){rsKeys.close();}
+				if (pst != null){pst.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){e.printStackTrace();}
 		}
 
 		return resul;
@@ -84,10 +103,11 @@ public class DAOPersona implements IDAOPersona{
 	public Object getById(int id) {
 		
 		Object resul = new Object();
+		Statement st = null;
 		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
+			st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
 	    	String sql = "SELECT * FROM `test` WHERE id=" + id;
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
@@ -99,7 +119,10 @@ public class DAOPersona implements IDAOPersona{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if (st != null){st.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){e.printStackTrace();}
 		}
 		
 		return resul;
@@ -109,17 +132,32 @@ public class DAOPersona implements IDAOPersona{
 	public boolean update(Object o) {
 		
 		boolean resul = false;
+		String sql = "";
+		PreparedStatement pst = null;
 		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			String sql = "UPDATE `test` SET `nombre`= ? , `nota` = ? , `telefono` = ? WHERE `id`= ? ;";
-			PreparedStatement pst = con.prepareStatement(sql); //No permite la inyección de SQL. Es más seguro y es más rápido
-			//Cojo los parámetros y se los envío a la sql en el orden requerido en la propia sql
 			Persona p = (Persona)o; //Casteo
+			
+			if (p.getFecha() != null){
+				sql = "UPDATE `test` SET `nombre`= ? , `nota` = ? , `telefono` = ? , `fecha` = ? WHERE `id`= ? ;";
+			}else{
+				sql = "UPDATE `test` SET `nombre`= ? , `nota` = ? , `telefono` = ? WHERE `id`= ? ;";
+			}
+			
+			pst = con.prepareStatement(sql); //No permite la inyección de SQL. Es más seguro y es más rápido
+			//Cojo los parámetros y se los envío a la sql en el orden requerido en la propia sql
+			
 			pst.setString(1, p.getNombre());
 			pst.setFloat(2, p.getNota());
 			pst.setString(3, p.getTelefono());
-			pst.setInt(4, p.getId());
+			if (p.getFecha() != null){
+				pst.setTimestamp(4, p.getFecha());
+				pst.setInt(5, p.getId());
+			}else{
+				pst.setInt(4, p.getId());
+			}
+			
 			
 			if (pst.executeUpdate() == 1){
 				resul = true;
@@ -128,7 +166,10 @@ public class DAOPersona implements IDAOPersona{
 			}catch (Exception e){ //Si falla que vuelva al form. Sólo se pueden enviar Atributos, parámetros no
 				e.printStackTrace();
 			}finally{
-				DataBaseHelper.closeConnection();
+				try{
+					if (pst != null){pst.close();}
+					DataBaseHelper.closeConnection();
+				}catch(Exception e){e.printStackTrace();}
 			}
 		
 		return resul;
@@ -139,6 +180,7 @@ public class DAOPersona implements IDAOPersona{
 	public boolean delete(int id) {
 		
 		boolean resul = false;
+		PreparedStatement pst = null;
 		
 		try{
 			
@@ -146,7 +188,7 @@ public class DAOPersona implements IDAOPersona{
 	        //String sql = "DELETE FROM `test` WHERE  `id`=" + id;
 	        
 	        String sql = "DELETE FROM `test` WHERE  `id`= ?";
-	        PreparedStatement pst = conexion.prepareStatement(sql); //No permite la inyección de SQL y es más rápido
+	        pst = conexion.prepareStatement(sql); //No permite la inyección de SQL y es más rápido
 	        pst.setInt(1,  id);
 	        
 	        if (pst.executeUpdate() == 1){
@@ -156,7 +198,10 @@ public class DAOPersona implements IDAOPersona{
 		}catch  (Exception e){ //Si falla que vuelva al form. S�lo se pueden enviar Atributos, par�metros no
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if (pst != null){pst.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){e.printStackTrace();}
 		}
 		
 		return resul;
@@ -170,9 +215,11 @@ public class DAOPersona implements IDAOPersona{
 	public ArrayList<Object> getAprobados() {
 
 		ArrayList<Object> resul = new ArrayList<Object>();
+		Statement st = null;
+		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
+			st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
 	    	String sql = "SELECT * FROM `test` WHERE `nota` >= 5.0 ";
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
@@ -184,7 +231,10 @@ public class DAOPersona implements IDAOPersona{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if (st != null){st.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){e.printStackTrace();}
 		}
 		
 		return resul;
@@ -195,9 +245,11 @@ public class DAOPersona implements IDAOPersona{
 	public ArrayList<Object> getSuspendidos() {
 		
 		ArrayList<Object> resul = new ArrayList<Object>();
+		Statement st = null;
+		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
+			st = con.createStatement(); //Se puede inyectar SQL. No es seguro. Usar PreparedStatement
 	    	String sql = "SELECT * FROM `test`  WHERE `nota` < 5.0 ";
 	    	ResultSet rs = st.executeQuery (sql);
 	    	
@@ -209,7 +261,10 @@ public class DAOPersona implements IDAOPersona{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if (st != null){st.close();}
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){e.printStackTrace();}
 		}
 		
 		return resul;

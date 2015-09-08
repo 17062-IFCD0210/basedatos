@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+<%@page import="com.ipartek.formacion.basedatosProfe.util.UtilidadesFecha"%>
 <%@page import="com.ipartek.formacion.basedatosProfe.bean.Persona"%>
 <html lang="es">
   <head>
@@ -92,10 +93,9 @@
 			          		placeholder="Inserta tu teléfono">
 		          	</p>
 		          	<p>Fecha: 
-			          	<input type="text"
-			          		value="<%=alumno.getFecha()%>"
+			          	<input type="datetime-local"
+			          		value="<%=UtilidadesFecha.timestampToString(alumno.getFecha())%>"
 			          		name="fecha"
-			          		required
 			          		tabindex="4"
 			          		placeholder="Inserta la fecha">
 		          	</p>

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ipartek.formacion.basedatosProfe.bean.Persona;
 import com.ipartek.formacion.basedatosProfe.modelo.DAOPersona;
 import com.ipartek.formacion.basedatosProfe.modelo.DataBaseHelper;
+import com.ipartek.formacion.basedatosProfe.util.UtilidadesFecha;
 import com.sun.org.apache.bcel.internal.generic.DASTORE;
 
 /**
@@ -180,6 +181,8 @@ public class InicioServlet extends HttpServlet {
 			p.setId(Integer.parseInt(sId));
 			p.setNota(Float.parseFloat(sNota));
 			p.setTelefono(sTelefono);
+			p.setFecha(UtilidadesFecha.stringToTimeStamp(sFecha));
+			
 			//TODO fecha
 			
 			if ("-1".equals(sId)){ //insertar nueva persona

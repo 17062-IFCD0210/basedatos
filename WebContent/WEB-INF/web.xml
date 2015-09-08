@@ -5,36 +5,6 @@
     <welcome-file>inicio</welcome-file>
   </welcome-file-list>
   <servlet>
-    <description>Servlet de prueba para insertar un nuevo registro en la tabla test</description>
-    <display-name>insertarServlet</display-name>
-    <servlet-name>insertarServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatosProfe.controllers.InsertarServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>insertarServlet</servlet-name>
-    <url-pattern>/insertar</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description>Elimina registro de la tabla test de la base de datos skalada</description>
-    <display-name>eliminarServlet</display-name>
-    <servlet-name>eliminarServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatosProfe.controllers.EliminarServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>eliminarServlet</servlet-name>
-    <url-pattern>/eliminar</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description>Lista la tabla test de la bbdd skalada</description>
-    <display-name>ListarServlet</display-name>
-    <servlet-name>ListarServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatosProfe.controllers.ListarServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ListarServlet</servlet-name>
-    <url-pattern>/Editar</url-pattern>
-  </servlet-mapping>
-  <servlet>
     <description></description>
     <display-name>InicioServlet</display-name>
     <servlet-name>InicioServlet</servlet-name>

@@ -47,6 +47,10 @@ table tr td {
 	border: 2px solid orange;
 }
 
+tr:hover, td:hover {
+	background: orange;
+}
+
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .lead {

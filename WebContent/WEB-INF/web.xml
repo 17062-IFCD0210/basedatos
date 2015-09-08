@@ -5,36 +5,6 @@
     <welcome-file>inicio</welcome-file>
   </welcome-file-list>
   <servlet>
-    <description>Servlet de prueba para insertar un nuevo registro en la tabla test</description>
-    <display-name>InsertarServlet</display-name>
-    <servlet-name>InsertarServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatos.controllers.InsertarServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>InsertarServlet</servlet-name>
-    <url-pattern>/insertar</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description>Controla la eliminacion de registros de la tabla `test`</description>
-    <display-name>EliminarServlet</display-name>
-    <servlet-name>EliminarServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatos.controllers.EliminarServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>EliminarServlet</servlet-name>
-    <url-pattern>/eliminar</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description>Controlador para editar el alumno de la tabla `test`</description>
-    <display-name>EditarServlet</display-name>
-    <servlet-name>EditarServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatos.controllers.EditarServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>EditarServlet</servlet-name>
-    <url-pattern>/editar</url-pattern>
-  </servlet-mapping>
-  <servlet>
     <description></description>
     <display-name>InicioServlet</display-name>
     <servlet-name>InicioServlet</servlet-name>
@@ -44,14 +14,5 @@
     <servlet-name>InicioServlet</servlet-name>
     <url-pattern>/inicio</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ListadoServlet</display-name>
-    <servlet-name>ListadoServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.basedatos.controllers.ListadoServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ListadoServlet</servlet-name>
-    <url-pattern>/listado</url-pattern>
-  </servlet-mapping>
+  
 </web-app>

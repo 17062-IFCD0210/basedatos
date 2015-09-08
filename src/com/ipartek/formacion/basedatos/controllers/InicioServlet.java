@@ -1,10 +1,6 @@
 package com.ipartek.formacion.basedatos.controllers;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -16,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
 import com.ipartek.formacion.basedatos.modelo.DAOPersona;
-import com.ipartek.formacion.basedatos.modelo.DataBaseHelper;
+import com.ipartek.formacion.basedatos.util.UtilidadesFecha;
 
 
 /**
@@ -58,14 +54,15 @@ public class InicioServlet extends HttpServlet {
 		// 0: listar
 		// 1: Detalle
 		// 2: Eliminar
+		// 3: CrearNuevo
 		
 		
 		if("1".equals(pAccion)){
-			detalle(request, response);	
-		
+			detalle(request, response);		
 		}else if("2".equals(pAccion)){		
 			eliminar(request, response);				
-		
+		}else if("3".equals(pAccion)){		
+			nuevo(request, response);			
 		}else{			
 			listar(request, response);			
 		}
@@ -75,6 +72,10 @@ public class InicioServlet extends HttpServlet {
 	}
 
 	
+
+	private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+		dispatcher = request.getRequestDispatcher( "form.jsp" );				
+	}
 
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -96,15 +97,17 @@ public class InicioServlet extends HttpServlet {
 
 	private void eliminar(HttpServletRequest request,
 			HttpServletResponse response) {
-	
-		int pId = Integer.parseInt( pID );
-		if ( dao.delete(pId) ){
-			request.setAttribute("msg", "Eliminado con exito");
+		
+		int id = Integer.parseInt(pID);
+		
+		if ( dao.delete(id) ){
+			request.setAttribute("msg", "Persona eliminada");
 		}else{
-			request.setAttribute("msg", "No eliminado");
+			request.setAttribute("msg", "No se ha podido ELIMINAR");
 		}
-	
+		
 		listar(request, response);
+		
 		
 	}
 
@@ -124,41 +127,50 @@ public class InicioServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
-		try {
-				// Recoger parametros
-				String sNombre   = request.getParameter("nombre");
-				String sNota     = request.getParameter("nota");
-				String sTelefono = request.getParameter("telefono");
-				String sFecha    = request.getParameter("fecha");
-				String sID       = request.getParameter("id");
-				
-				// Mapear persona
-				Persona p = new Persona(sNombre);
-				p.setId(Integer.parseInt(sID));
-				p.setNota(Float.parseFloat(sNota));
-				p.setTelefono(sTelefono);
-					// TODO fecha
-				
-				// Crear nueva persona
-				if ( "-1".equals(sID) ){
-					dao.save(p);
-					
-				// Modificar persona
-				}else {
-					dao.update(p);
+
+		try{
+			//recoger parametros
+			String sNombre   = request.getParameter("nombre");
+			String sNota     = request.getParameter("nota");
+			String sTelefono = request.getParameter("telefono");
+			String sFecha    = request.getParameter("fecha");
+			String sID       = request.getParameter("id");
+			
+			//mapear Persona
+			Persona p = new Persona(sNombre);
+			p.setId( Integer.parseInt(sID));
+			p.setNota( Float.parseFloat(sNota));
+			p.setTelefono( sTelefono );
+			p.setFecha( UtilidadesFecha.stringToTimeStamp(sFecha));
+						
+			//crear nueva Persona
+			if ( "-1".equals(sID) ){
+				if ( dao.save(p) != -1 ){
+					request.setAttribute("msg", "Creado nuevo registro");
+				}else{
+					request.setAttribute("msg", "No se ha creado el nuevo registro");	
 				}
+			//modificar persona	
+			}else{
 				
-				
+				if ( dao.update(p) ){
+					request.setAttribute("msg", p.getNombre() + " Modificado con Exito" );
+				}else{
+					request.setAttribute("msg", "No se ha realizado la modificación para " + p.getNombre() );
+				}
+			}
+			
+			
+			
 		}catch ( Exception e){
 			e.printStackTrace();
-			request.setAttribute( "msg", e.getMessage() );
+			request.setAttribute("msg", e.getMessage() );
 			
 		}finally{
 			//volver index
-			listar(request,response);
-		}
-		
+			listar(request, response);
+			dispatcher.forward(request, response);
+		}	
 		
 		
 	}

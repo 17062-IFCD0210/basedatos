@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.ipartek.formacion.basedatos.util.UtilidadesFecha"%>
 <%@page import="com.ipartek.formacion.basedatos.modelo.DAOPersona"%>
 <%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <html lang="es">
@@ -31,27 +32,30 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Insertar nuevo registro</h3>
+              <a href="inicio" class="btn btn-info">Volver</a>
+              <%
+				Persona p = (Persona)request.getAttribute("alumno");
+              	String titulo = "Insertar nuevo registro";
+				if ( p == null ){
+					p = new Persona("");
+				}else{
+					titulo="Modificar a " + p.getNombre();
+				}
+				
+				%>
+              
+              
+              <h3 class="masthead-brand"><%=titulo%></h3>
               
               <% //Mostrar mensaje
               	if(request.getAttribute("msg") != null) {
               		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
               	}
-              
               %>
               
             </div>
           </div>
 
-		
-			<%
-				Persona p = (Persona)request.getAttribute("alumno");
-				if ( p == null){
-					p = new Persona("");
-					
-				}
-			
-			%>
 
           <div class="inner cover">
           
@@ -86,19 +90,19 @@
          		
          		<label for="fecha">Fecha: </label>
          		<br>
-         		<input type="date" 
+         		<input type="datetime-local" 
          				name="fecha"
-         				value="<%=p.getTelefono()%>">
+         				value="<%=UtilidadesFecha.timestampToString(p.getFecha())%>">
          		<br><br>
          		
          		<input type="hidden" name="id" value="<%=p.getId()%>">
 
-						<input type="reset" value="Limpiar">  
+						<input type="reset" value="Limpiar" class="btn btn-warning">  
 						
 						<%if (p.getId() == -1) {%>       		
-         					<input type="submit" value="Crear">
+         					<input type="submit" value="Crear" class="btn btn-success">
 						<%}else {%>
-							<input type="submit" value="Modificar">
+							<input type="submit" value="Modificar" class="btn btn-success">
 						<%}%>
 
          	</form>

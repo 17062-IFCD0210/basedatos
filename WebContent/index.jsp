@@ -51,12 +51,7 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">Aprende Base Datos</h1>
-            <% //Mostrar mensaje
-              	if(request.getAttribute("msg") != null) {
-              		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
-              	}
-              
-              %>
+            
               <div class="tablaconexion">
 	            <ul>
 	            	<li>Servidor: <small>localhost</small></li>
@@ -68,7 +63,7 @@
 	            </ul>
            	  </div>
            
-             	<a class="btn btn-warning btn-xs" href="form.jsp" role="button">Insertar nuevo registro</a>
+             	<a class="btn btn-success btn-xs" href="inicio?accion=3" role="button">Crear nuevo registro</a>
              	
             	<table class="tabla_blanco">
 	            	<thead>
@@ -121,13 +116,22 @@
             	</table>
             	
             	<br>
-            	<a class="btn btn-warning btn-xs" href="inicio?filtro=0" role="button" id="0">Aprobados</a>
-            	<a class="btn btn-warning btn-xs" href="inicio?filtro=1" role="button" id="1">Suspendidos</a>
-            	<a class="btn btn-warning btn-xs" href="inicio" role="button">Todos</a>
+            	<a class="btn btn-primary btn-xs" href="inicio?filtro=0" role="button">Aprobados</a>
+            	<a class="btn btn-primary btn-xs" href="inicio?filtro=1" role="button">Suspendidos</a>
+            	<a class="btn btn-primary btn-xs" href="inicio"          role="button">Todos</a>
+            	
             	
             	<br>
+            	<br>
             	
-           
+		            	<% //Mostrar mensaje
+		            
+		              	if(request.getAttribute("msg") != null) {
+		              		out.print("<h4>" + request.getAttribute("msg") + "</h4>");
+		              	}
+		           
+		              	%>
+         		 
             
             
           </div>

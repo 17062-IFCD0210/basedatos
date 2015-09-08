@@ -51,6 +51,7 @@ public class InicioServlet extends HttpServlet {
 		// 0: Listar
 		// 1: Detalle
 		// 2: Eliminar
+		// 3:crear nuevo
 
 		//Detalle
 		if("1".equals(pAccion)){
@@ -59,6 +60,10 @@ public class InicioServlet extends HttpServlet {
 		//Eliminar
 		}else if("2".equals(pAccion)){
 			eliminar(request, response);
+			
+		//Nuevo
+		}else if("3".equals(pAccion)){
+			nuevo(request, response);
 			
 		//Listar
 		}else {
@@ -101,6 +106,11 @@ public class InicioServlet extends HttpServlet {
 
 	
 
+	private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+	 	dispatcher = request.getRequestDispatcher("form.jsp");
+		
+	}
+
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
 		ArrayList<Object> alumnos = new ArrayList<Object>();
 		
@@ -124,7 +134,7 @@ public class InicioServlet extends HttpServlet {
 		
 		int id = Integer.parseInt(pID);
 		if(dao.delete(id)){
-			request.setAttribute("msg",	"Persona eliminada");
+			request.setAttribute("msg",	"Persona eliminada:"+"-->"+ "ID:"+ " "+ id);
 		}else{
 			request.setAttribute("msg",	"No se ha podido eliminar");
 		}
@@ -147,7 +157,7 @@ public class InicioServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		//doGet(request, response);
 		
 		String sql=null;
 		try{
@@ -172,11 +182,20 @@ public class InicioServlet extends HttpServlet {
     		
     		//crear nueva persona
     		if ("-1".equals(pID)){
-    			dao.save(p);
+    			if(dao.save(p) !=-1){
+    				int j = dao.save(p);
+    				request.setAttribute("msg","Creado con exito:" +" "+  "ID:"+ j+" "+ "Nombre:"+ p.getNombre() );
+    				
+    			}else{
+    				request.setAttribute("msg","NO Creado con exito");
+    			}
     		//modificar persona
     		}else{
-    			
-    			dao.update(p);
+    			if(dao.update(p)){
+    				request.setAttribute("msg", "ID:"+ p.getId() +" "+ "Nombre:"+ p.getNombre()+  " "+ "Mofificado con exito");
+    			}else{
+    				request.setAttribute("msg", "NO Mofificado con exito");
+    			}
     		}
     		
     		
@@ -190,6 +209,7 @@ public class InicioServlet extends HttpServlet {
 		}finally{
 			//volver a la index vamos a listar
 			listar(request,response);
+			dispatcher.forward(request, response);
 		
 		}
 	}

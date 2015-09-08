@@ -20,6 +20,19 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+  <style>
+  	.masthead-brand{
+  		color:red;
+  	}
+  	label{
+  		color:green;
+  	}
+  	.botones{
+  		color:black;
+  	}
+  
+  </style>
+  
   </head>
   <body>
     
@@ -33,17 +46,18 @@
 
           <div class="masthead clearfix">
             <div class="inner">
+            	<a href="inicio" class="btn btn-info">Volver</a>
               <h3 class="masthead-brand">
               
               <% 
               	boolean edicion=false; 
               	Persona p = null;
               	if ( request.getAttribute("alumno") != null ){
-          			out.print("Editar Registro");
-          			p = (Persona)request.getAttribute("alumno");
+              		p = (Persona)request.getAttribute("alumno");
+              		out.print("Editar Registro: " + p.getNombre());          			
           			edicion=true;
             	}else{
-          			out.print("Insertar Nuevo Registro");
+          			out.print("Nuevo Registro");
           		}              
               %>
               </h3>
@@ -109,17 +123,20 @@
   	          		       value=""
 	          		        >
 	          	</div>          		
-          		<input type="reset" value="Limpiar">
-          		
-          			<input type="submit" value="<% if(edicion){out.print("Modificar");}else{out.print("Crear");} %>">
+          		<input type="reset" 
+          			value="Limpiar" 
+          			class="btn btn-warning btn-xs botones"
+          			>          		
+          		<input type="submit" 
+          			class="btn btn-success btn-xs botones" 
+          			value="<% if(edicion){out.print("Modificar");}else{out.print("Crear");} %>">
           		
           			
           		
           		
           	
           	</form>
-          	<br>
-           	<a href="inicio">Volver</a>
+          
           </div>
 
           <div class="mastfoot">

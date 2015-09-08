@@ -64,26 +64,32 @@ public class DAOPersona implements IDAOPersona{
 
 	@Override
 	public int save(Object o) {
-
+		int resul=1;
 		try{
 			
-			  Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement();
-			Persona p=(Persona)o;
-			String pNombre = p.getNombre();
-			Float pNota = p.getNota();
-			String pTelefono = p.getTelefono();
-			Date pFecha = p.getFecha();
-	    	String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES ('" + pNombre + "',"+ pNota + ",'"+ pTelefono +"');";
+			Connection con = DataBaseHelper.getConnection();			 
+			String sql ="INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES (?,?,?);";				
+			PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			
+			Persona p=(Persona)o;				
+			Date pFecha = p.getFecha();			
+			pst.setString(1,p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());
+			
+			
+	    
 	    	System.out.println(p.toString());
-			 
-			
-			
+	    	System.out.println(p.toString());
 	    	
-	    	System.out.println(p.toString());
 	    	//ejecutar insert
-	    	if ( st.executeUpdate(sql) != 1){	    		
-	    		throw new Exception("No se ha realizado insercion: " + sql);	    		
+	    	if ( pst.executeUpdate() == 1){
+	    		ResultSet rsKeys = pst.getGeneratedKeys();
+	    		if(rsKeys.next()){
+	    			resul=rsKeys.getInt(1);
+	    		}else{
+	    			throw new SQLException("No se ha podido generar ID");
+	    		}	    			    		
 	    	}
 
 		}catch(Exception e){
@@ -92,7 +98,7 @@ public class DAOPersona implements IDAOPersona{
 			DataBaseHelper.closeConnection();
 		}
 		
-		return 0;
+		return resul;
 	}
 
 	@Override
@@ -123,28 +129,29 @@ public class DAOPersona implements IDAOPersona{
 
 	@Override
 	public boolean update(Object o) {
-		try {
-			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement();
-			Persona p = new Persona(null);		
+		boolean resul=false;
+		Persona p = null;
+		try{
+			Connection con = DataBaseHelper.getConnection();			
+			String sql = "UPDATE `test` SET `nombre`= ?,`nota`= ?, `telefono`= ? WHERE `id`= ?;";
+			PreparedStatement pst = con.prepareStatement(sql);				
 			p=(Persona) o;
-			String sql = "UPDATE `test` SET `nombre`='"+p.getNombre()+"',`nota`="+p.getNota()+", `telefono`='"+p.getTelefono()+"' WHERE  `id`="+p.getId()+";";
-			
+			pst.setString(1, p.getNombre());
+			pst.setFloat(2, p.getNota());
+			pst.setString(3, p.getTelefono());
+			pst.setInt(4, p.getId());
 			
 			//ejecutar update
-	    	if ( st.executeUpdate(sql) != 1){	    		
-	    		throw new Exception("No se ha realizado modificacion: " + sql);
-	    	}
-			
-		}catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-    		return false;
+	    	if ( pst.executeUpdate() == 1){	    		
+	    		resul=true;
+	    	}			
+		}catch (Exception e) {			
+			e.printStackTrace();    	
 		}finally{
 			DataBaseHelper.closeConnection();
 		}
  
-		return true;
+		return resul;
 	}
 
 	@Override

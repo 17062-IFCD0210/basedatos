@@ -135,7 +135,7 @@
 										</div>
 									</div>
 									<div class="modal-footer">
-										<a href="inicio?accion=2&id=<%=p.getId() %>" id="boton_eliminar" class="btn btn-danger disabled">Eliminar</a>
+										<a href="inicio?accion=2&id=<%=p.getId() %>" id="boton_eliminar" class="btn btn-danger">Eliminar</a>
 										<button type="button" id="boton_cancelar" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 									</div>
 								</div>

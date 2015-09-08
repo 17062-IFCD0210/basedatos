@@ -1,3 +1,4 @@
+<%@page import="com.ipartek.formacion.basedatos.util.UtilidadesFecha"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.ipartek.formacion.basedatos.bean.Persona"%>
 <%@page import="java.sql.ResultSet"%>
@@ -103,10 +104,10 @@
 				</div>
 				<div class="form-group">
 	          		<label for="fecha">Fecha</label>
-	           		<input type="date" 
+	           		<input type="datetime-local" 
 	          			   name="fecha"  
 	          		       tabindex="4"
-  	          		       value=""
+  	          		       value="<% if(edicion){out.print(UtilidadesFecha.timestampToString(p.getFecha()));} %>"
 	          		        >
 	          	</div>          		
           		<input type="reset" class="btn btn-warning" value="Limpiar">

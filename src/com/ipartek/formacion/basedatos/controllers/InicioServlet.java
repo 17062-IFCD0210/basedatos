@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
 import com.ipartek.formacion.basedatos.modelo.DAOPersona;
+import com.ipartek.formacion.basedatos.util.UtilidadesFecha;
 
 
 
@@ -162,12 +163,13 @@ public class InicioServlet extends HttpServlet {
 			String sNota=request.getParameter("nota");		
 			String sTelefono=request.getParameter("telefono");
 			String sID=request.getParameter("id");
+			String sFecha=request.getParameter("fecha");
 			
 			Persona p = new Persona(sNombre);   		
-    		//p.setFecha(Date.parse(sFecha));
     		p.setTelefono(sTelefono);
     		p.setNota(Float.parseFloat(sNota));
 			p.setId(Integer.parseInt(sID));
+    		p.setFecha(UtilidadesFecha.stringToTimeStamp(sFecha));
 			//crear nueva persona
     		if ("-1".equals(sID)){
     			int indice=dao.save(p);

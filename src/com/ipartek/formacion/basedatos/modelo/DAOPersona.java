@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.ipartek.formacion.basedatos.bean.Persona;
+import com.ipartek.formacion.basedatos.util.UtilidadesFecha;
 
 
 /**
@@ -29,11 +30,13 @@ public class DAOPersona implements IDAOPersona{
 	public ArrayList<Object> getAll(){
 		
 		ArrayList<Object> resul = new ArrayList<Object>();
+		Statement st=null;
+		ResultSet rs=null; 
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
+			st = con.createStatement(); 
 	    	String sql = "SELECT * FROM `test` ";
-	    	ResultSet rs = st.executeQuery (sql);
+	    	rs = st.executeQuery (sql);
 	    	
 	    	//mapeo resultSet => ArrayList<Persona>
 	    	Persona p = null;	    	
@@ -48,7 +51,17 @@ public class DAOPersona implements IDAOPersona{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if(rs!=null){
+					rs.close();
+				}
+				if(st!=null){
+					st.close();
+				}				
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){
+				e.printStackTrace();
+			}			
 		}
 		return resul;
 		
@@ -57,19 +70,30 @@ public class DAOPersona implements IDAOPersona{
 	@Override
 	public int save(Object o) {
 		int resul=-1;
+		String sql="";
+		PreparedStatement pst=null;
+		ResultSet rsKeys=null;
 		try{
-			Connection con = DataBaseHelper.getConnection();
-			String sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES (?, ?, ?);";
-			PreparedStatement pst = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-			//el segundo argumento sirve para obtener datos de la consulta, asi podremos acceder al nuevo id creado
 			Persona p=(Persona)o;			
+			Connection con = DataBaseHelper.getConnection();
+			if (p.getFecha()!=null){
+				sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`, `fecha`) VALUES (?, ?, ?, ?);";				
+			}else{
+				sql = "INSERT INTO `test` (`nombre`, `nota`, `telefono`) VALUES (?, ?, ?);";				
+			}
+
+			pst = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			//el segundo argumento sirve para obtener datos de la consulta, asi podremos acceder al nuevo id creado
+			
 			pst.setString(1, p.getNombre());
 			pst.setFloat(2, p.getNota());
-			pst.setString(3, p.getTelefono());			
-			//pst.setInt(4, p.getId());
+			pst.setString(3, p.getTelefono());
+			if (p.getFecha()!=null){
+				pst.setTimestamp(4, p.getFecha());
+			}
 			if(pst.executeUpdate()==1){
 				//aqui recuperamos la id del registro recien insertado para devolverlo
-				ResultSet rsKeys = pst.getGeneratedKeys();
+				rsKeys = pst.getGeneratedKeys();
 				if (rsKeys.next()){
 					resul=rsKeys.getInt(1);
 				}else{
@@ -79,7 +103,17 @@ public class DAOPersona implements IDAOPersona{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if(pst!=null){
+					pst.close();
+				}
+				if(rsKeys!=null){
+					rsKeys.close();
+				}				
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 		
 		return resul;
@@ -88,11 +122,13 @@ public class DAOPersona implements IDAOPersona{
 	@Override
 	public Object getById(int id) {
 		Persona p;
+		Statement st=null;
+		ResultSet rs=null; 
 		try {
 			Connection con = DataBaseHelper.getConnection();    	
-	    	Statement st = con.createStatement();
+	    	st = con.createStatement();
 	    	String sql   = "SELECT * FROM `test` WHERE `id` = "+id+";";
-	    	ResultSet rs = st.executeQuery (sql);	    	
+	    	rs = st.executeQuery (sql);	    	
 	    	rs.first();
 	    	p = mapeo(rs);
 	    	
@@ -103,7 +139,17 @@ public class DAOPersona implements IDAOPersona{
 			e.printStackTrace();
     		return false;
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if(rs!=null){
+					rs.close();
+				}
+				if(st!=null){
+					st.close();
+				}				
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){
+				e.printStackTrace();
+			}	
 		}
 		return p;
 	}
@@ -111,22 +157,41 @@ public class DAOPersona implements IDAOPersona{
 	@Override
 	public boolean update(Object o) {
 		boolean resul=false;
+		String sql;
+		PreparedStatement pst =null;
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			String sql="UPDATE `test` SET `nombre`=?, `nota`=?, `telefono`=? where `id`=?;";
-			PreparedStatement pst = con.prepareStatement(sql);
-			Persona p=(Persona)o;			
+			Persona p=(Persona)o;
+			if (p.getFecha()!=null){
+				sql="UPDATE `test` SET `nombre`=?, `nota`=?, `telefono`=? , `fecha`=? where `id`=?;";
+			}else{
+				sql="UPDATE `test` SET `nombre`=?, `nota`=?, `telefono`=? where `id`=?;";
+			}
+			pst = con.prepareStatement(sql);
+					
 			pst.setString(1, p.getNombre());
 			pst.setFloat(2, p.getNota());
-			pst.setString(3, p.getTelefono());			
-			pst.setInt(4, p.getId());
+			pst.setString(3, p.getTelefono());
+			if (p.getFecha()!=null){			
+				pst.setTimestamp(4, p.getFecha());
+				pst.setInt(5, p.getId());
+			}else{
+				pst.setInt(4, p.getId());
+			}
 			if(pst.executeUpdate()==1){
 				resul=true;
 			}    	
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if(pst!=null){
+					pst.close();
+				}				
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){
+				e.printStackTrace();
+			}	
 		}
 		return resul;
 	}
@@ -134,10 +199,11 @@ public class DAOPersona implements IDAOPersona{
 	@Override
 	public boolean delete(int id) {
 		boolean resul=false;
+		PreparedStatement pst=null;
 		try {
 			Connection con = DataBaseHelper.getConnection();
 			String sql   = "DELETE FROM `test` WHERE `id` = ?;";
-			PreparedStatement pst = con.prepareStatement(sql);
+			pst = con.prepareStatement(sql);
 			pst.setInt(1, id);
 			if(pst.executeUpdate()==1){
 				resul=true;
@@ -150,7 +216,14 @@ public class DAOPersona implements IDAOPersona{
 			e.printStackTrace();
     		return false;
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if(pst!=null){
+					pst.close();
+				}				
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){
+				e.printStackTrace();
+			}	
 		}
  
 		return resul;
@@ -159,18 +232,30 @@ public class DAOPersona implements IDAOPersona{
 	@Override
 	public ArrayList<Object> getAprobados() {
 		ArrayList<Object> resul = new ArrayList<Object>();
+		ResultSet rs=null;
+		Statement st =null;
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
+			st = con.createStatement(); 
 	    	String sql = "SELECT * FROM `test` WHERE `nota` >= 5";
-	    	ResultSet rs = st.executeQuery (sql);
+	    	rs = st.executeQuery (sql);
 	    	while(rs.next()){
 	    		resul.add(mapeo(rs));
 	    	}	
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if(rs!=null){
+					rs.close();
+				}		
+				if(st!=null){
+					st.close();
+				}		
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){
+				e.printStackTrace();
+			}	
 		}
 		return resul;
 	}
@@ -178,18 +263,30 @@ public class DAOPersona implements IDAOPersona{
 	@Override
 	public ArrayList<Object> getSuspendidos() {
 		ArrayList<Object> resul = new ArrayList<Object>();
+		ResultSet rs=null;
+		Statement st =null;		
 		try{
 			Connection con = DataBaseHelper.getConnection();
-			Statement st = con.createStatement(); 
+			st = con.createStatement(); 
 	    	String sql = "SELECT * FROM `test` WHERE `nota` < 5";
-	    	ResultSet rs = st.executeQuery (sql);
+	    	rs = st.executeQuery (sql);
 	    	while(rs.next()){
 	    		resul.add(mapeo(rs));
 	    	}	
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			DataBaseHelper.closeConnection();
+			try{
+				if(rs!=null){
+					rs.close();
+				}		
+				if(st!=null){
+					st.close();
+				}		
+				DataBaseHelper.closeConnection();
+			}catch(Exception e){
+				e.printStackTrace();
+			}	
 		}
 		return resul;
 	}

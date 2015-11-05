@@ -96,8 +96,7 @@
 			          	<input type="datetime-local"
 			          		value="<%=UtilidadesFecha.timestampToString(alumno.getFecha())%>"
 			          		name="fecha"
-			          		tabindex="4"
-			          		placeholder="Inserta la fecha">
+			          		tabindex="4">
 		          	</p>
 	          	</div>
 	          	<br>
@@ -108,9 +107,9 @@
 	          	<button type="reset" class="btn btn-success">Limpiar</button>
 	          	
 	          	<% if ( alumno.getId() == -1){ %>
-	          		<button type="submit" class="btn btn-danger">Crear</button>
+	          		<input type="submit" class="btn btn-danger" value="Crear">
 	          	<% }else{ %>
-	          		<button type="submit" class="btn btn-danger">Modificar</button>
+	          		<input type="submit" class="btn btn-danger" value="Modificar">
 	          	<% } %>
 	            
 	          </form>

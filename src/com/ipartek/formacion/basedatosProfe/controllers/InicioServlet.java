@@ -68,6 +68,7 @@ public class InicioServlet extends HttpServlet {
 			//0.- Listar
 			//1.- Detalle
 			//2.- Eliminar
+			//3.- Nuevo
 			
 			//Detalle
 			if ("1".equals(pAccion)){
@@ -186,9 +187,6 @@ public class InicioServlet extends HttpServlet {
 			//TODO fecha
 			
 			if ("-1".equals(sId)){ //insertar nueva persona
-				dao.save(p);
-				request.setAttribute("msg", "El nuevo alumno se ha añadido");
-			}else if ("-1".equals(sId)){
 				if (dao.save(p) == 1){
 					request.setAttribute("msg", "El alumno se ha creado con éxito");
 				}else{
